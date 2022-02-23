@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
 
@@ -12,8 +13,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
-      home: const GetStartedPage(),
+      home: GetStartedPage(),
     );
   }
 }
