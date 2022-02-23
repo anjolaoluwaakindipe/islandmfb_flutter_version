@@ -6,7 +6,9 @@ class AppButton extends StatelessWidget {
       : super(key: key);
 
   final String text;
+
   final dynamic onPress;
+
 
   @override
   Widget build(BuildContext context) {
