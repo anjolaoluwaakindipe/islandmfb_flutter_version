@@ -1,16 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
+import 'package:islandmfb_flutter_version/requests/auth_request.dart';
+import 'package:islandmfb_flutter_version/state/token_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
-class GetStartedPage extends StatelessWidget {
-  const GetStartedPage({Key? key}) : super(key: key);
+class GetStartedPage extends StatefulWidget {
+  GetStartedPage({Key? key}) : super(key: key);
+
+  TokenController tokenInfoController = Get.put(TokenController());
 
   @override
+  State<GetStartedPage> createState() => _GetStartedPageState();
+}
+
+class _GetStartedPageState extends State<GetStartedPage> {
+  @override
   Widget build(BuildContext context) {
+    print(widget.tokenInfoController.tokenInfoState.value);
+    widget.tokenInfoController.setTokenFromLogin("aji", "test1234");
+    Timer(Duration(seconds: 3),
+        () => print(widget.tokenInfoController.tokenInfoState.value));
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
