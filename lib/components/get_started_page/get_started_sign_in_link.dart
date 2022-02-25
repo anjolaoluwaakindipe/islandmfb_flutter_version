@@ -28,7 +28,7 @@ class GetStartedSignInLink extends StatelessWidget {
               style: const TextStyle(color: successColor),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  Get.to(const LoginPage());
+                  Get.to( LoginPage());
                 },
             ),
           ],

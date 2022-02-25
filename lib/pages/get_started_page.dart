@@ -7,14 +7,14 @@ import 'package:islandmfb_flutter_version/components/get_started_page/get_starte
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/requests/auth_request.dart';
-import 'package:islandmfb_flutter_version/state/token_controller.dart';
+import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
 class GetStartedPage extends StatefulWidget {
   GetStartedPage({Key? key}) : super(key: key);
 
-  TokenController tokenInfoController = Get.put(TokenController());
+  TokenStateController tokenInfoController = Get.put(TokenStateController());
 
   @override
   State<GetStartedPage> createState() => _GetStartedPageState();
@@ -23,11 +23,6 @@ class GetStartedPage extends StatefulWidget {
 class _GetStartedPageState extends State<GetStartedPage> {
   @override
   Widget build(BuildContext context) {
-    print(widget.tokenInfoController.tokenInfoState.value);
-    widget.tokenInfoController.setTokenFromLogin("aji", "test1234");
-    Timer(Duration(seconds: 3),
-        () => print(widget.tokenInfoController.tokenInfoState.value));
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
