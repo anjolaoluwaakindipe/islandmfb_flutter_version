@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
+import 'package:get/get.dart';
 
 class GetStartedSignInLink extends StatelessWidget {
   const GetStartedSignInLink({

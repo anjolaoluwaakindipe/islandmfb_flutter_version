@@ -2,15 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/success_page.dart';
+import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
+import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/verification_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:bs_flutter_selectbox/bs_flutter_selectbox.dart';
 
 import '../components/shared/app_textfield.dart';
-import '../components/shared/app_verification_textfield.dart';
 
-class VerificationPage extends StatelessWidget {
-  const VerificationPage({Key? key}) : super(key: key);
+class PersonalInformationPage extends StatelessWidget {
+  PersonalInformationPage({
+    Key? key,
+  }) : super(key: key);
+
+  final BsSelectBoxController _select1 = BsSelectBoxController(options: [
+    const BsSelectBoxOption(value: 1, text: Text('Male')),
+    const BsSelectBoxOption(value: 2, text: Text('Female')),
+  ]);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,7 @@ class VerificationPage extends StatelessWidget {
         child: AppButton(
           text: "Continue",
           onPress: () {
-            Get.to(const SuccessPage());
+            Get.to(const AccountTypePage());
           },
         ),
       ),
@@ -42,32 +52,56 @@ class VerificationPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               height: 1,
             ),
-            Text(
-              "Verification",
+            const Text(
+              "Personal Information",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF333333)),
             ),
-            SizedBox(
+            const SizedBox(
               height: 2,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(),
               child: Text(
-                "Enter 4 digit code we sent to the mobile number linked to your account",
+                "Create an account by providing the details needed below.",
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
               ),
             ),
-            SizedBox(
-              height: 15,
+            const SizedBox(
+              height: 5,
             ),
+            AppTextField(hint: "Enter your first name", label: "First Name"),
+            const SizedBox(
+              height: 20,
+            ),
+            AppTextField(hint: "Enter your last name", label: "Last Name"),
+            const SizedBox(
+              height: 20,
+            ),
+            AppTextField(
+                hint: "Enter your email adddress", label: "Email Address"),
+            const SizedBox(
+              height: 5,
+            ),
+            BsSelectBox(
+              hintText: 'Male',
+              controller: _select1,
+            ),
+            // AppTextField(hint: "Enter your email adddress", label: "Gender"),
+            const SizedBox(
+              height: 25,
+            ),
+            const SizedBox(
+              height: 15,
+            )
           ],
         ),
       ),

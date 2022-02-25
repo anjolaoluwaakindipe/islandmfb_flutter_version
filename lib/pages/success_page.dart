@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/sign_up_active_page.dart';
+import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
+import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
-class LetsGetStartedPage extends StatelessWidget {
-  const LetsGetStartedPage({Key? key}) : super(key: key);
+class SuccessPage extends StatelessWidget {
+  const SuccessPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +16,6 @@ class LetsGetStartedPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        leading: SizedBox(
-          height: 1,
-          child: SvgPicture.asset(
-            'assets/images/back.svg',
-            height: 1,
-            width: 1,
-            fit: BoxFit.contain,
-          ),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -32,15 +24,14 @@ class LetsGetStartedPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/images/pana.svg",
-              alignment: AlignmentDirectional.center,
-              semanticsLabel: 'Island Logo',
+              "assets/images/bi_shield-fill-check.svg",
+              semanticsLabel: 'Success',
             ),
             const SizedBox(
-              height: 60,
+              height: 5,
             ),
             const Text(
-              "Let's get started",
+              "Success!",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 30,
@@ -48,12 +39,12 @@ class LetsGetStartedPage extends StatelessWidget {
                   color: Color(0xFF333333)),
             ),
             const SizedBox(
-              height: 2,
+              height: 10,
             ),
             const Padding(
-              padding: EdgeInsets.only(),
+              padding: EdgeInsets.only(top: 1.0),
               child: Text(
-                "Never a better time than new to start enjoying Microfinance banking on a new level",
+                "You have successfully signed up your account in our app and can start using",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
               ),
@@ -62,15 +53,14 @@ class LetsGetStartedPage extends StatelessWidget {
               height: 25,
             ),
             AppButton(
-              text: "Set Up Profile",
+              text: "Start using",
               onPress: () {
-                Get.to(const SignUpActivePage());
+                Get.to(const CreateAccountNewPage());
               },
             ),
             const SizedBox(
               height: 15,
-            ),
-            const Text("Create an Account"),
+            )
           ],
         ),
       ),

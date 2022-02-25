@@ -15,6 +15,76 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  bs_flutter:
+    dependency: "direct main"
+    description:
+      name: bs_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.7"
+  bs_flutter_alert:
+    dependency: transitive
+    description:
+      name: bs_flutter_alert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+  bs_flutter_buttons:
+    dependency: transitive
+    description:
+      name: bs_flutter_buttons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.8"
+  bs_flutter_card:
+    dependency: transitive
+    description:
+      name: bs_flutter_card
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
+  bs_flutter_datatable:
+    dependency: transitive
+    description:
+      name: bs_flutter_datatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.5"
+  bs_flutter_inputtext:
+    dependency: transitive
+    description:
+      name: bs_flutter_inputtext
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
+  bs_flutter_modal:
+    dependency: transitive
+    description:
+      name: bs_flutter_modal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
+  bs_flutter_responsive:
+    dependency: transitive
+    description:
+      name: bs_flutter_responsive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+  bs_flutter_selectbox:
+    dependency: transitive
+    description:
+      name: bs_flutter_selectbox
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.0"
+  bs_flutter_utils:
+    dependency: transitive
+    description:
+      name: bs_flutter_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   characters:
     dependency: transitive
     description:
@@ -102,6 +172,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   get:
     dependency: "direct main"
     description:
@@ -109,6 +184,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.6.1"
+  getwidget:
+    dependency: "direct main"
+    description:
+      name: getwidget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   google_fonts:
     dependency: "direct main"
     description:
@@ -130,6 +212,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.3"
   lints:
     dependency: transitive
     description:
