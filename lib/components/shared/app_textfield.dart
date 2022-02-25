@@ -4,11 +4,18 @@ import 'package:flutter/material.dart';
 import '../../utilities/colors.dart';
 
 class AppTextField extends StatelessWidget {
-  AppTextField({Key? key, this.label = "", this.hint = "",  required this.textController}) : super(key: key);
+  AppTextField(
+      {Key? key,
+      this.label = "",
+      this.hint = "",
+      required this.textController,
+      this.onChanged})
+      : super(key: key);
 
   String label;
   String hint;
   TextEditingController textController;
+  var onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class AppTextField extends StatelessWidget {
         children: [
           Text(
             label,
-            style:const TextStyle(
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w200,
             ),
@@ -32,6 +39,7 @@ class AppTextField extends StatelessWidget {
               fillColor: accentColor,
             ),
             controller: textController,
+            onChanged: onChanged,
           ),
         ],
       ),

@@ -1,32 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
-class AppButton extends StatelessWidget {
-  const AppButton({Key? key, required this.text, required this.onPress})
+class AppButton extends StatefulWidget {
+  AppButton(
+      {Key? key,
+      required this.text,
+      required this.onPress,
+      this.isDisabled = false})
       : super(key: key);
 
   final String text;
 
   final dynamic onPress;
+  final bool isDisabled;
 
+  @override
+  State<AppButton> createState() => _AppButtonState();
+}
 
+class _AppButtonState extends State<AppButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: onPress,
+        onPressed: widget.isDisabled ? null : widget.onPress,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
-            text,
+            widget.text,
             textAlign: TextAlign.center,
             style: const TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: 1.3),
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.3,
+                color: whiteColor),
           ),
         ),
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
+          backgroundColor: widget.isDisabled
+              ? MaterialStateProperty.all<Color>(disabledColor)
+              : MaterialStateProperty.all<Color>(primaryColor),
           elevation: MaterialStateProperty.all(1),
         ),
       ),
