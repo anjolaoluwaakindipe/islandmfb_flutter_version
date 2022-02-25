@@ -4,16 +4,18 @@ import 'package:islandmfb_flutter_version/requests/request_settings.dart';
 
 import 'package:http/http.dart' as http;
 
-Future getAccountInfo(String customerNo) async {
+Future<Map> getAccountInfo(String customerNo) async {
   String urlString =
       accountUrl + "/getCustomerAccounts?CustomerNo=" + customerNo;
   return await http.get(
     Uri.parse(urlString),
     headers: {
-      "Accept": "application/json",
+      "Access-Control-Allow-Headers": "Access-Control-Allow-Origin, Accept",
+      "Access-Control-Allow-Origin": "*",
     },
   ).then(
     (value) {
+      print(json.decode(value.body));
       if (value.statusCode == 200) {
         return {
           "success": true,

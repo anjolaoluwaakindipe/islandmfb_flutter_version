@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/pages/account_services_pages.dart';
 import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/home_page.dart';
+import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +37,9 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
+
       home: const AccountServicesPage(),
+
     );
   }
 }

@@ -43,7 +43,7 @@ Future loginUser(String username, String password) async {
   );
 }
 
-Future getUser(String token) async {
+Future getUserInfo(String token) async {
   String uriString = keycloakBaseUrl +
       "/auth/realms/" +
       customRealm +
@@ -154,7 +154,7 @@ Future logoutUser(String refreshToken) async {
 void main() async {
   var tokenInfo = await loginUser("aji", "test1234");
   print(tokenInfo);
-  var user = await getUser(tokenInfo["access_token"]);
+  var user = await getUserInfo(tokenInfo["access_token"]);
 
   print(await logoutUser(tokenInfo["refresh_token"]));
   // var adminToken = await getAdminToken();

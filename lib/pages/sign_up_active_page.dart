@@ -9,7 +9,11 @@ import 'package:get/get.dart';
 import '../components/shared/app_textfield.dart';
 
 class SignUpActivePage extends StatelessWidget {
-  const SignUpActivePage({Key? key}) : super(key: key);
+  SignUpActivePage({Key? key}) : super(key: key);
+
+  final accountNumberTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final confirmPasswordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,15 +71,27 @@ class SignUpActivePage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            AppTextField(hint: "Enter Account Number", label: "Account Number"),
+            AppTextField(
+              hint: "Enter Account Number",
+              label: "Account Number",
+              textController: accountNumberTextController,
+            ),
             const SizedBox(
               height: 20,
             ),
-            AppTextField(hint: "***************", label: "Enter Password"),
+            AppTextField(
+              hint: "***************",
+              label: "Enter Password",
+              textController: passwordTextController,
+            ),
             const SizedBox(
               height: 20,
             ),
-            AppTextField(hint: "***************", label: "Confirm Password"),
+            AppTextField(
+              hint: "***************",
+              label: "Confirm Password",
+              textController: confirmPasswordTextController,
+            ),
             const SizedBox(
               height: 25,
             ),
