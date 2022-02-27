@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/success_page.dart';
+import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
+import 'package:islandmfb_flutter_version/pages/verification_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
 import '../components/shared/app_textfield.dart';
-import '../components/shared/app_verification_textfield.dart';
 
-class VerificationPage extends StatelessWidget {
-  const VerificationPage({Key? key}) : super(key: key);
+class CreateAccountNewPage extends StatelessWidget {
+  const CreateAccountNewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,41 +33,59 @@ class VerificationPage extends StatelessWidget {
         child: AppButton(
           text: "Continue",
           onPress: () {
-            Get.to(const SuccessPage());
+            Get.to(PersonalInformationPage());
           },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 30,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               height: 1,
             ),
-            Text(
-              "Verification",
+            const Text(
+              "Create Your Account",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF333333)),
             ),
-            SizedBox(
+            const SizedBox(
               height: 2,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(),
               child: Text(
-                "Enter 4 digit code we sent to the mobile number linked to your account",
+                "Create an account by providing the details needed below.",
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
               ),
             ),
-            SizedBox(
-              height: 15,
+            const SizedBox(
+              height: 5,
             ),
+            AppTextField(hint: "Enter your BVN", label: "BVN"),
+            const SizedBox(
+              height: 20,
+            ),
+            AppTextField(
+                hint: "Enter your phone number", label: "Phone Number"),
+            const SizedBox(
+              height: 20,
+            ),
+            AppTextField(hint: "Enter your email", label: "Email Address"),
+            const SizedBox(
+              height: 25,
+            ),
+            const SizedBox(
+              height: 15,
+            )
           ],
         ),
       ),
