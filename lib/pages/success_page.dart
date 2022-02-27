@@ -55,7 +55,7 @@ class SuccessPage extends StatelessWidget {
             AppButton(
               text: "Start using",
               onPress: () {
-                Get.to(const CreateAccountNewPage());
+                Get.to( CreateAccountNewPage());
               },
             ),
             const SizedBox(

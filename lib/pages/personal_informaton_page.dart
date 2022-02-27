@@ -17,6 +17,12 @@ class PersonalInformationPage extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  // TextField controllers
+    TextEditingController firstNameTextController = TextEditingController();
+  TextEditingController lastNameTextEditingController =
+      TextEditingController();
+  TextEditingController emailTextEditingController = TextEditingController();
+
   final BsSelectBoxController _select1 = BsSelectBoxController(options: [
     const BsSelectBoxOption(value: 1, text: Text('Male')),
     const BsSelectBoxOption(value: 2, text: Text('Female')),
@@ -78,16 +84,16 @@ class PersonalInformationPage extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            AppTextField(hint: "Enter your first name", label: "First Name"),
+            AppTextField(hint: "Enter your first name", label: "First Name", textController: firstNameTextController,),
             const SizedBox(
               height: 20,
             ),
-            AppTextField(hint: "Enter your last name", label: "Last Name"),
+            AppTextField(hint: "Enter your last name", label: "Last Name", textController: lastNameTextEditingController,),
             const SizedBox(
               height: 20,
             ),
             AppTextField(
-                hint: "Enter your email adddress", label: "Email Address"),
+                hint: "Enter your email adddress", label: "Email Address", textController: emailTextEditingController,),
             const SizedBox(
               height: 5,
             ),
