@@ -15,7 +15,6 @@ Future<Map> getAccountInfo(String customerNo) async {
     },
   ).then(
     (value) {
-      print(json.decode(value.body));
       if (value.statusCode == 200) {
         return {
           "success": true,

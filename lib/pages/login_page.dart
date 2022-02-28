@@ -53,11 +53,11 @@ class _LoginPageState extends State<LoginPage> {
         print(user);
       }
 
-      // if (user.containsKey("customer_no")) {
-      //   print(getAccountInfo("0002"));
-      //   await accountState
-      //       .setAccountStateFromLogin(user["customer_no"].toString());
-      // }
+      if (user.containsKey("customer_no")) {
+        await accountState
+            .setAccountStateFromLogin(user["customer_no"].toString());
+        print(accountState.selectedAccountState);
+      }
 
       context.loaderOverlay.hide();
 
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
             barrierDismissible: true);
 
-        Get.offAll(const HomePage());
+        Get.offAll(() => const HomePage());
       } else {
         showDialog(
             context: context,
@@ -127,12 +127,14 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: whiteColor,
         body: SafeArea(
           child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             reverse: true,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               height: MediaQuery.of(context).size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

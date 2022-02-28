@@ -10,7 +10,12 @@ import 'package:get/get.dart';
 import '../components/shared/app_textfield.dart';
 
 class CreateAccountNewPage extends StatelessWidget {
-  const CreateAccountNewPage({Key? key}) : super(key: key);
+  CreateAccountNewPage({Key? key}) : super(key: key);
+
+  TextEditingController bvnTextController = TextEditingController();
+  TextEditingController phoneNumberTextEditingController =
+      TextEditingController();
+  TextEditingController emailTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +75,16 @@ class CreateAccountNewPage extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            AppTextField(hint: "Enter your BVN", label: "BVN"),
+            AppTextField(hint: "Enter your BVN", label: "BVN", textController: bvnTextController,),
             const SizedBox(
               height: 20,
             ),
             AppTextField(
-                hint: "Enter your phone number", label: "Phone Number"),
+                hint: "Enter your phone number", label: "Phone Number", textController: phoneNumberTextEditingController,),
             const SizedBox(
               height: 20,
             ),
-            AppTextField(hint: "Enter your email", label: "Email Address"),
+            AppTextField(hint: "Enter your email", label: "Email Address", textController: emailTextEditingController,),
             const SizedBox(
               height: 25,
             ),
