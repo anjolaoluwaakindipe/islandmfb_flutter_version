@@ -7,3 +7,4 @@ const Color successColor = Color(0xFF226F37);
 const Color greyColor = Color.fromRGBO(0, 0, 0, 0.38);
 const Color blackColor = Color(0xFF000000);
 const Color disabledColor = Color(0xFFD4A7AA);
+const Color lightextColor = Color.fromRGBO(0, 0, 0, 0.6);

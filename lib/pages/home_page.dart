@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: whiteColor,
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       appBar: homePageAppBar(() {}),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "Hi " + (userState.user["given_name"] ?? "Anjola"),
+                    "Hi " + (userState.user["given_name"] ?? " "),
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                               const TextStyle(color: blackColor, fontSize: 10),
                           children: <TextSpan>[
                             TextSpan(
-                              text: selectedAccount["product"] ??
+                              text: (selectedAccount["product"] + "  ") ??
                                   "Savings Account    ",
                             ),
                             TextSpan(
@@ -139,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                         height: 10,
                       ),
                       Text(
-                        nairaFormat.format(1234.234),
+                        nairaFormat.format(
+                            selectedAccount["availableBalance"] ?? 0.00),
                         softWrap: true,
                         style: const TextStyle(
                           color: primaryColor,
@@ -167,7 +168,8 @@ class _HomePageState extends State<HomePage> {
                           children: <TextSpan>[
                             const TextSpan(text: "Book Balance   "),
                             TextSpan(
-                              text: nairaFormat.format(1244.234),
+                              text: nairaFormat
+                                  .format(selectedAccount["bookBalance"]),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                               ),

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
-import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
-import 'package:islandmfb_flutter_version/pages/verification_page.dart';
+
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:bs_flutter_selectbox/bs_flutter_selectbox.dart';
 
 import '../components/shared/app_textfield.dart';

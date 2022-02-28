@@ -4,15 +4,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({
+  AppDrawer({
     Key? key,
   }) : super(key: key);
 
+  final accountState = Get.put(AccountStateController());
+
   @override
   Widget build(BuildContext context) {
+    var selectedAccount = accountState.selectedAccountState;
+
     void onLogoutClick() {
       showDialog(
           context: context,
@@ -49,108 +54,102 @@ class AppDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor: whiteColor,
-      child: Flexible(
-        flex: 1,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 30.0,
-          ),
-          child: Column(
-            children: [
-              Flexible(
-                flex: 3,
-                child: Row(
+      child: Expanded(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Center(
-                            child: Initicon(
-                              text: "Akinloluwa Adeleye",
-                              backgroundColor: primaryColor,
-                              size: 50,
-                            ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Center(
+                      child: Obx(() => Initicon(
+                            text: selectedAccount["accountName"] ?? "",
+                            backgroundColor: primaryColor,
+                            size: 50,
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Obx(() => Text(
+                          selectedAccount["accountName"] ?? "",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
                           ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Text(
-                            "Akinloluwa Adeleye",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("BVN: " + "222900866343",
-                              style: TextStyle(fontSize: 12)),
-                          SizedBox(height: 20),
-                        ],
-                      ),
+                        )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text("BVN: " + "222900866343",
+                        style: TextStyle(fontSize: 12)),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+                Column(
+                  children: [
+                    DrawerNavButtons(
+                      name: "Accounts",
+                      svgUrl: "assets/images/drawerAccounts.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Transfer",
+                      svgUrl: "assets/images/drawerTransfer.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Loan",
+                      svgUrl: "assets/images/drawerLoan.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Airtime",
+                      svgUrl: "assets/images/drawerAirtime.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Bill payment",
+                      svgUrl: "assets/images/drawerBillPayment.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Self service",
+                      svgUrl: "assets/images/drawerSelfService.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Self service",
+                      svgUrl: "assets/images/drawerSelfService.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Profile",
+                      svgUrl: "assets/images/drawerProfile.svg",
+                      onClickHandler: () {},
+                    ),
+                    DrawerNavButtons(
+                      name: "Set PIN",
+                      svgUrl: "assets/images/drawerSetPin.svg",
+                      onClickHandler: () {},
                     ),
                   ],
                 ),
-              ),
-              Flexible(
-                  flex: 6,
-                  child: Column(
-                    children: [
-                      DrawerNavButtons(
-                        name: "Accounts",
-                        svgUrl: "assets/images/drawerAccounts.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Transfer",
-                        svgUrl: "assets/images/drawerTransfer.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Loan",
-                        svgUrl: "assets/images/drawerLoan.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Airtime",
-                        svgUrl: "assets/images/drawerAirtime.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Bill payment",
-                        svgUrl: "assets/images/drawerBillPayment.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Self service",
-                        svgUrl: "assets/images/drawerSelfService.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Self service",
-                        svgUrl: "assets/images/drawerSelfService.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Profile",
-                        svgUrl: "assets/images/drawerProfile.svg",
-                        onClickHandler: () {},
-                      ),
-                      DrawerNavButtons(
-                        name: "Set PIN",
-                        svgUrl: "assets/images/drawerSetPin.svg",
-                        onClickHandler: () {},
-                      ),
-                    ],
-                  )),
-              Flexible(
-                flex: 2,
-                child: Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Row(
                       children: [
                         DrawerNavButtons(
@@ -165,8 +164,8 @@ class AppDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
