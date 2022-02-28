@@ -3,6 +3,7 @@ import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
+import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
@@ -22,7 +23,7 @@ class AppDrawer extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Get.to(LoginPage());
+                      Get.to(const LetsGetStartedPage());
                     },
                     child: const Text(
                       "Yes",

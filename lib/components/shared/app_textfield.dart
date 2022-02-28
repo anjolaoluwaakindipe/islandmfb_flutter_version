@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import '../../utilities/colors.dart';
 
 class AppTextField extends StatelessWidget {
-  AppTextField(
-      {Key? key,
-      this.label = "",
-      this.hint = "",
-      required this.textController,
-      this.onChanged})
-      : super(key: key);
+  AppTextField({
+    Key? key,
+    this.label = "",
+    this.hint = "",
+    required this.textController,
+    this.onChanged
+  }) : super(key: key);
 
   String label;
   String hint;
