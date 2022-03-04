@@ -8,7 +8,13 @@ import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
 class SuccessPage extends StatelessWidget {
-  const SuccessPage({Key? key}) : super(key: key);
+  SuccessPage(
+      {Key? key, this.nextPage, required this.buttonText , required this.successMessage})
+      : super(key: key);
+
+  Widget? nextPage;
+  String buttonText;
+  String successMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,15 @@ class SuccessPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        child: AppButton(
+          text: buttonText,
+          onPress: () {
+            Get.to(nextPage);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -41,26 +56,15 @@ class SuccessPage extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 1.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 1.0),
               child: Text(
-                "You have successfully signed up your account in our app and can start using",
+                successMessage,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
               ),
             ),
-            const SizedBox(
-              height: 25,
-            ),
-            AppButton(
-              text: "Start using",
-              onPress: () {
-                Get.to( CreateAccountNewPage());
-              },
-            ),
-            const SizedBox(
-              height: 15,
-            )
           ],
         ),
       ),

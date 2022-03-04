@@ -6,7 +6,7 @@ class AccountStateController extends GetxController {
   final selectedAccountState = {}.obs;
 
   Future setAccountStateFromLogin(String customerNo) async {
-    var response = await getAccountInfo("0002");
+    var response = await getAccountInfo(customerNo);
     if (response["success"] == true) {
       accountState.value = response["data"];
     }

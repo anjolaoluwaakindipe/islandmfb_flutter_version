@@ -1,8 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:form_validator/form_validator.dart';
+import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
+import 'package:islandmfb_flutter_version/pages/airtime_verification.dart';
+import 'package:islandmfb_flutter_version/pages/home_page.dart';
+import 'package:islandmfb_flutter_version/state/airtime_state_controller.dart';
+import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AirtimePage extends StatefulWidget {
@@ -28,14 +35,12 @@ class _AirtimePageState extends State<AirtimePage> {
   TextEditingController narrationTextController = TextEditingController();
   TextEditingController pinTextController = TextEditingController();
 
-  // drop down menu items builder
-  DropdownMenuItem<String> buildMenuItem(String item) {
-    return DropdownMenuItem(
-      child: Text(item),
-      value: item,
-    );
-  }
+  
 
+  // state controllers
+  AirtimeStateController airtimeState = Get.put(AirtimeStateController());
+
+  // disables button if fields are empty
   unDisableButton() {
     if (billerValue == null ||
         productValue == null ||
@@ -43,7 +48,8 @@ class _AirtimePageState extends State<AirtimePage> {
         mobileNumberTextController.text.isEmpty ||
         narrationTextController.text.isEmpty ||
         pinTextController.text.isEmpty ||
-        pinTextController.text.length < 4) {
+        pinTextController.text.length < 4 ||
+        mobileNumberTextController.text.length < 11) {
       setState(() {
         isButtonDisabled = true;
       });
@@ -54,6 +60,24 @@ class _AirtimePageState extends State<AirtimePage> {
     }
   }
 
+  // form key state
+  final GlobalKey<FormState> _airtimeFormKey = GlobalKey<FormState>();
+
+  // function for the verification button
+  void onVerifyHnadler() {
+    if (_airtimeFormKey.currentState!.validate()) {
+      airtimeState.setAirtimeState(
+        amount: double.parse(amountTextController.text),
+        biller: billerValue,
+        product: productValue,
+        narration: narrationTextController.text,
+        mobileNumber: mobileNumberTextController.text,
+      );
+
+      Get.to(const AirtimeVerificationPage());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +85,9 @@ class _AirtimePageState extends State<AirtimePage> {
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(const HomePage());
+            },
             icon: SvgPicture.asset(
               "assets/images/back.svg",
               height: 20,
@@ -105,6 +131,7 @@ class _AirtimePageState extends State<AirtimePage> {
                   isExpanded: true,
                   value: billerValue,
                   buttonHeight: 70,
+                  focusColor: accentColor,
                   buttonPadding:
                       const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4),
                   dropdownElevation: 0,
@@ -142,6 +169,7 @@ class _AirtimePageState extends State<AirtimePage> {
                         hint: const Text("Select product"),
                         isExpanded: true,
                         value: productValue,
+                        focusColor: accentColor,
                         buttonHeight: 70,
                         buttonPadding: const EdgeInsets.symmetric(
                             horizontal: 15.0, vertical: 4),
@@ -159,59 +187,86 @@ class _AirtimePageState extends State<AirtimePage> {
                     )
                   : Container(),
               productValue != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AppTextField(
-                          textController: amountTextController,
-                          label: "Amount",
-                          labelColor: lightextColor,
-                          textInputType: TextInputType.number,
-                          onChanged: (value) {
-                            unDisableButton();
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AppTextField(
-                          textController: mobileNumberTextController,
-                          label: "Mobile Number",
-                          labelColor: lightextColor,
-                          textInputType: TextInputType.phone,
-                          onChanged: (value) {
-                            unDisableButton();
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AppTextField(
-                          textController: narrationTextController,
-                          label: "Narration",
-                          labelColor: lightextColor,
-                          onChanged: (value) {
-                            unDisableButton();
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AppTextField(
-                          textController: pinTextController,
-                          label: "Pin",
-                          labelColor: lightextColor,
-                          textInputType: TextInputType.number,
-                          maxCharacterLength: 4,
-                          hideText: true,
-                          onChanged: (value) {
-                            unDisableButton();
-                          },
-                        ),
-                      ],
+                  ? Form(
+                      key: _airtimeFormKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          AppTextField(
+                            textController: amountTextController,
+                            label: "Amount",
+                            labelColor: lightextColor,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                    decimal: true),
+                            onChanged: (value) {
+                              unDisableButton();
+                            },
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d*\.?\d{0,2}')),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          AppTextField(
+                            textController: mobileNumberTextController,
+                            label: "Mobile Number",
+                            labelColor: lightextColor,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                    decimal: false, signed: false),
+                            onChanged: (value) {
+                              unDisableButton();
+                            },
+                            validator: ValidationBuilder()
+                                .phone()
+                                .minLength(11)
+                                .build(),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')),
+                              LengthLimitingTextInputFormatter(11)
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          AppTextField(
+                            textController: narrationTextController,
+                            label: "Narration",
+                            labelColor: lightextColor,
+                            onChanged: (value) {
+                              unDisableButton();
+                            },
+                            validator:
+                                ValidationBuilder().maxLength(50).build(),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          AppTextField(
+                            textController: pinTextController,
+                            label: "Pin",
+                            labelColor: lightextColor,
+                            textInputType: TextInputType.number,
+                            hideText: true,
+                            onChanged: (value) {
+                              unDisableButton();
+                            },
+                            suffixIconWidget: null,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')),
+                              LengthLimitingTextInputFormatter(4)
+                            ],
+                          ),
+                        ],
+                      ),
                     )
                   : Container()
             ],
@@ -225,7 +280,9 @@ class _AirtimePageState extends State<AirtimePage> {
         ),
         child: AppButton(
           text: "Verify",
-          onPress: () {},
+          onPress: () {
+            onVerifyHnadler();
+          },
           isDisabled: isButtonDisabled,
         ),
       ),

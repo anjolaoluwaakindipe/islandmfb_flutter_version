@@ -50,13 +50,11 @@ class _LoginPageState extends State<LoginPage> {
 
       if (token.containsKey("access_token")) {
         await userState.setUserStateFromLogin(token["access_token"]);
-        print(user);
       }
 
       if (user.containsKey("customer_no")) {
         await accountState
             .setAccountStateFromLogin(user["customer_no"].toString());
-        print(accountState.selectedAccountState);
       }
 
       context.loaderOverlay.hide();
@@ -83,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
             barrierDismissible: true);
 
-        Get.offAll(() => const HomePage());
+        Get.to(() => const HomePage());
       } else {
         showDialog(
             context: context,

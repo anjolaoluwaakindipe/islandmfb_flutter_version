@@ -7,13 +7,11 @@ import 'package:http/http.dart' as http;
 Future<Map> getAccountInfo(String customerNo) async {
   String urlString =
       accountUrl + "/getCustomerAccounts?CustomerNo=" + customerNo;
-  return await http.get(
+  return await http
+      .get(
     Uri.parse(urlString),
-    headers: {
-      "Access-Control-Allow-Headers": "Access-Control-Allow-Origin, Accept",
-      "Access-Control-Allow-Origin": "*",
-    },
-  ).then(
+  )
+      .then(
     (value) {
       if (value.statusCode == 200) {
         return {
@@ -25,7 +23,7 @@ Future<Map> getAccountInfo(String customerNo) async {
         return {"success": false, "msg": "An error occured please try again"};
       }
     },
-  );
+  ); 
 }
 
 void main() async {

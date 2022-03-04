@@ -53,7 +53,7 @@ Future getUserInfo(String token) async {
     "Accept": "application/json"
   }).then(
     (value) {
-      print(json.decode(value.body));
+      
       return json.decode(value.body);
     },
   );

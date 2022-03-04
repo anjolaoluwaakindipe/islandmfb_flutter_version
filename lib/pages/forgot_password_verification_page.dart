@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
+import 'package:islandmfb_flutter_version/pages/reset_password_page.dart';
 import 'package:islandmfb_flutter_version/pages/success_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
@@ -10,14 +12,16 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../components/shared/app_textfield.dart';
 import '../components/shared/app_verification_textfield.dart';
 
-class VerificationPage extends StatefulWidget {
-  const VerificationPage({Key? key}) : super(key: key);
+class ForgotPasswordVerificationPage extends StatefulWidget {
+  const ForgotPasswordVerificationPage({Key? key}) : super(key: key);
 
   @override
-  State<VerificationPage> createState() => _VerificationPageState();
+  State<ForgotPasswordVerificationPage> createState() =>
+      _ForgotPasswordVerificationPageState();
 }
 
-class _VerificationPageState extends State<VerificationPage> {
+class _ForgotPasswordVerificationPageState
+    extends State<ForgotPasswordVerificationPage> {
   bool _isButtonDisabled = true;
 
   // pin text controller
@@ -33,6 +37,10 @@ class _VerificationPageState extends State<VerificationPage> {
         _isButtonDisabled = false;
       });
     }
+  }
+
+  void onContinueHandler() {
+    Get.to(ResetPasswordPage());
   }
 
   @override
@@ -61,11 +69,7 @@ class _VerificationPageState extends State<VerificationPage> {
           isDisabled: _isButtonDisabled,
           text: "Continue",
           onPress: () {
-            Get.to(SuccessPage(
-              buttonText: "Start using",
-              successMessage:
-                  "You have successfully signed up your account in our app and can start using",
-            ));
+            onContinueHandler();
           },
         ),
       ),
@@ -79,11 +83,11 @@ class _VerificationPageState extends State<VerificationPage> {
               height: 1,
             ),
             const Text(
-              "Verification",
+              "Enter 4 digits Code",
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 30,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                   color: Color(0xFF333333)),
             ),
             const SizedBox(
@@ -92,7 +96,7 @@ class _VerificationPageState extends State<VerificationPage> {
             const Padding(
               padding: EdgeInsets.only(),
               child: Text(
-                "Enter 4 digit code we sent to the mobile number linked to your account",
+                "Enter the 4 digits code we just sent you in your email address",
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
               ),
@@ -101,6 +105,12 @@ class _VerificationPageState extends State<VerificationPage> {
               height: 20,
             ),
             PinCodeTextField(
+              hintCharacter: "*",
+              autoDismissKeyboard: true,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                LengthLimitingTextInputFormatter(11)
+              ],
               controller: pinTextController,
               appContext: context,
               animationType: AnimationType.none,
