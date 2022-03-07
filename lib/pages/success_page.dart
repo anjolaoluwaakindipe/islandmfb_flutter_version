@@ -9,7 +9,10 @@ import 'package:get/get.dart';
 
 class SuccessPage extends StatelessWidget {
   SuccessPage(
-      {Key? key, this.nextPage, required this.buttonText , required this.successMessage})
+      {Key? key,
+      this.nextPage,
+      required this.buttonText,
+      required this.successMessage})
       : super(key: key);
 
   Widget? nextPage;
@@ -36,7 +39,7 @@ class SuccessPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SvgPicture.asset(
               "assets/images/bi_shield-fill-check.svg",

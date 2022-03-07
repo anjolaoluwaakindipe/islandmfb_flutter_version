@@ -1,7 +1,11 @@
 // helper functions
 import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/requests/request_settings.dart';
 import 'package:http/http.dart' as http;
+import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
+import 'package:islandmfb_flutter_version/storage/secure_storage.dart';
 
 String xformurlencoder(Map<dynamic, dynamic> bodyFields) {
   String encodedStr = "";
@@ -17,7 +21,8 @@ String xformurlencoder(Map<dynamic, dynamic> bodyFields) {
 }
 
 // requests
-Future loginUser(String username, String password) async {
+Future loginUserWithUsernameAndPassword(
+    String username, String password) async {
   Map loginInfo = {
     "username": username,
     "password": password,
@@ -43,18 +48,67 @@ Future loginUser(String username, String password) async {
   );
 }
 
+Future reLoginWithRefreshToken() async {
+  String? refreshToken = await SecureStorage.readAValue("refresh_token");
+
+  Map loginInfo = {
+    "refresh_token": refreshToken,
+    "grant_type": passwordGrantType,
+    "client_id": customClientId
+  };
+
+  String body = xformurlencoder(loginInfo);
+
+  String uri = keycloakBaseUrl +
+      "/auth/realms/" +
+      customRealm +
+      "/protocol/openid-connect/token";
+  if (refreshToken != null) {
+    return await http
+        .post(
+      Uri.parse(uri),
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: body,
+    )
+        .then((value) async {
+      if (value.statusCode == 200) {
+        Map tokenInformation = json.decode(value.body);
+        Get.put(TokenStateController()).tokenState.value = tokenInformation;
+        SecureStorage.writeAValue(
+            "refresh_token", tokenInformation["refresh_token"]);
+        SecureStorage.writeAValue(
+            "access_token", tokenInformation["access_token"]);
+        await getUserInfo(tokenInformation["access_token"]);
+      } else {
+        SecureStorage.deleteAValue("refresh_token");
+        SecureStorage.deleteAValue("access_token");
+        Get.to(LoginPage());
+      }
+    });
+  }
+}
+
 Future getUserInfo(String token) async {
+  String refreshToken = await SecureStorage.readAValue("refresh_token");
+
   String uriString = keycloakBaseUrl +
       "/auth/realms/" +
       customRealm +
       "/protocol/openid-connect/userinfo";
+
   return await http.get(Uri.parse(uriString), headers: {
     "Authorization": "Bearer " + token,
     "Accept": "application/json"
   }).then(
     (value) {
-      
-      return json.decode(value.body);
+      if (value.statusCode == 200) {
+        return json.decode(value.body);
+      } else if (value.statusCode == 401 && refreshToken.isNotEmpty) {
+        reLoginWithRefreshToken();
+        return;
+      } else {
+        Get.to(LoginPage());
+      }
     },
   );
 }
@@ -152,7 +206,7 @@ Future logoutUser(String refreshToken) async {
 }
 
 void main() async {
-  var tokenInfo = await loginUser("aji", "test1234");
+  var tokenInfo = await loginUserWithUsernameAndPassword("aji", "test1234");
   print(tokenInfo);
   var user = await getUserInfo(tokenInfo["access_token"]);
 
