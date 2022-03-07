@@ -74,9 +74,9 @@ Future reLoginWithRefreshToken() async {
       if (value.statusCode == 200) {
         Map tokenInformation = json.decode(value.body);
         Get.put(TokenStateController()).tokenState.value = tokenInformation;
-        SecureStorage.writeAValue(
+        await SecureStorage.writeAValue(
             "refresh_token", tokenInformation["refresh_token"]);
-        SecureStorage.writeAValue(
+        await SecureStorage.writeAValue(
             "access_token", tokenInformation["access_token"]);
         await getUserInfo(tokenInformation["access_token"]);
       } else {
@@ -89,7 +89,7 @@ Future reLoginWithRefreshToken() async {
 }
 
 Future getUserInfo(String token) async {
-  String refreshToken = await SecureStorage.readAValue("refresh_token");
+  String? refreshToken = await SecureStorage.readAValue("refresh_token");
 
   String uriString = keycloakBaseUrl +
       "/auth/realms/" +
@@ -103,7 +103,7 @@ Future getUserInfo(String token) async {
     (value) {
       if (value.statusCode == 200) {
         return json.decode(value.body);
-      } else if (value.statusCode == 401 && refreshToken.isNotEmpty) {
+      } else if (value.statusCode == 401 && refreshToken != null) {
         reLoginWithRefreshToken();
         return;
       } else {
