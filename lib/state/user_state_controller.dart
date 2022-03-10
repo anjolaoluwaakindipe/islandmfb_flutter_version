@@ -6,7 +6,7 @@ class UserStateController extends GetxController {
   final user = {}.obs;
 
   Future setUserStateFromLogin() async {
-    String? accessToken = await SecureStorage.readAValue("accessToken");
+    String? accessToken = await SecureStorage.readAValue("access_token");
 
     if (accessToken != null) {
       user.value = await getUserInfo(accessToken);

@@ -11,6 +11,7 @@ import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/loan_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_product_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
 import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
-      home: LoanPage(),
+      home: LoginPage(),
     );
   }
 }

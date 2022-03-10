@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:islandmfb_flutter_version/components/loan_page/loan_page_quick_actions.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_product_page.dart';
+import 'package:islandmfb_flutter_version/requests/auth_request.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class LoanPage extends StatefulWidget {
@@ -15,6 +18,15 @@ class LoanPage extends StatefulWidget {
 class _LoanPageState extends State<LoanPage> {
   // naira formatter
   final nairaFormat = NumberFormat.currency(name: "N  ");
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future(() async {
+      await reLoginWithRefreshToken();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,124 +59,95 @@ class _LoanPageState extends State<LoanPage> {
       ),
       backgroundColor: whiteColor,
       body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 30,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Hi Akinloluwa",
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Hi Akinloluwa",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  )),
+              const SizedBox(height: 10),
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                decoration: BoxDecoration(
+                    color: accentColor,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(nairaFormat.format(4000),
+                        style: const TextStyle(
+                          color: primaryColor,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Text("Loan Balance", style: TextStyle(fontSize: 16)),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    RichText(
+                      text: const TextSpan(children: [
+                        TextSpan(
+                          text: "Next repayment date  ",
+                        ),
+                        TextSpan(
+                            text: "dd/mm/yy",
+                            style: TextStyle(fontWeight: FontWeight.w600))
+                      ], style: TextStyle(fontSize: 15)),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Quick Actions",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                )),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-              decoration: BoxDecoration(
-                  color: accentColor, borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Column(
                 children: [
-                  Text(nairaFormat.format(4000),
-                      style: const TextStyle(
-                        color: primaryColor,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                      )),
-                  const SizedBox(
-                    height: 5,
+                  LoanPageQuickActions(
+                    iconUrlString: "assets/images/loanApplyForLoan.svg",
+                    subtitle: "See what loans you qualify for",
+                    title: "Apply for Loan",
+                    onClick: () {
+                      Get.to(LoanProductPage());
+                    },
                   ),
-                  const Text("Loan Balance", style: TextStyle(fontSize: 16)),
-                  const SizedBox(
-                    height: 5,
+                  const SizedBox(height: 20),
+                  LoanPageQuickActions(
+                    iconUrlString: "assets/images/loanLoanRepayment.svg",
+                    subtitle: "Repay your loans in time to access more",
+                    title: "Loan Repayment",
                   ),
-                  RichText(
-                    text: const TextSpan(children: [
-                      TextSpan(
-                        text: "Next repayment date  ",
-                      ),
-                      TextSpan(
-                          text: "dd/mm/yy",
-                          style: TextStyle(fontWeight: FontWeight.w600))
-                    ], style: TextStyle(fontSize: 15)),
-                  )
+                  const SizedBox(height: 20),
+                  LoanPageQuickActions(
+                    iconUrlString: "assets/images/loanLoanTransaction.svg",
+                    subtitle: "Check out you loan(s) transactions",
+                    title: " Loan Transaction",
+                  ),
+                  const SizedBox(height: 40)
                 ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Quick Actions",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Column(
-              children: [
-                LoanPageQuickActions(),
-              ],
-            )
-          ],
-        ),
-      )),
-    );
-  }
-}
-
-class LoanPageQuickActions extends StatefulWidget {
-  const LoanPageQuickActions({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<LoanPageQuickActions> createState() => _LoanPageQuickActionsState();
-}
-
-class _LoanPageQuickActionsState extends State<LoanPageQuickActions> {
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(10),
-      onTap: () {},
-      highlightColor: primaryColor,
-      child: Ink(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: accentColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SvgPicture.asset("assets/images/loanApplyForLoan.svg"),
-            SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Apply for Loan",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text("See what loans you qualify for "),
-                ],
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

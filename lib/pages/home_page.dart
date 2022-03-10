@@ -40,10 +40,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedAccount = accountState.selectedAccountState;
+    var selectedAccount = accountState.selectedAccount;
+    var customerDetail = accountState.customerDetails;
     final nairaFormat = NumberFormat.currency(name: "N  ");
-
-    print(selectedAccount);
 
     void openChangeAccountModal() {
       showModalBottomSheet<void>(
@@ -93,11 +92,11 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       "Hi " +
-                          (selectedAccount["customerName"]!
+                          (customerDetail["name"]!
                                   .split(" ")[0]!
                                   .toString()
                                   .capitalize ??
-                              "Anjola "),
+                              " "),
                       style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,

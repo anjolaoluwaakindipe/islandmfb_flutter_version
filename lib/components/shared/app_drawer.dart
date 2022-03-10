@@ -4,7 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
@@ -17,7 +20,7 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var selectedAccount = accountState.selectedAccountState;
+    var customerDetails = accountState.customerDetails;
 
     void onLogoutClick() {
       showDialog(
@@ -75,7 +78,7 @@ class AppDrawer extends StatelessWidget {
                       ),
                       Center(
                         child: Obx(() => Initicon(
-                              text: selectedAccount["accountName"] ?? "",
+                              text: customerDetails["name"] ?? "",
                               backgroundColor: primaryColor,
                               size: 50,
                             )),
@@ -84,7 +87,7 @@ class AppDrawer extends StatelessWidget {
                         height: 50,
                       ),
                       Obx(() => Text(
-                            selectedAccount["accountName"] ?? "",
+                            customerDetails["name"] ?? "",
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -93,8 +96,8 @@ class AppDrawer extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text("BVN: " + "222900866343",
-                          style: TextStyle(fontSize: 12)),
+                      Text("BVN: " + (customerDetails["bvn"] ?? ""),
+                          style: const TextStyle(fontSize: 12)),
                       const SizedBox(height: 20),
                     ],
                   ),
@@ -108,12 +111,16 @@ class AppDrawer extends StatelessWidget {
                       DrawerNavButtons(
                         name: "Transfer",
                         svgUrl: "assets/images/drawerTransfer.svg",
-                        onClickHandler: () {},
+                        onClickHandler: () {
+                          Get.to(TransferPage());
+                        },
                       ),
                       DrawerNavButtons(
                         name: "Loan",
                         svgUrl: "assets/images/drawerLoan.svg",
-                        onClickHandler: () {},
+                        onClickHandler: () {
+                          Get.to(LoanPage());
+                        },
                       ),
                       DrawerNavButtons(
                         name: "Airtime",
@@ -130,7 +137,9 @@ class AppDrawer extends StatelessWidget {
                       DrawerNavButtons(
                         name: "Self service",
                         svgUrl: "assets/images/drawerSelfService.svg",
-                        onClickHandler: () {},
+                        onClickHandler: () {
+                          Get.to(const SelfServicePage());
+                        },
                       ),
                       DrawerNavButtons(
                         name: "Profile",

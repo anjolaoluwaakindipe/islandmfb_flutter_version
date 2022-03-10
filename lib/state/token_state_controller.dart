@@ -10,7 +10,7 @@ class TokenStateController extends GetxController {
     super.onInit();
     String? refreshToken = await SecureStorage.readAValue("refresh_token");
     String? accessToken = await SecureStorage.readAValue("access_token");
-    if (refreshToken!= null && accessToken !=null) {
+    if (refreshToken != null && accessToken != null) {
       tokenState.value =
           {"access_token": accessToken, "refresh_token": refreshToken}.obs;
       return;
@@ -28,6 +28,7 @@ class TokenStateController extends GetxController {
           "refresh_token", tokenState["refresh_token"]);
       await SecureStorage.writeAValue(
           "access_token", tokenState["access_token"]);
+      
     }
   }
 }

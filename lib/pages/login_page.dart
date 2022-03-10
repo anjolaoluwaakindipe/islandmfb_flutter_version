@@ -55,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
             .setAccountStateFromLogin(user["customer_no"].toString());
       }
 
+
       context.loaderOverlay.hide();
 
       if (token.containsKey("access_token") && user.isNotEmpty) {
@@ -63,7 +64,8 @@ class _LoginPageState extends State<LoginPage> {
         showDialog(
             context: context,
             builder: (_) => AppAlertDialogue(
-                  content: token["error_description"],
+                  content: token["error_description"] ??
+                      "An error occurred while login in. Please try again",
                   contentColor: primaryColor,
                   actions: [
                     TextButton(

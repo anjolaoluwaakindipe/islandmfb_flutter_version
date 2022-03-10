@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
-import 'package:islandmfb_flutter_version/pages/link_bvn.dart';
+import 'package:islandmfb_flutter_version/pages/link_bvn_page.dart';
 import 'package:islandmfb_flutter_version/pages/statement_of_account_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 

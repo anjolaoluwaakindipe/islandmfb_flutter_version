@@ -50,20 +50,20 @@ Future loginUserWithUsernameAndPassword(
 
 Future reLoginWithRefreshToken() async {
   String? refreshToken = await SecureStorage.readAValue("refresh_token");
-
-  Map loginInfo = {
-    "refresh_token": refreshToken,
-    "grant_type": passwordGrantType,
-    "client_id": customClientId
-  };
-
-  String body = xformurlencoder(loginInfo);
-
-  String uri = keycloakBaseUrl +
-      "/auth/realms/" +
-      customRealm +
-      "/protocol/openid-connect/token";
   if (refreshToken != null) {
+    Map loginInfo = {
+      "refresh_token": refreshToken,
+      "grant_type": refreshTokenGrantType,
+      "client_id": customClientId
+    };
+
+    String body = xformurlencoder(loginInfo);
+
+    String uri = keycloakBaseUrl +
+        "/auth/realms/" +
+        customRealm +
+        "/protocol/openid-connect/token";
+
     return await http
         .post(
       Uri.parse(uri),
@@ -85,6 +85,8 @@ Future reLoginWithRefreshToken() async {
         Get.to(LoginPage());
       }
     });
+  } else {
+    Get.to(LoginPage());
   }
 }
 
