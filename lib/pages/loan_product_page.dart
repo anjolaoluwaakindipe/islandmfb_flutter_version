@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_product_form_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class LoanProductPage extends StatefulWidget {
@@ -65,22 +66,33 @@ class _LoanProductPageState extends State<LoanProductPage> {
                   LoanProductPageLoanProductButtons(
                     loanTitle: "Quick Loan",
                     loanSubtitle: "5% interest",
-                    onClick: () {},
+                    onClick: () {
+                      Get.to(LoanProductForm(formTitle: "Quick Loan"));
+                    },
                   ),
                   const SizedBox(height: 10),
                   LoanProductPageLoanProductButtons(
                     loanTitle: "Student Loan",
                     loanSubtitle: "10% interest",
+                    onClick: () {
+                      Get.to(LoanProductForm(formTitle: "Student Loan"));
+                    },
                   ),
                   const SizedBox(height: 10),
                   LoanProductPageLoanProductButtons(
                     loanTitle: "Business Loan",
                     loanSubtitle: "25% interest",
+                    onClick: () {
+                      Get.to(LoanProductForm(formTitle: "Business Loan"));
+                    },
                   ),
                   const SizedBox(height: 10),
                   LoanProductPageLoanProductButtons(
                     loanTitle: "Educational Loan",
                     loanSubtitle: "10% interest",
+                    onClick: () {
+                      Get.to(LoanProductForm(formTitle: "Educational Loan"));
+                    },
                   ),
                   const SizedBox(height: 40),
                 ],

@@ -16,6 +16,7 @@ import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
 import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
 import 'package:islandmfb_flutter_version/pages/sign_up_active_page.dart';
+import 'package:islandmfb_flutter_version/pages/splash_screen_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/verification_page.dart';
 

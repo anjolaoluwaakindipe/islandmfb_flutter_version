@@ -9,8 +9,10 @@ import 'package:islandmfb_flutter_version/components/shared/app_drawer.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
+import 'package:islandmfb_flutter_version/requests/account_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
+import 'package:islandmfb_flutter_version/state/transactions_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/user_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
@@ -25,13 +27,14 @@ class _HomePageState extends State<HomePage> {
   final userState = Get.put(UserStateController());
   final tokenState = Get.put(TokenStateController());
   final accountState = Get.put(AccountStateController());
+  final transactionState = Get.put(TransactionStateController());
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    Future(() {
+    Future(() async {
       if (userState.user.isEmpty) {
         Get.to(LoginPage());
       }
@@ -43,6 +46,11 @@ class _HomePageState extends State<HomePage> {
     var selectedAccount = accountState.selectedAccount;
     var customerDetail = accountState.customerDetails;
     final nairaFormat = NumberFormat.currency(name: "N  ");
+
+    Future(() async {
+      await transactionState.setRecentTransactionHistory();
+      print(transactionState.recentTransactionHistoryState);
+    });
 
     void openChangeAccountModal() {
       showModalBottomSheet<void>(
@@ -90,18 +98,18 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      "Hi " +
-                          (customerDetail["name"]!
-                                  .split(" ")[0]!
-                                  .toString()
-                                  .capitalize ??
-                              " "),
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Obx(() => Text(
+                          "Hi " +
+                              (customerDetail["name"]!
+                                      .split(" ")[0]!
+                                      .toString()
+                                      .capitalize ??
+                                  " "),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
                     RichText(
                       text: TextSpan(
                           text: "Change Account",
@@ -250,132 +258,63 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  "Transaction History",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Transaction History",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: const Text(
+                        "View all",
+                        style: TextStyle(fontSize: 12, color: successColor),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Column(
-                  children: [
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                    HomePageTransactionHistoryButtons(
-                      nairaFormat: nairaFormat,
-                      accountOwner: "Akinjoke",
-                      otherAccount: "Akinloluwa",
-                      moneyAmount: 30000,
-                      isCredit: true,
-                      date: "Thursday, July 12th 2022",
-                    ),
-                  ],
-                )
+                FutureBuilder<List>(future: Future(() async {
+                  await transactionState.setRecentTransactionHistory();
+                  return Future.value(
+                      transactionState.recentTransactionHistoryState);
+                }), builder: ((context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Obx(() => transactionState
+                            .recentTransactionHistoryState.isEmpty
+                        ? const Center(
+                            child: Text("You have no transaction history",
+                                style: TextStyle(color: accentColor)),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: ((context, index) {
+                              return HomePageTransactionHistoryButtons(
+                                nairaFormat: nairaFormat,
+                                accountOwner: "Akinjoke",
+                                otherAccount: "Akinloluwa",
+                                moneyAmount: snapshot.data?[index]?["amount"],
+                                isCredit: true,
+                                narrative: snapshot.data?[index]?["narrative"],
+                                date: snapshot.data?[index]?["postDate"],
+                              );
+                            }),
+                          ));
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: primaryColor,
+                  ));
+                }))
               ],
             ),
           ),

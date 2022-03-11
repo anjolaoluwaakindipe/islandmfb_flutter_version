@@ -44,6 +44,20 @@ Future<Map> getCustomerDetails(String customerNo) async {
   });
 }
 
+Future<Map> getCustomerRecentTransactions(String accountNo) async {
+  String urlString =
+      accountUrl + "/getAccountRecentTxns?AccountNo=" + accountNo;
+
+  return await http.get(Uri.parse(urlString)).then((value) {
+    if (value.statusCode == 200) {
+      return {"success": true, "data": json.decode(value.body)};
+    } else {
+      return {"success": false, "statusCode": value.statusCode};
+    }
+  });
+}
+
 void main() async {
   print(await getCustomerAccounts("0002"));
+  print(await getCustomerRecentTransactions(1000021.toString()));
 }
