@@ -3,8 +3,12 @@ import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
+import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
+import 'package:islandmfb_flutter_version/pages/bill_payment_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/profile_main_page.dart';
+import 'package:islandmfb_flutter_version/pages/profile_set_pin.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
@@ -91,7 +95,7 @@ class AppDrawer extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Text("BVN: " + "222900866343",
+                    const Text("BVN: " "222900866343",
                         style: TextStyle(fontSize: 12)),
                     const SizedBox(height: 20),
                   ],
@@ -116,12 +120,16 @@ class AppDrawer extends StatelessWidget {
                     DrawerNavButtons(
                       name: "Airtime",
                       svgUrl: "assets/images/drawerAirtime.svg",
-                      onClickHandler: () {},
+                      onClickHandler: () {
+                        Get.to(const AirtimePage());
+                      },
                     ),
                     DrawerNavButtons(
                       name: "Bill payment",
                       svgUrl: "assets/images/drawerBillPayment.svg",
-                      onClickHandler: () {},
+                      onClickHandler: () {
+                        Get.to(const BillPaymentPage());
+                      },
                     ),
                     DrawerNavButtons(
                       name: "Self service",
@@ -136,12 +144,16 @@ class AppDrawer extends StatelessWidget {
                     DrawerNavButtons(
                       name: "Profile",
                       svgUrl: "assets/images/drawerProfile.svg",
-                      onClickHandler: () {},
+                      onClickHandler: () {
+                        Get.to(const ProfileMainPage());
+                      },
                     ),
                     DrawerNavButtons(
                       name: "Set PIN",
                       svgUrl: "assets/images/drawerSetPin.svg",
-                      onClickHandler: () {},
+                      onClickHandler: () {
+                        Get.to(const ProfileSetPinPage());
+                      },
                     ),
                   ],
                 ),

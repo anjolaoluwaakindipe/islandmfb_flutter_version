@@ -23,15 +23,18 @@ class CreateAccountNewPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        // leading: SizedBox(
-        //   height: 1,
-        //   child: SvgPicture.asset(
-        //     '../../images/back.svg',
-        //     height: 1,
-        //     width: 1,
-        //     fit: BoxFit.contain,
-        //   ),
-        // ),
+        leading: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
+              ),
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -75,16 +78,27 @@ class CreateAccountNewPage extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            AppTextField(hint: "Enter your BVN", label: "BVN", textController: bvnTextController,),
+            AppTextField(
+              hint: "Enter your BVN",
+              label: "BVN",
+              textController: bvnTextController,
+            ),
             const SizedBox(
               height: 20,
             ),
             AppTextField(
-                hint: "Enter your phone number", label: "Phone Number", textController: phoneNumberTextEditingController,),
+              hint: "Enter your phone number",
+              label: "Phone Number",
+              textController: phoneNumberTextEditingController,
+            ),
             const SizedBox(
               height: 20,
             ),
-            AppTextField(hint: "Enter your email", label: "Email Address", textController: emailTextEditingController,),
+            AppTextField(
+              hint: "Enter your email",
+              label: "Email Address",
+              textController: emailTextEditingController,
+            ),
             const SizedBox(
               height: 25,
             ),

@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "Hi " + (userState.user["given_name"] ?? " "),
+                    "Hi " + (userState.user["given_name"] ?? "Moses "),
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -121,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                               const TextStyle(color: blackColor, fontSize: 10),
                           children: <TextSpan>[
                             TextSpan(
-                              text: (selectedAccount["product"] + "  ") ??
+                              text: (selectedAccount["product"] +
+                                      "SAVINGS ACCOUNT") ??
                                   "Savings Account    ",
                             ),
                             TextSpan(
@@ -139,8 +140,8 @@ class _HomePageState extends State<HomePage> {
                         height: 10,
                       ),
                       Text(
-                        nairaFormat.format(
-                            selectedAccount["availableBalance"] ?? 0.00),
+                        nairaFormat
+                            .format(selectedAccount["availableBalance"] ?? 0),
                         softWrap: true,
                         style: const TextStyle(
                           color: primaryColor,
@@ -169,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                             const TextSpan(text: "Book Balance   "),
                             TextSpan(
                               text: nairaFormat
-                                  .format(selectedAccount["bookBalance"]),
+                                  .format(selectedAccount["bookBalance"] ?? 0),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                               ),

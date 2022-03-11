@@ -16,6 +16,18 @@ class SuccessPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
+        leading: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
+              ),
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -55,7 +67,7 @@ class SuccessPage extends StatelessWidget {
             AppButton(
               text: "Start using",
               onPress: () {
-                Get.to( CreateAccountNewPage());
+                Get.to(CreateAccountNewPage());
               },
             ),
             const SizedBox(

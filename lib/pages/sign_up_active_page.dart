@@ -21,23 +21,17 @@ class SignUpActivePage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        // leading: SizedBox(
-        //   height: 1,
-        //   child: SvgPicture.asset(
-        //     '../../images/back.svg',
-        //     height: 1,
-        //     width: 1,
-        //     fit: BoxFit.contain,
-        //   ),
-        // ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: AppButton(
-          text: "Continue",
-          onPress: () {
-            Get.to(const VerificationPage());
-          },
+        leading: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
+              ),
+            ),
+          ),
         ),
       ),
       body: Padding(
@@ -102,6 +96,15 @@ class SignUpActivePage extends StatelessWidget {
         ),
       ),
       backgroundColor: whiteColor,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        child: AppButton(
+          text: "Continue",
+          onPress: () {
+            Get.to(const VerificationPage());
+          },
+        ),
+      ),
     );
   }
 }

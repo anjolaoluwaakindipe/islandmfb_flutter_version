@@ -1,22 +1,32 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
-import 'package:islandmfb_flutter_version/utilities/colors.dart';
+import 'package:flutter_svg/svg.dart';
 
-class AirtimePage extends StatefulWidget {
-  const AirtimePage({Key? key}) : super(key: key);
+import '../components/shared/app_button.dart';
+import '../components/shared/app_textfield.dart';
+import '../utilities/colors.dart';
+
+class UtilityPage extends StatefulWidget {
+  const UtilityPage({Key? key}) : super(key: key);
 
   @override
-  State<AirtimePage> createState() => _AirtimePageState();
+  _UtilityPageState createState() => _UtilityPageState();
 }
 
-class _AirtimePageState extends State<AirtimePage> {
-  // DropDown variables
-  final billerItems = ["Glo", "MTN", "Airtel", "Vodacom"];
+class _UtilityPageState extends State<UtilityPage> {
+  final billerItems = [
+    "AZURI TECHNOLOGIES",
+    "Edo Waste Management",
+    "Enugu State Water Co ",
+    "Cross River Water Board"
+  ];
+
   String? billerValue;
-  final productItems = ["VTU"];
+
+  final productItems = [
+    "Payment (Returning Customer)",
+    "Payment (New Customer)",
+  ];
   String? productValue;
 
   // button state
@@ -24,9 +34,8 @@ class _AirtimePageState extends State<AirtimePage> {
 
   // textediting controllers
   TextEditingController amountTextController = TextEditingController();
+  TextEditingController customerUniqueTextController = TextEditingController();
   TextEditingController mobileNumberTextController = TextEditingController();
-  TextEditingController narrationTextController = TextEditingController();
-  TextEditingController pinTextController = TextEditingController();
 
   // drop down menu items builder
   DropdownMenuItem<String> buildMenuItem(String item) {
@@ -40,10 +49,9 @@ class _AirtimePageState extends State<AirtimePage> {
     if (billerValue == null ||
         productValue == null ||
         amountTextController.text.isEmpty ||
+        customerUniqueTextController.text.isEmpty ||
         mobileNumberTextController.text.isEmpty ||
-        narrationTextController.text.isEmpty ||
-        pinTextController.text.isEmpty ||
-        pinTextController.text.length < 4) {
+        mobileNumberTextController.text.length < 4) {
       setState(() {
         isButtonDisabled = true;
       });
@@ -70,7 +78,7 @@ class _AirtimePageState extends State<AirtimePage> {
         ),
         backgroundColor: whiteColor,
         title: const Text(
-          "Airtime",
+          "Utility",
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 18,
@@ -178,8 +186,8 @@ class _AirtimePageState extends State<AirtimePage> {
                           height: 15,
                         ),
                         AppTextField(
-                          textController: mobileNumberTextController,
-                          label: "Mobile Number",
+                          textController: customerUniqueTextController,
+                          label: "Customer's Unique Number",
                           labelColor: lightextColor,
                           textInputType: TextInputType.phone,
                           onChanged: (value) {
@@ -190,23 +198,9 @@ class _AirtimePageState extends State<AirtimePage> {
                           height: 15,
                         ),
                         AppTextField(
-                          textController: narrationTextController,
-                          label: "Narration",
+                          textController: mobileNumberTextController,
+                          label: "Phone Number",
                           labelColor: lightextColor,
-                          onChanged: (value) {
-                            unDisableButton();
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AppTextField(
-                          textController: pinTextController,
-                          label: "Pin",
-                          labelColor: lightextColor,
-                          textInputType: TextInputType.number,
-                          maxCharacterLength: 4,
-                          hideText: true,
                           onChanged: (value) {
                             unDisableButton();
                           },
@@ -224,7 +218,7 @@ class _AirtimePageState extends State<AirtimePage> {
           vertical: 20,
         ),
         child: AppButton(
-          text: "Verify",
+          text: "Continue",
           onPress: () {},
           isDisabled: isButtonDisabled,
         ),

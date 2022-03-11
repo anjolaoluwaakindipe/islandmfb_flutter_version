@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AppButton extends StatefulWidget {
@@ -6,11 +7,12 @@ class AppButton extends StatefulWidget {
       {Key? key,
       required this.text,
       required this.onPress,
-      this.isDisabled = false})
+      this.isDisabled = false,
+      this.iconic})
       : super(key: key);
 
   final String text;
-
+  IconData? iconic;
   final dynamic onPress;
   final bool isDisabled;
 
@@ -26,17 +28,24 @@ class _AppButtonState extends State<AppButton> {
       child: ElevatedButton(
         onPressed: widget.isDisabled ? null : widget.onPress,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Text(
-            widget.text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.3,
-                color: whiteColor),
-          ),
-        ),
+            padding: const EdgeInsets.all(15.0),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(widget.iconic),
+                  Text(
+                    widget.text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.3,
+                        color: whiteColor),
+                  )
+                ],
+              ),
+            )),
         style: ButtonStyle(
           backgroundColor: widget.isDisabled
               ? MaterialStateProperty.all<Color>(disabledColor)

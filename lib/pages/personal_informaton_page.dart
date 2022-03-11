@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
+import 'package:islandmfb_flutter_version/components/shared/app_dropdown.dart';
 import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
 
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
@@ -15,10 +16,11 @@ class PersonalInformationPage extends StatelessWidget {
   }) : super(key: key);
 
   // TextField controllers
-    TextEditingController firstNameTextController = TextEditingController();
-  TextEditingController lastNameTextEditingController =
+  final TextEditingController firstNameTextController = TextEditingController();
+  final TextEditingController lastNameTextEditingController =
       TextEditingController();
-  TextEditingController emailTextEditingController = TextEditingController();
+  final TextEditingController emailTextEditingController =
+      TextEditingController();
 
   final BsSelectBoxController _select1 = BsSelectBoxController(options: [
     const BsSelectBoxOption(value: 1, text: Text('Male')),
@@ -31,25 +33,28 @@ class PersonalInformationPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        // leading: SizedBox(
-        //   height: 1,
-        //   child: SvgPicture.asset(
-        //     '../../images/back.svg',
-        //     height: 1,
-        //     width: 1,
-        //     fit: BoxFit.contain,
-        //   ),
-        // ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: AppButton(
-          text: "Continue",
-          onPress: () {
-            Get.to(const AccountTypePage());
-          },
+        leading: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
+              ),
+            ),
+          ),
         ),
       ),
+      // bottomNavigationBar: Padding(
+      //   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      //   child: AppButton(
+      //     text: "Continue",
+      //     onPress: () {
+      //       Get.to(const AccountTypePage());
+      //     },
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
@@ -81,23 +86,39 @@ class PersonalInformationPage extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            AppTextField(hint: "Enter your first name", label: "First Name", textController: firstNameTextController,),
-            const SizedBox(
-              height: 20,
+            AppTextField(
+              hint: "Enter your first name",
+              label: "First Name",
+              textController: firstNameTextController,
             ),
-            AppTextField(hint: "Enter your last name", label: "Last Name", textController: lastNameTextEditingController,),
             const SizedBox(
               height: 20,
             ),
             AppTextField(
-                hint: "Enter your email adddress", label: "Email Address", textController: emailTextEditingController,),
+              hint: "Enter your last name",
+              label: "Last Name",
+              textController: lastNameTextEditingController,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            AppTextField(
+              hint: "Enter your email adddress",
+              label: "Email Address",
+              textController: emailTextEditingController,
+            ),
             const SizedBox(
               height: 5,
             ),
-            BsSelectBox(
-              hintText: 'Male',
-              controller: _select1,
-            ),
+            AppDropdown(
+                requiredItems: const ["Male", "Female"],
+                itemValue: "",
+                text: "Gender",
+                hintText: "Select Gender"),
+            // BsSelectBox(
+            //   hintText: 'Male',
+            //   controller: _select1,
+            // ),
             // AppTextField(hint: "Enter your email adddress", label: "Gender"),
             const SizedBox(
               height: 25,
