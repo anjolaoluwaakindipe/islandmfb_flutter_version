@@ -36,7 +36,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SvgPicture.asset(
-              "../../logo.svg",
+              "assets/images/logo.svg",
               semanticsLabel: 'Island Logo',
             ),
             const SizedBox(

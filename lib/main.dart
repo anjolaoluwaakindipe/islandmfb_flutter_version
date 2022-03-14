@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:islandmfb_flutter_version/pages/account_services_pages.dart';
+import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
+import 'package:islandmfb_flutter_version/pages/airtime_verification.dart';
+import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
+import 'package:islandmfb_flutter_version/pages/failure_page.dart';
+import 'package:islandmfb_flutter_version/pages/forgot_password_page.dart';
+import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_product_page.dart';
+import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
+import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
+import 'package:islandmfb_flutter_version/pages/sign_up_active_page.dart';
+import 'package:islandmfb_flutter_version/pages/splash_screen_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
+import 'package:islandmfb_flutter_version/pages/verification_page.dart';
+
 
 import 'pages/sign_up_active_page.dart';
 
@@ -9,22 +30,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-        ),
-        home: SignUpActivePage());
+
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ).apply(
+            bodyColor: const Color(0xFF333333),
+            displayColor: const Color(0xFF333333)),
+      ),
+      home: SplashScreenPage(),
+    );
+
   }
 }
 

@@ -13,21 +13,25 @@ class LetsGetStartedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: whiteColor,
-        leading: SizedBox(
-          child: Padding(
+
+          toolbarHeight: 80,
+          elevation: 0,
+          backgroundColor: whiteColor,
+          leading: Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.back();
+              },
+
               icon: SvgPicture.asset(
                 "assets/images/back.svg",
                 height: 20,
               ),
             ),
-          ),
-        ),
-      ),
+
+          )),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
