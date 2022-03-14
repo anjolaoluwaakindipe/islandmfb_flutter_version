@@ -47,7 +47,6 @@ class _SignUpActivePageState extends State<SignUpActivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
           toolbarHeight: 80,
           elevation: 0,
           backgroundColor: whiteColor,
@@ -57,13 +56,11 @@ class _SignUpActivePageState extends State<SignUpActivePage> {
               onPressed: () {
                 Get.back();
               },
-
               icon: SvgPicture.asset(
                 "assets/images/back.svg",
                 height: 20,
               ),
             ),
-
           )),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -73,7 +70,6 @@ class _SignUpActivePageState extends State<SignUpActivePage> {
             Get.to(const VerificationPage());
           },
           isDisabled: _isButtonDisabled,
-
         ),
       ),
       body: SingleChildScrollView(
@@ -161,15 +157,6 @@ class _SignUpActivePageState extends State<SignUpActivePage> {
         ),
       ),
       backgroundColor: whiteColor,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: AppButton(
-          text: "Continue",
-          onPress: () {
-            Get.to(const VerificationPage());
-          },
-        ),
-      ),
     );
   }
 }
