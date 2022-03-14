@@ -6,7 +6,6 @@ import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
 import 'package:islandmfb_flutter_version/pages/verification_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 
 import '../components/shared/app_textfield.dart';
 
@@ -24,20 +23,33 @@ class _AccountServicesState extends State<AccountServicesPage> {
 
   String selectedValue = "";
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        // leading: SizedBox(
-        //   height: 1,
-        //   child: SvgPicture.asset(
-        //     '../../images/back.svg',
-        //     height: 1,
-        //     width: 1,
-        //     fit: BoxFit.contain,
-        //   ),
-        // ),
+        leading: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
+              ),
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        child: AppButton(
+          text: "Submit Application",
+          onPress: () {
+            Get.to(PersonalInformationPage());
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(

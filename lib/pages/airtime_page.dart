@@ -13,7 +13,7 @@ import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dar
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AirtimePage extends StatefulWidget {
-  AirtimePage({Key? key}) : super(key: key);
+  const AirtimePage({Key? key}) : super(key: key);
 
   @override
   State<AirtimePage> createState() => _AirtimePageState();

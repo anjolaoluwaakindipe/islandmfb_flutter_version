@@ -25,6 +25,18 @@ class SuccessPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
+        leading: SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
+              ),
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -68,6 +80,8 @@ class SuccessPage extends StatelessWidget {
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
               ),
             ),
+
+
           ],
         ),
       ),

@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
+
     if (userState.user.isEmpty) {
       return Container();
     }
@@ -132,6 +133,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 25,
+
                     ),
                     decoration: BoxDecoration(
                       color: accentColor,
@@ -139,6 +141,7 @@ class _HomePageState extends State<HomePage> {
                         5,
                       ),
                     ),
+
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,10 +163,12 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
+
                               ),
                             ],
                           ),
                         ),
+
                         const SizedBox(
                           height: 10,
                         ),
@@ -189,6 +194,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(
                           height: 10,
+
                         ),
                         RichText(
                           text: TextSpan(
@@ -245,7 +251,9 @@ class _HomePageState extends State<HomePage> {
                         svgUrlString: "assets/images/airtimeQuickActions.svg",
                       ),
                       const SizedBox(
+
                         width: 40,
+
                       ),
                       HomePageQuicActionButtons(
                         name: "Bills",

@@ -4,10 +4,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
+
+import 'package:islandmfb_flutter_version/pages/bill_payment_page.dart';
+import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/profile_main_page.dart';
+import 'package:islandmfb_flutter_version/pages/profile_set_pin.dart';
 import 'package:islandmfb_flutter_version/pages/loan_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
+
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
@@ -31,7 +38,7 @@ class AppDrawer extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Get.to(LoginPage());
+                      Get.to(const LetsGetStartedPage());
                     },
                     child: const Text(
                       "Yes",
@@ -163,6 +170,7 @@ class AppDrawer extends StatelessWidget {
                             svgUrl: "assets/images/drawerLogout.svg",
                             onClickHandler: onLogoutClick,
                           ),
+
                         ],
                       ),
                       const SizedBox(
@@ -172,6 +180,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ],
               ),
+
             ),
           ),
         ),

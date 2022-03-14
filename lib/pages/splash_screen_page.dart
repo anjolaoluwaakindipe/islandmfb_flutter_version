@@ -1,18 +1,23 @@
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
 
+
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
 
   @override
+
   State<SplashScreenPage> createState() => _SplashScreenPageState();
+
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
+
   void initState() {
     super.initState();
     Timer(
@@ -33,5 +38,6 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
         ),
       ),
     );
+
   }
 }

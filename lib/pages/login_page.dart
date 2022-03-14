@@ -17,7 +17,7 @@ import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();

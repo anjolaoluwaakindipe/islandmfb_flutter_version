@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
-import 'package:get/get.dart';
 
 class GetStartedSignInLink extends StatelessWidget {
   const GetStartedSignInLink({
@@ -29,7 +29,7 @@ class GetStartedSignInLink extends StatelessWidget {
               style: const TextStyle(color: successColor),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  Get.to( LoginPage());
+                  Get.to(const LetsGetStartedPage());
                 },
             ),
           ],

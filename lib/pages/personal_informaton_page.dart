@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
+import 'package:islandmfb_flutter_version/components/shared/app_dropdown.dart';
 import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
 import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dart';
 
@@ -23,11 +24,13 @@ class PersonalInformationPage extends StatefulWidget {
 
 class _PersonalInformationPageState extends State<PersonalInformationPage> {
   // TextField controllers
+
   TextEditingController firstNameTextController = TextEditingController();
 
   TextEditingController lastNameTextEditingController = TextEditingController();
 
   TextEditingController emailTextEditingController = TextEditingController();
+
 
   // gender dropdown variables
   List<String> genderItems = ["Male", "Female"];
@@ -84,6 +87,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
           ),
         ),
         backgroundColor: whiteColor,
+
         centerTitle: true,
         elevation: 0,
         toolbarHeight: 80,
@@ -115,6 +119,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF333333)),
               ),
+
               const SizedBox(
                 height: 10,
               ),

@@ -7,6 +7,7 @@ import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../components/home_page/home_page_quick_action.dart';
 import '../components/shared/app_textfield.dart';
 import '../components/shared/app_verification_textfield.dart';
 
@@ -41,6 +42,7 @@ class _VerificationPageState extends State<VerificationPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
+
         toolbarHeight: 80,
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
@@ -51,6 +53,7 @@ class _VerificationPageState extends State<VerificationPage> {
             icon: SvgPicture.asset(
               "assets/images/back.svg",
               height: 20,
+
             ),
           ),
         ),
@@ -100,6 +103,7 @@ class _VerificationPageState extends State<VerificationPage> {
             const SizedBox(
               height: 20,
             ),
+
             PinCodeTextField(
               controller: pinTextController,
               appContext: context,
@@ -139,6 +143,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 ),
               ),
             )
+
           ],
         ),
       ),

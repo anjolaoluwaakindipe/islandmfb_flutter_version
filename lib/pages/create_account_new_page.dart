@@ -71,9 +71,11 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
           ),
         ),
         backgroundColor: whiteColor,
+
         centerTitle: true,
         elevation: 0,
         toolbarHeight: 80,
+
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -170,6 +172,7 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
               ),
             ],
           ),
+
         ),
       ),
       backgroundColor: whiteColor,
