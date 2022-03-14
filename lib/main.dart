@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
-      home: LoginPage(),
+      home: SplashScreenPage(),
     );
   }
 }
