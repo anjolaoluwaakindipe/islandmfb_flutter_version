@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:islandmfb_flutter_version/pages/bill_payment_page.dart';
+import 'package:islandmfb_flutter_version/pages/cable_tv_page.dart';
+import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
+import 'package:islandmfb_flutter_version/pages/loan_repayment_verify_airtime.dart';
+import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
 
 import 'pages/sign_up_active_page.dart';
 
@@ -24,7 +29,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: SignUpActivePage());
+        home: PersonalInformationPage());
   }
 }
 

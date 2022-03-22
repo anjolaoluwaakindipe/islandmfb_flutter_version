@@ -55,78 +55,80 @@ class PersonalInformationPage extends StatelessWidget {
       //     },
       //   ),
       // ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 1,
-            ),
-            const Text(
-              "Personal Information",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF333333)),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(),
-              child: Text(
-                "Create an account by providing the details needed below.",
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
+      body: Scrollbar(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 1,
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            AppTextField(
-              hint: "Enter your first name",
-              label: "First Name",
-              textController: firstNameTextController,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            AppTextField(
-              hint: "Enter your last name",
-              label: "Last Name",
-              textController: lastNameTextEditingController,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            AppTextField(
-              hint: "Enter your email adddress",
-              label: "Email Address",
-              textController: emailTextEditingController,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            AppDropdown(
-                requiredItems: const ["Male", "Female"],
-                itemValue: "",
-                text: "Gender",
-                hintText: "Select Gender"),
-            // BsSelectBox(
-            //   hintText: 'Male',
-            //   controller: _select1,
-            // ),
-            // AppTextField(hint: "Enter your email adddress", label: "Gender"),
-            const SizedBox(
-              height: 25,
-            ),
-            const SizedBox(
-              height: 15,
-            )
-          ],
+              const Text(
+                "Personal Information",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF333333)),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(),
+                child: Text(
+                  "Create an account by providing the details needed below.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              AppTextField(
+                hint: "Enter your first name",
+                label: "First Name",
+                textController: firstNameTextController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AppTextField(
+                hint: "Enter your last name",
+                label: "Last Name",
+                textController: lastNameTextEditingController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AppTextField(
+                hint: "Enter your email adddress",
+                label: "Email Address",
+                textController: emailTextEditingController,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              AppDropdown(
+                  requiredItems: const ["Male", "Female"],
+                  itemValue: "",
+                  text: "Gender",
+                  hintText: "Select Gender"),
+              // BsSelectBox(
+              //   hintText: 'Male',
+              //   controller: _select1,
+              // ),
+              // AppTextField(hint: "Enter your email adddress", label: "Gender"),
+              const SizedBox(
+                height: 25,
+              ),
+              const SizedBox(
+                height: 15,
+              )
+            ],
+          ),
         ),
       ),
       backgroundColor: whiteColor,

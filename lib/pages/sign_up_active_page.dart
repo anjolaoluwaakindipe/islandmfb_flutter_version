@@ -34,65 +34,67 @@ class SignUpActivePage extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 1,
-            ),
-            const Text(
-              "Set Profile",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF333333)),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(),
-              child: Text(
-                "Set up your online profile with Island MFB account by providing the details below.",
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 1,
               ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            AppTextField(
-              hint: "Enter Account Number",
-              label: "Account Number",
-              textController: accountNumberTextController,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            AppTextField(
-              hint: "***************",
-              label: "Enter Password",
-              textController: passwordTextController,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            AppTextField(
-              hint: "***************",
-              label: "Confirm Password",
-              textController: confirmPasswordTextController,
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            const SizedBox(
-              height: 15,
-            )
-          ],
+              const Text(
+                "Set Profile",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF333333)),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(),
+                child: Text(
+                  "Set up your online profile with Island MFB account by providing the details below.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              AppTextField(
+                hint: "Enter Account Number",
+                label: "Account Number",
+                textController: accountNumberTextController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AppTextField(
+                hint: "***************",
+                label: "Enter Password",
+                textController: passwordTextController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AppTextField(
+                hint: "***************",
+                label: "Confirm Password",
+                textController: confirmPasswordTextController,
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const SizedBox(
+                height: 15,
+              )
+            ],
+          ),
         ),
       ),
       backgroundColor: whiteColor,

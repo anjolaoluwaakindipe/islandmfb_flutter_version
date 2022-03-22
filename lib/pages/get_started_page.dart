@@ -27,7 +27,6 @@ class _GetStartedPageState extends State<GetStartedPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
