@@ -8,6 +8,7 @@ import 'package:islandmfb_flutter_version/components/home_page/home_page_transac
 import 'package:islandmfb_flutter_version/components/shared/app_drawer.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
 import 'package:islandmfb_flutter_version/requests/account_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
     Future(() async {
       if (userState.user.isEmpty) {
-        Get.to(LoginPage());
+        // Get.to(LoginPage());
       }
     });
   }
@@ -49,7 +50,6 @@ class _HomePageState extends State<HomePage> {
 
     Future(() async {
       await transactionState.setRecentTransactionHistory();
-      print(transactionState.recentTransactionHistoryState);
     });
 
     void openChangeAccountModal() {
@@ -77,10 +77,9 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
-
-    if (userState.user.isEmpty) {
-      return Container();
-    }
+    // if (userState.user.isEmpty) {
+    //   return Container();
+    // }
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -133,7 +132,6 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 25,
-
                     ),
                     decoration: BoxDecoration(
                       color: accentColor,
@@ -141,7 +139,6 @@ class _HomePageState extends State<HomePage> {
                         5,
                       ),
                     ),
-
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,12 +160,10 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
-
                               ),
                             ],
                           ),
                         ),
-
                         const SizedBox(
                           height: 10,
                         ),
@@ -194,7 +189,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(
                           height: 10,
-
                         ),
                         RichText(
                           text: TextSpan(
@@ -251,9 +245,7 @@ class _HomePageState extends State<HomePage> {
                         svgUrlString: "assets/images/airtimeQuickActions.svg",
                       ),
                       const SizedBox(
-
                         width: 40,
-
                       ),
                       HomePageQuicActionButtons(
                         name: "Bills",
@@ -277,7 +269,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(TransactionHistoryPage());
+                      },
                       child: const Text(
                         "View all",
                         style: TextStyle(fontSize: 12, color: successColor),
@@ -301,6 +295,7 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(color: accentColor)),
                           )
                         : ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data?.length,
                             itemBuilder: ((context, index) {

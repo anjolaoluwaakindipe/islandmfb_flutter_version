@@ -20,4 +20,10 @@ class AccountStateController extends GetxController {
   void changeSelectedAccount(int index) {
     selectedAccount.value = customerAccounts[index];
   }
+
+  void clearAccoutState() {
+    customerAccounts.value = [];
+    selectedAccount.value = {};
+    customerDetails.value = {};
+  }
 }

@@ -1,7 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
+import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
 import 'package:islandmfb_flutter_version/pages/sign_up_active_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
@@ -12,8 +15,8 @@ class LetsGetStartedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-
           toolbarHeight: 80,
           elevation: 0,
           backgroundColor: whiteColor,
@@ -23,15 +26,12 @@ class LetsGetStartedPage extends StatelessWidget {
               onPressed: () {
                 Get.back();
               },
-
               icon: SvgPicture.asset(
                 "assets/images/back.svg",
                 height: 20,
               ),
             ),
-
           )),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
@@ -40,7 +40,6 @@ class LetsGetStartedPage extends StatelessWidget {
           children: [
             SvgPicture.asset(
               "assets/images/pana.svg",
-              alignment: AlignmentDirectional.center,
               semanticsLabel: 'Island Logo',
             ),
             const SizedBox(
@@ -77,7 +76,17 @@ class LetsGetStartedPage extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            const Text("Create an Account"),
+            RichText(
+              text: TextSpan(
+                  text: "Create an Account",
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w400,
+                    color: blackColor,
+                    fontSize: 14,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => Get.to(CreateAccountNewPage())),
+            ),
           ],
         ),
       ),

@@ -27,7 +27,6 @@ class _GetStartedPageState extends State<GetStartedPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
-        
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -47,7 +46,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 30,
-                  fontWeight: FontWeight.w200,
+                  fontWeight: FontWeight.w600,
                   color: Color(0xFF333333)),
             ),
             const SizedBox(
@@ -64,7 +63,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
               height: 25,
             ),
             AppButton(
-              text: "Start",
+              text: "Get Started",
               onPress: () {
                 Get.to(const LetsGetStartedPage());
               },

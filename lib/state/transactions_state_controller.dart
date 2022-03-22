@@ -10,19 +10,27 @@ class TransactionStateController extends GetxController {
   Future setRecentTransactionHistory() async {
     var selectedAccountNumber = await Get.put(AccountStateController())
         .selectedAccount["primaryAccountNo"]?["_number"];
-    recentTransactionHistoryState.value =
-        await getCustomerRecentTransactions(selectedAccountNumber)
-            .then((value) {
-      if (value["success"] == true) {
-        return value["data"];
-      } else {
-        return [];
+    if (selectedAccountNumber != null) {
+      recentTransactionHistoryState.value =
+          await getCustomerRecentTransactions(selectedAccountNumber)
+              .then((value) {
+        if (value["success"] == true) {
+          return value["data"];
+        } else {
+          return [];
+        }
+      });
+      if (recentTransactionHistoryState.isEmpty) {
+        return;
       }
-    });
-    if (recentTransactionHistoryState.isEmpty) {
-      return;
-    }
 
-    return recentTransactionHistoryState;
+      return recentTransactionHistoryState;
+    }
+  }
+
+  void clearTransactionState() {
+    recentTransactionHistoryState.value = [];
+    selectedTransactionState.value = {};
+    fullTransactionHistoryState.value = [];
   }
 }

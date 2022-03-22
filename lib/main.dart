@@ -1,28 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:islandmfb_flutter_version/pages/account_services_pages.dart';
-import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
-import 'package:islandmfb_flutter_version/pages/airtime_verification.dart';
-import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
-import 'package:islandmfb_flutter_version/pages/failure_page.dart';
-import 'package:islandmfb_flutter_version/pages/forgot_password_page.dart';
-import 'package:islandmfb_flutter_version/pages/get_started_page.dart';
-import 'package:islandmfb_flutter_version/pages/home_page.dart';
-import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
-import 'package:islandmfb_flutter_version/pages/loan_page.dart';
-import 'package:islandmfb_flutter_version/pages/loan_product_page.dart';
-import 'package:islandmfb_flutter_version/pages/login_page.dart';
-import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
-import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
-import 'package:islandmfb_flutter_version/pages/sign_up_active_page.dart';
 import 'package:islandmfb_flutter_version/pages/splash_screen_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
-import 'package:islandmfb_flutter_version/pages/verification_page.dart';
-
-
-import 'pages/sign_up_active_page.dart';
+import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,7 +10,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -51,9 +30,8 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
-      home: SplashScreenPage(),
+      home: TransactionHistoryPage(),
     );
-
   }
 }
 

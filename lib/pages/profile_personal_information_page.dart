@@ -1,8 +1,10 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../components/shared/app_dropdown.dart';
 import '../components/shared/app_textfield.dart';
@@ -124,7 +126,9 @@ class _ProfilePersonalInformationPageState
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
             icon: SvgPicture.asset(
               "assets/images/back.svg",
               height: 20,
@@ -144,21 +148,25 @@ class _ProfilePersonalInformationPageState
         elevation: 0,
         foregroundColor: blackColor,
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 0.0),
-            child: GFButton(
-              text: "Save",
-              onPressed: () {},
-              size: 1,
-              hoverColor: accentColor,
-              focusColor: accentColor,
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 20,
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              "Save",
+              style: TextStyle(fontSize: 14),
+            ),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(blackColor),
+              overlayColor: MaterialStateProperty.all<Color>(accentColor),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
+                const CircleBorder(
+                  side: BorderSide(color: Colors.transparent),
+                ),
               ),
-              color: Colors.transparent,
             ),
           ),
+          const SizedBox(
+            width: 20,
+          )
         ],
         toolbarHeight: 80,
       ),
@@ -169,141 +177,97 @@ class _ProfilePersonalInformationPageState
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const SizedBox(height: 15),
             AppDropdown(
                 requiredItems: titleItems,
                 itemValue: titleValue,
                 text: "Title",
                 hintText: "Select Title"),
-            const SizedBox(height: 0),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                "First Name",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AppTextField(
-                textController: firstNameTextController,
-                textInputType: TextInputType.text,
-                onChanged: (value) {
-                  unDisableButton();
-                },
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Middle Name",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AppTextField(
-                textController: middleNameTextController,
-                textInputType: TextInputType.text,
-                onChanged: (value) {
-                  unDisableButton();
-                },
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Last Name",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AppTextField(
-                textController: lastNameTextController,
-                textInputType: TextInputType.text,
-                onChanged: (value) {
-                  unDisableButton();
-                },
-              ),
-            ]),
             const SizedBox(height: 15),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              AppDropdown(
-                  text: "Gender",
-                  hintText: "Select Gender",
-                  requiredItems: genderItems,
-                  itemValue: genderValue),
-              const SizedBox(height: 15),
-              AppDropdown(
-                  text: "Marital Status",
-                  hintText: "Select status",
-                  requiredItems: maritalItems,
-                  itemValue: maritalValue),
-              const SizedBox(height: 15),
-              const Text(
-                "Date of Birth",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AppTextField(
-                textController: dateOfBirthTextController,
-                textInputType: TextInputType.datetime,
-                onChanged: (value) {
-                  unDisableButton();
-                },
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Mothers maiden name",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AppTextField(
-                textController: mothersMaidenNameTextController,
-                textInputType: TextInputType.text,
-                onChanged: (value) {
-                  unDisableButton();
-                },
-              ),
-              const SizedBox(height: 15),
-              AppDropdown(
-                  text: "Nationality",
-                  hintText: "Select Country",
-                  requiredItems: nationality,
-                  itemValue: nationalityValue),
-              const SizedBox(height: 15),
-              AppDropdown(
-                  text: "State of Origin",
-                  hintText: "Select State",
-                  requiredItems: stateOfOriginItems,
-                  itemValue: stateOfOriginValue),
-              const SizedBox(height: 15),
-              AppDropdown(
-                  text: "LGA",
-                  hintText: "Select local government area",
-                  requiredItems: lgaItems,
-                  itemValue: lgaValue),
-              const SizedBox(height: 15),
-              const Text(
-                "Tax Identification Number",
-                style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              AppTextField(
-                textController: taxIdentificationNumberTextController,
-                textInputType: TextInputType.number,
-                onChanged: (value) {
-                  unDisableButton();
-                },
-              ),
-            ]),
+            AppTextField(
+              textController: firstNameTextController,
+              textInputType: TextInputType.text,
+              label: "FirstName",
+              onChanged: (value) {
+                unDisableButton();
+              },
+            ),
+            const SizedBox(height: 15),
+            AppTextField(
+              textController: middleNameTextController,
+              textInputType: TextInputType.text,
+              label: "Middle Name",
+              onChanged: (value) {
+                unDisableButton();
+              },
+            ),
+            const SizedBox(height: 15),
+            AppTextField(
+              textController: lastNameTextController,
+              textInputType: TextInputType.text,
+              label: "Last Name",
+              onChanged: (value) {
+                unDisableButton();
+              },
+            ),
+            const SizedBox(height: 15),
+            AppDropdown(
+                text: "Gender",
+                hintText: "Select Gender",
+                requiredItems: genderItems,
+                itemValue: genderValue),
+            const SizedBox(height: 15),
+            AppDropdown(
+                text: "Marital Status",
+                hintText: "Select status",
+                requiredItems: maritalItems,
+                itemValue: maritalValue),
+            const SizedBox(height: 15),
+            AppTextField(
+              textController: dateOfBirthTextController,
+              textInputType: TextInputType.datetime,
+              label: "Date of Birth",
+              onChanged: (value) {
+                unDisableButton();
+              },
+            ),
+            const SizedBox(height: 15),
+            AppTextField(
+              textController: mothersMaidenNameTextController,
+              textInputType: TextInputType.text,
+              label: "Mother's maiden name",
+              onChanged: (value) {
+                unDisableButton();
+              },
+            ),
+            const SizedBox(height: 15),
+            AppDropdown(
+                text: "Nationality",
+                hintText: "Select Country",
+                requiredItems: nationality,
+                itemValue: nationalityValue),
+            const SizedBox(height: 15),
+            AppDropdown(
+                text: "State of Origin",
+                hintText: "Select State",
+                requiredItems: stateOfOriginItems,
+                itemValue: stateOfOriginValue),
+            const SizedBox(height: 15),
+            AppDropdown(
+                text: "LGA",
+                hintText: "Select local government area",
+                requiredItems: lgaItems,
+                itemValue: lgaValue),
+            const SizedBox(height: 15),
+            AppTextField(
+              textController: taxIdentificationNumberTextController,
+              textInputType: TextInputType.number,
+              label: "Tax Identification No",
+              onChanged: (value) {
+                unDisableButton();
+              },
+            ),
+            const SizedBox(height: 50)
           ]),
         ),
       ),

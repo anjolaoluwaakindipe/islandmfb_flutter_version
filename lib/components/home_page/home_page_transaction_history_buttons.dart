@@ -46,7 +46,7 @@ class HomePageTransactionHistoryButtons extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        DateFormat("h:mm a, EEE, d MMM, yyyy")
+                         DateFormat("h:mm a, EEE, d MMM, yyyy")
                             .format(DateTime.parse(date)),
                         style: const TextStyle(fontSize: 10),
                       ),

@@ -50,13 +50,15 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
 
   void onContinueHandler() {
     if (_createAccountFormKey.currentState!.validate()) {
-      Get.to(PersonalInformationPage());
+      Get.to(const PersonalInformationPage());
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
@@ -71,11 +73,9 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
           ),
         ),
         backgroundColor: whiteColor,
-
         centerTitle: true,
         elevation: 0,
         toolbarHeight: 80,
-
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -87,92 +87,96 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
           isDisabled: isButtonDisabled,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-        ),
-        child: Form(
-          key: _createAccountFormKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 1,
-              ),
-              const Text(
-                "Create Your Account",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF333333)),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(),
-                child: Text(
-                  "Create an account by providing the details needed below.",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w100,),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AppTextField(
-                hint: "Enter your BVN",
-                label: "BVN",
-                textController: bvnTextController,
-                textInputType: const TextInputType.numberWithOptions(
-                  signed: false,
-                  decimal: false,
-                ),
-                onChanged: (value) {
-                  buttonStateHandler();
-                },
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  LengthLimitingTextInputFormatter(11)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AppTextField(
-                hint: "Enter your phone number",
-                label: "Phone Number",
-                textController: phoneNumberTextEditingController,
-                onChanged: (value) {
-                  buttonStateHandler();
-                },
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  LengthLimitingTextInputFormatter(11)
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AppTextField(
-                hint: "Enter your email",
-                label: "Email Address",
-                onChanged: (value) {
-                  buttonStateHandler();
-                },
-                textController: emailTextEditingController,
-                validator: ValidationBuilder()
-                    .email("Not a valid email address")
-                    .build(),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 30,
           ),
-
+          child: Form(
+            key: _createAccountFormKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 1,
+                ),
+                const Text(
+                  "Create Your Account",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF333333)),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(),
+                  child: Text(
+                    "Create an account by providing the details needed below.",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                AppTextField(
+                  hint: "Enter your BVN",
+                  label: "BVN",
+                  textController: bvnTextController,
+                  textInputType: const TextInputType.numberWithOptions(
+                    signed: false,
+                    decimal: false,
+                  ),
+                  onChanged: (value) {
+                    buttonStateHandler();
+                  },
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    LengthLimitingTextInputFormatter(11)
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                AppTextField(
+                  hint: "Enter your phone number",
+                  label: "Phone Number",
+                  textController: phoneNumberTextEditingController,
+                  onChanged: (value) {
+                    buttonStateHandler();
+                  },
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    LengthLimitingTextInputFormatter(11)
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                AppTextField(
+                  hint: "Enter your email",
+                  label: "Email Address",
+                  onChanged: (value) {
+                    buttonStateHandler();
+                  },
+                  textController: emailTextEditingController,
+                  validator: ValidationBuilder()
+                      .email("Not a valid email address")
+                      .build(),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       backgroundColor: whiteColor,

@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../components/shared/app_button.dart';
 import '../components/shared/app_textfield.dart';
@@ -69,7 +70,9 @@ class _CableTvPageState extends State<CableTvPage> {
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
             icon: SvgPicture.asset(
               "assets/images/back.svg",
               height: 20,

@@ -46,6 +46,7 @@ class _SignUpActivePageState extends State<SignUpActivePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
           toolbarHeight: 80,
           elevation: 0,

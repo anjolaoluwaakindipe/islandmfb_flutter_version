@@ -28,7 +28,10 @@ class TokenStateController extends GetxController {
           "refresh_token", tokenState["refresh_token"]);
       await SecureStorage.writeAValue(
           "access_token", tokenState["access_token"]);
-      
     }
+  }
+
+  void clearTokenState() {
+    tokenState.value = {};
   }
 }

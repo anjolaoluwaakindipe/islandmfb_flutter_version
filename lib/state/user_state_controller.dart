@@ -12,4 +12,8 @@ class UserStateController extends GetxController {
       user.value = await getUserInfo(accessToken);
     }
   }
+
+  void clearUserState() {
+    user.value = {};
+  }
 }
