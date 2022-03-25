@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
+import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
+import 'package:islandmfb_flutter_version/pages/own_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/splash_screen_page.dart';
 import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
 
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
-      home: TransactionHistoryPage(),
+      home: SplashScreenPage(),
     );
   }
 }
