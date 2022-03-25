@@ -197,9 +197,6 @@ class _CableTvPageState extends State<CableTvPage> {
                             unDisableButton();
                           },
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ),
                         AppTextField(
                           textController: mobileNumberTextController,
                           label: "Phone Number",
@@ -207,6 +204,9 @@ class _CableTvPageState extends State<CableTvPage> {
                           onChanged: (value) {
                             unDisableButton();
                           },
+                        ),
+                        const SizedBox(
+                          height: 40,
                         ),
                       ],
                     )
