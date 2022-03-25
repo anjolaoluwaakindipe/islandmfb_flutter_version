@@ -78,7 +78,7 @@ class _TransferPageState extends State<TransferPage> {
                 "Bank",
                 style: TextStyle(
                   fontSize: 15,
-                  fontWeight: FontWeight.w200,
+                  fontWeight: FontWeight.w500,
                   color: blackColor,
                 ),
               ),

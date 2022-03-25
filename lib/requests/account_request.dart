@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+import 'package:islandmfb_flutter_version/models/account.dart';
 import 'package:islandmfb_flutter_version/requests/request_settings.dart';
 
 import 'package:http/http.dart' as http;
@@ -74,7 +75,6 @@ Future<Map> getCustomerTransactionsSpecifically(
       (size != 0 ? size.toString() : "");
   return await http.get(Uri.parse(urlStrinng)).then((value) {
     if (value.statusCode == 200) {
-      
       return {"success": true, "data": json.decode(value.body)};
     } else {
       return {"success": false, "statusCode": value.statusCode};

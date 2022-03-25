@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 40,
                       ),
                       const Text(
-                        "Use your email address, phone number or account number sd your login id",
+                        "Use your email address, phone number or account number as your login id",
                         style: TextStyle(
                           color: greyColor,
                           fontSize: 17,
