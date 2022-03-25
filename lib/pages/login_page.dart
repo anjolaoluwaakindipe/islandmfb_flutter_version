@@ -48,47 +48,24 @@ class _LoginPageState extends State<LoginPage> {
         passwordTextController.text,
       );
 
-      if (token.containsKey("access_token")) {
-        await userState.setUserStateFromLogin(token["access_token"]);
-        print(user);
-      }
+      await userState.setUserStateFromLogin();
 
       if (user.containsKey("customer_no")) {
         await accountState
             .setAccountStateFromLogin(user["customer_no"].toString());
-        print(accountState.selectedAccountState);
       }
+
 
       context.loaderOverlay.hide();
 
       if (token.containsKey("access_token") && user.isNotEmpty) {
-        showDialog(
-            context: context,
-            builder: (_) => AppAlertDialogue(
-                  content: "Login Successful",
-                  contentColor: successColor,
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        "Close",
-                        style: TextStyle(
-                          color: blackColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-            barrierDismissible: true);
-
-        Get.offAll(() => const HomePage());
+        Get.to(() => const HomePage());
       } else {
         showDialog(
             context: context,
             builder: (_) => AppAlertDialogue(
-                  content: token["error_description"],
+                  content: token["error_description"] ??
+                      "An error occurred while login in. Please try again",
                   contentColor: primaryColor,
                   actions: [
                     TextButton(
@@ -129,9 +106,8 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             reverse: true,
-            child: Container(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              height: MediaQuery.of(context).size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
@@ -182,10 +158,14 @@ class _LoginPageState extends State<LoginPage> {
                             text: "Forgot Password?",
                             style: TextStyle(color: blackColor)),
                       ),
+                      const SizedBox(
+                        height: 40,
+                      )
                     ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       AppButton(
                         text: "Sign In",

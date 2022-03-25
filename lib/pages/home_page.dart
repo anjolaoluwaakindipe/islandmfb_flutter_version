@@ -1,16 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/home_page/home_page_app_bar.dart';
 import 'package:islandmfb_flutter_version/components/home_page/home_page_quick_action.dart';
 import 'package:islandmfb_flutter_version/components/home_page/home_page_transaction_history_buttons.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_drawer.dart';
+import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
+import 'package:islandmfb_flutter_version/requests/account_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
+import 'package:islandmfb_flutter_version/state/transactions_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/user_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
@@ -25,15 +28,29 @@ class _HomePageState extends State<HomePage> {
   final userState = Get.put(UserStateController());
   final tokenState = Get.put(TokenStateController());
   final accountState = Get.put(AccountStateController());
+  final transactionState = Get.put(TransactionStateController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Future(() async {
+      if (userState.user.isEmpty) {
+        // Get.to(LoginPage());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // if (userState.user.isEmpty) {
-    //   return LoginPage();
-    // }
-
-    var selectedAccount = accountState.selectedAccountState;
+    var selectedAccount = accountState.selectedAccount;
+    var customerDetail = accountState.customerDetails;
     final nairaFormat = NumberFormat.currency(name: "N  ");
+
+    Future(() async {
+      await transactionState.setRecentTransactionHistory();
+    });
 
     void openChangeAccountModal() {
       showModalBottomSheet<void>(
@@ -60,296 +77,249 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
-    return Scaffold(
-      backgroundColor: whiteColor,
-      drawer: AppDrawer(),
-      appBar: homePageAppBar(() {}),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    "Hi " + (userState.user["given_name"] ?? "Moses "),
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
+    // if (userState.user.isEmpty) {
+    //   return Container();
+    // }
+
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        backgroundColor: whiteColor,
+        drawer: AppDrawer(),
+        appBar: homePageAppBar(() {}),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Obx(() => Text(
+                          "Hi " +
+                              (customerDetail["name"]!
+                                      .split(" ")[0]!
+                                      .toString()
+                                      .capitalize ??
+                                  " "),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                    RichText(
+                      text: TextSpan(
+                          text: "Change Account",
+                          style: const TextStyle(
+                            color: successColor,
+                            fontSize: 11,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              openChangeAccountModal();
+                            }),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Obx(
+                  () => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 25,
                     ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        text: "Change Account",
-                        style: const TextStyle(
-                          color: successColor,
-                          fontSize: 11,
+                    decoration: BoxDecoration(
+                      color: accentColor,
+                      borderRadius: BorderRadius.circular(
+                        5,
+                      ),
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                                color: blackColor, fontSize: 10),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: ((selectedAccount["product"]) ??
+                                        "Savings Account") +
+                                    "  ",
+                              ),
+                              TextSpan(
+                                text: (selectedAccount["primaryAccountNo"]
+                                        ?["_number"]) ??
+                                    "01290293820",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            openChangeAccountModal();
-                          }),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Obx(
-                () => Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 25,
-                  ),
-                  decoration: BoxDecoration(
-                    color: accentColor,
-                    borderRadius: BorderRadius.circular(
-                      5,
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          nairaFormat.format(
+                              selectedAccount["availableBalance"] ?? 10.00),
+                          softWrap: true,
+                          style: const TextStyle(
+                            color: primaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 1,
+                        ),
+                        const Text(
+                          "Available Balance",
+                          style: TextStyle(
+                            color: blackColor,
+                            fontSize: 10,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                                color: blackColor, fontSize: 10),
+                            children: <TextSpan>[
+                              const TextSpan(text: "Book Balance   "),
+                              TextSpan(
+                                text: nairaFormat.format(
+                                    selectedAccount["bookBalance"] ?? 10),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "Quick Actions",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          style:
-                              const TextStyle(color: blackColor, fontSize: 10),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: (selectedAccount["product"] +
-                                      "SAVINGS ACCOUNT") ??
-                                  "Savings Account    ",
-                            ),
-                            TextSpan(
-                              text: (selectedAccount["primaryAccountNo"]
-                                      ?["_number"]) ??
-                                  "01290293820",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
+                      HomePageQuicActionButtons(
+                        name: "Transfer",
+                        onTap: () {
+                          Get.to(TransferPage());
+                        },
+                        svgUrlString: "assets/images/transferQuickActions.svg",
                       ),
                       const SizedBox(
-                        height: 10,
+                        width: 40,
                       ),
-                      Text(
-                        nairaFormat
-                            .format(selectedAccount["availableBalance"] ?? 0),
-                        softWrap: true,
-                        style: const TextStyle(
-                          color: primaryColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      HomePageQuicActionButtons(
+                        name: "Airtime",
+                        onTap: () {
+                          Get.to(AirtimePage());
+                        },
+                        svgUrlString: "assets/images/airtimeQuickActions.svg",
                       ),
                       const SizedBox(
-                        height: 1,
+                        width: 40,
                       ),
-                      const Text(
-                        "Available Balance",
-                        style: TextStyle(
-                          color: blackColor,
-                          fontSize: 10,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          style:
-                              const TextStyle(color: blackColor, fontSize: 10),
-                          children: <TextSpan>[
-                            const TextSpan(text: "Book Balance   "),
-                            TextSpan(
-                              text: nairaFormat
-                                  .format(selectedAccount["bookBalance"] ?? 0),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      HomePageQuicActionButtons(
+                        name: "Bills",
+                        onTap: () {},
+                        svgUrlString: "assets/images/billsQuickActions.svg",
+                      )
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                "Quick Actions",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  HomePageQuicActionButtons(
-                    name: "Transfer",
-                    onTap: () {},
-                    svgUrlString: "assets/images/transferQuickActions.svg",
-                  ),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  HomePageQuicActionButtons(
-                    name: "Airtime",
-                    onTap: () {},
-                    svgUrlString: "assets/images/airtimeQuickActions.svg",
-                  ),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  HomePageQuicActionButtons(
-                    name: "Bills",
-                    onTap: () {},
-                    svgUrlString: "assets/images/billsQuickActions.svg",
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                "Transaction History",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Transaction History",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.to(TransactionHistoryPage());
+                      },
+                      child: const Text(
+                        "View all",
+                        style: TextStyle(fontSize: 12, color: successColor),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Column(
-                children: [
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                  HomePageTransactionHistoryButtons(
-                    nairaFormat: nairaFormat,
-                    accountOwner: "Akinjoke",
-                    otherAccount: "Akinloluwa",
-                    moneyAmount: 30000,
-                    isCredit: true,
-                    date: "Thursday, July 12th 2022",
-                  ),
-                ],
-              )
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+                FutureBuilder<List>(future: Future(() async {
+                  await transactionState.setRecentTransactionHistory();
+                  return Future.value(
+                      transactionState.recentTransactionHistoryState);
+                }), builder: ((context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Obx(() => transactionState
+                            .recentTransactionHistoryState.isEmpty
+                        ? const Center(
+                            child: Text("You have no transaction history",
+                                style: TextStyle(color: accentColor)),
+                          )
+                        : ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: ((context, index) {
+                              return HomePageTransactionHistoryButtons(
+                                nairaFormat: nairaFormat,
+                                accountOwner: "Akinjoke",
+                                otherAccount: "Akinloluwa",
+                                moneyAmount: snapshot.data?[index]?["amount"],
+                                isCredit: true,
+                                narrative: snapshot.data?[index]?["narrative"],
+                                date: snapshot.data?[index]?["postDate"],
+                              );
+                            }),
+                          ));
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: primaryColor,
+                  ));
+                }))
+              ],
+            ),
           ),
         ),
       ),

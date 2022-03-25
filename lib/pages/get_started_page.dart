@@ -35,7 +35,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SvgPicture.asset(
-              "../../logo.svg",
+              "assets/images/logo.svg",
               semanticsLabel: 'Island Logo',
             ),
             const SizedBox(
@@ -46,7 +46,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
               textAlign: TextAlign.left,
               style: TextStyle(
                   fontSize: 30,
-                  fontWeight: FontWeight.w200,
+                  fontWeight: FontWeight.w600,
                   color: Color(0xFF333333)),
             ),
             const SizedBox(
@@ -63,7 +63,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
               height: 25,
             ),
             AppButton(
-              text: "Start",
+              text: "Get Started",
               onPress: () {
                 Get.to(const LetsGetStartedPage());
               },

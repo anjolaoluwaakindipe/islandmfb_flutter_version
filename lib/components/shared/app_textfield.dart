@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../utilities/colors.dart';
 
@@ -13,7 +14,12 @@ class AppTextField extends StatelessWidget {
       this.labelColor,
       this.textInputType,
       this.maxCharacterLength,
-      this.hideText = false})
+      this.hideText = false,
+      this.inputFormatters,
+      this.suffixIconWidget,
+      this.validator,
+      this.readOnly = false,
+      this.enabled})
       : super(key: key);
 
   String label;
@@ -24,6 +30,11 @@ class AppTextField extends StatelessWidget {
   TextInputType? textInputType;
   int? maxCharacterLength;
   bool hideText;
+  List<TextInputFormatter>? inputFormatters;
+  Widget? suffixIconWidget;
+  String? Function(String?)? validator;
+  bool readOnly;
+  bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +47,7 @@ class AppTextField extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.w200,
+              fontWeight: FontWeight.w600,
               color: labelColor ?? blackColor,
             ),
           ),
@@ -44,10 +55,8 @@ class AppTextField extends StatelessWidget {
             height: 10,
           ),
           Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: accentColor,
-              borderRadius: BorderRadius.circular(10),
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
             ),
             child: Center(
               child: TextFormField(
@@ -55,17 +64,28 @@ class AppTextField extends StatelessWidget {
                 maxLength: maxCharacterLength,
                 obscureText: hideText,
                 cursorColor: primaryColor,
-                cursorWidth: 1,
+                cursorWidth: 2,
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
+                  isCollapsed: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   hintText: hint,
                   filled: true,
-                  counter: const SizedBox(),
-                  fillColor: Colors.transparent,
+                  errorStyle: const TextStyle(color: primaryColor),
+                  fillColor: accentColor,
                   hoverColor: accentColor,
+                  suffixIcon: suffixIconWidget,
                 ),
                 controller: textController,
                 onChanged: onChanged,
+                inputFormatters: inputFormatters,
+                validator: validator,
+                readOnly: readOnly,
+                enabled: enabled,
               ),
             ),
           ),

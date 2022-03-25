@@ -1,9 +1,9 @@
-import 'dart:html';
-
-import 'package:bs_flutter/bs_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:islandmfb_flutter_version/pages/profile_personal_information_page.dart';
+import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 
 import '../utilities/colors.dart';
 
@@ -15,6 +15,8 @@ class ProfileMainPage extends StatefulWidget {
 }
 
 class _ProfileMainPageState extends State<ProfileMainPage> {
+  AccountStateController accountState = Get.put(AccountStateController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,53 +64,57 @@ class _ProfileMainPageState extends State<ProfileMainPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text(
-                      "John Moses",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Text(
+                      accountState.customerDetails["name"] ?? " ",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    const Text("BVN: 22290086343"),
+                    Text("BVN: " + (accountState.customerDetails["bvn"] ?? "")),
                     const SizedBox(
                       height: 25,
                     ),
                     ProfileListTile(
                       titleText: "Personal Information",
                       color: accentColor,
+                      onTap: () {
+                        Get.to(const ProfilePersonalInformationPage());
+                      },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     ProfileListTile(
                       titleText: "Contact Details",
                       color: accentColor,
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     ProfileListTile(
                       titleText: "Means of Identification",
                       color: accentColor,
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     ProfileListTile(
                       titleText: "Proof of Address",
                       color: accentColor,
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     ProfileListTile(
                       titleText: "Employment Details",
                       color: accentColor,
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     ProfileListTile(
                       titleText: "Next of kin Details",
                       color: accentColor,
                     ),
+                    const SizedBox(height: 40)
                   ],
                 ),
               ),
@@ -134,10 +140,9 @@ class ProfileListTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Ink(
-        height: 60,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        decoration:
+            BoxDecoration(color: color, borderRadius: BorderRadius.circular(5)),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,

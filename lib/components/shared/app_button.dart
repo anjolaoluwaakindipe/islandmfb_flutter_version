@@ -29,20 +29,14 @@ class _AppButtonState extends State<AppButton> {
         onPressed: widget.isDisabled ? null : widget.onPress,
         child: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(widget.iconic),
-                Text(
-                  widget.text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.3,
-                      color: whiteColor),
-                )
-              ],
+            child: Text(
+              widget.text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.3,
+                  color: whiteColor),
             )),
         style: ButtonStyle(
           backgroundColor: widget.isDisabled

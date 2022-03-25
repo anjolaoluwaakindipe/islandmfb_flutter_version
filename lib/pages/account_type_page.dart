@@ -18,21 +18,24 @@ class AccountTypePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: whiteColor,
-        leading: SizedBox(
-          child: Padding(
+        leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
             icon: SvgPicture.asset(
               "assets/images/back.svg",
               height: 20,
             ),
           ),
         ),
-        ),
+        backgroundColor: whiteColor,
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 80,
       ),
+      backgroundColor: whiteColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 30,
@@ -48,61 +51,68 @@ class AccountTypePage extends StatelessWidget {
               "Account Type",
               textAlign: TextAlign.left,
               style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w400,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600,
                   color: Color(0xFF333333)),
             ),
             const SizedBox(
-              height: 2,
+              height: 10,
             ),
             const Padding(
               padding: EdgeInsets.only(),
               child: Text(
                 "Select an account type",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
-            Padding(
-              padding: const EdgeInsets.only(),
-              child: Container(
+            InkWell(
+              onTap: () {
+                Get.to(const AccountServicesPage());
+              },
+              child: Ink(
                 color: accentColor,
-                child: GFListTile(
-                  avatar: SvgPicture.asset('assets/images/Group.svg'),
-                  color: accentColor,
-                  titleText: 'Savings Account',
-                  // subTitleText: 'Savings Account',
-                  onTap: () {
-                    Get.to(const AccountServicesPage());
-                  },
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                child: Row(
+                  children: [
+                    SvgPicture.asset('assets/images/Group.svg'),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text("Savings Account"),
+                  ],
                 ),
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(),
-              child: Container(
+            InkWell(
+              onTap: () {
+                Get.to(const AccountServicesPage());
+              },
+              child: Ink(
                 color: accentColor,
-                child: GFListTile(
-                  avatar: SvgPicture.asset('assets/images/Group.svg'),
-                  color: accentColor,
-                  titleText: 'Current Account',
-                  // subTitleText: 'Current Account',
-                  onTap: () {
-                    Get.to(const AccountServicesPage());
-                  },
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                child: Row(
+                  children: [
+                    SvgPicture.asset('assets/images/Group.svg'),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    const Text("Current Account"),
+                  ],
                 ),
               ),
             ),
           ],
         ),
       ),
-      backgroundColor: whiteColor,
     );
   }
 }

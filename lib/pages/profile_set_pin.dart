@@ -1,11 +1,8 @@
-import 'dart:html';
-
 import 'package:bs_flutter/bs_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../components/shared/app_button.dart';
-import '../components/shared/app_textfield.dart';
 import '../utilities/colors.dart';
 
 class ProfileSetPinPage extends StatefulWidget {
