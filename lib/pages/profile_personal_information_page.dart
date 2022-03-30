@@ -187,7 +187,7 @@ class _ProfilePersonalInformationPageState
             AppTextField(
               textController: firstNameTextController,
               textInputType: TextInputType.text,
-              label: "FirstName",
+              label: "First Name",
               onChanged: (value) {
                 unDisableButton();
               },

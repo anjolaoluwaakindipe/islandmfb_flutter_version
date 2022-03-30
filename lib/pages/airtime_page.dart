@@ -118,9 +118,9 @@ class _AirtimePageState extends State<AirtimePage> {
               const Text(
                 "Biller",
                 style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 15,
                     color: lightextColor,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               DropdownButtonHideUnderline(
@@ -153,9 +153,9 @@ class _AirtimePageState extends State<AirtimePage> {
                   ? const Text(
                       "Product",
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 15,
                         color: lightextColor,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     )
                   : Container(),

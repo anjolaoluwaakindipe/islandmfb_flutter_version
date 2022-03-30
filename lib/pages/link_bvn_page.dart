@@ -117,9 +117,9 @@ class _LinkBVNPageState extends State<LinkBVNPage> {
               const Text(
                 "Phone Number",
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     color: blackColor,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
               DropdownButtonHideUnderline(

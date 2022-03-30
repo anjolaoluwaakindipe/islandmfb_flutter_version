@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../../utilities/colors.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   AppTextField(
       {Key? key,
       this.label = "",
@@ -20,7 +20,10 @@ class AppTextField extends StatelessWidget {
       this.validator,
       this.readOnly = false,
       this.enabled,
-      this.suffixIcon})
+      this.suffixIcon,
+      this.isPassword = false,
+      this.maxLines,
+      this.prefixIcon})
       : super(key: key);
 
   String label;
@@ -37,25 +40,43 @@ class AppTextField extends StatelessWidget {
   bool readOnly;
   bool? enabled;
   Widget? suffixIcon;
+  bool isPassword;
+  int? maxLines;
+  Widget? prefixIcon;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool passwordvisible = false;
+  bool? isPassword;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isPassword = widget.isPassword;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        label != ""
+        widget.label != ""
             ? Text(
-                label,
+                widget.label,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: labelColor ?? blackColor,
+                  color: widget.labelColor ?? blackColor,
                 ),
               )
             : Container(
                 height: 0,
               ),
-        label != ""
+        widget.label != ""
             ? const SizedBox(
                 height: 10,
               )
@@ -66,38 +87,68 @@ class AppTextField extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Colors.transparent,
           ),
-          child: Center(
+          child: IntrinsicHeight(
             child: TextFormField(
-              keyboardType: textInputType,
-              maxLength: maxCharacterLength,
-              obscureText: hideText,
+              keyboardType: widget.textInputType,
+              maxLength: widget.maxCharacterLength,
+              obscureText:
+                  widget.hideText || (widget.isPassword && !passwordvisible),
               cursorColor: primaryColor,
               cursorWidth: 2,
+              enableSuggestions: !isPassword!,
+              autocorrect: !isPassword!,
               decoration: InputDecoration(
-                suffixIconConstraints: BoxConstraints(maxWidth: 60),
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 1,
+                  minHeight: 1,
+                ),
+                isDense: true,
                 contentPadding: const EdgeInsets.only(
-                    left: 10, right: 20, top: 25, bottom: 25),
+                    left: 10, right: 10, top: 25, bottom: 25),
                 isCollapsed: true,
+                prefixIcon: widget.prefixIcon,
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(10.0),
-                  
                 ),
-                
-                suffix: suffixIcon,
-                hintText: hint,
+                hintText: widget.hint,
                 filled: true,
                 errorStyle: const TextStyle(color: primaryColor),
                 fillColor: accentColor,
                 hoverColor: accentColor,
-                suffixIcon: suffixIconWidget,
+                suffixIcon: widget.isPassword
+                    ? Container(
+                        padding: const EdgeInsets.only(right: 20),
+                        width: 40,
+                        child: Center(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                passwordvisible = !passwordvisible;
+                              });
+                            },
+                            child: !passwordvisible
+                                ? const Icon(
+                                    Icons.visibility_outlined,
+                                    size: 25,
+                                    color: greyColor,
+                                  )
+                                : const Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 25,
+                                    color: greyColor,
+                                  ),
+                          ),
+                        ),
+                      )
+                    : widget.suffixIconWidget,
               ),
-              controller: textController,
-              onChanged: onChanged,
-              inputFormatters: inputFormatters,
-              validator: validator,
-              readOnly: readOnly,
-              enabled: enabled,
+              controller: widget.textController,
+              onChanged: widget.onChanged,
+              inputFormatters: widget.inputFormatters,
+              validator: widget.validator,
+              readOnly: widget.readOnly,
+              enabled: widget.enabled,
             ),
           ),
         ),
