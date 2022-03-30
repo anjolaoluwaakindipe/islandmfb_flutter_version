@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/home_page/home_page_app_bar.dart';
 import 'package:islandmfb_flutter_version/components/home_page/home_page_quick_action.dart';
 import 'package:islandmfb_flutter_version/components/home_page/home_page_transaction_history_buttons.dart';
+import 'package:islandmfb_flutter_version/components/shared/app_customer_accounts_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_drawer.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/own_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
 import 'package:islandmfb_flutter_version/requests/account_request.dart';
@@ -55,25 +57,10 @@ class _HomePageState extends State<HomePage> {
     void openChangeAccountModal() {
       showModalBottomSheet<void>(
           context: context,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           builder: (BuildContext context) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: Container(
-                height: 500,
-                color: whiteColor,
-                child: Column(
-                  children: [
-                    Center(
-                      child: Container(
-                        height: 2,
-                        width: 100,
-                        color: greyColor,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
+            return HomePageBottomSheet();
           });
     }
 
@@ -149,13 +136,13 @@ class _HomePageState extends State<HomePage> {
                                 color: blackColor, fontSize: 10),
                             children: <TextSpan>[
                               TextSpan(
-                                text: ((selectedAccount["product"]) ??
+                                text: ((selectedAccount.value.product) ??
                                         "Savings Account") +
                                     "  ",
                               ),
                               TextSpan(
-                                text: (selectedAccount["primaryAccountNo"]
-                                        ?["_number"]) ??
+                                text: (selectedAccount
+                                        .value.primaryAccountNo["_number"]) ??
                                     "01290293820",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
@@ -169,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Text(
                           nairaFormat.format(
-                              selectedAccount["availableBalance"] ?? 10.00),
+                              selectedAccount.value.availableBalance ?? 10.00),
                           softWrap: true,
                           style: const TextStyle(
                             color: primaryColor,
@@ -198,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                               const TextSpan(text: "Book Balance   "),
                               TextSpan(
                                 text: nairaFormat.format(
-                                    selectedAccount["bookBalance"] ?? 10),
+                                    selectedAccount.value.bookBalance ?? 10),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -230,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                       HomePageQuicActionButtons(
                         name: "Transfer",
                         onTap: () {
-                          Get.to(TransferPage());
+                          Get.to(OwnAccountTransferPage());
                         },
                         svgUrlString: "assets/images/transferQuickActions.svg",
                       ),
@@ -282,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                FutureBuilder<List>(future: Future(() async {
+                (FutureBuilder<List>(future: Future(() async {
                   await transactionState.setRecentTransactionHistory();
                   return Future.value(
                       transactionState.recentTransactionHistoryState);
@@ -317,10 +304,81 @@ class _HomePageState extends State<HomePage> {
                       child: CircularProgressIndicator(
                     color: primaryColor,
                   ));
-                }))
+                })))
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomePageBottomSheet extends StatelessWidget {
+  HomePageBottomSheet({
+    Key? key,
+  }) : super(key: key);
+
+  final nairaFormat = NumberFormat.currency(name: "N  ");
+  final accountState = Get.put(AccountStateController());
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedAccount = accountState.selectedAccount;
+
+    final customerAccounts = accountState.customerAccounts.where((account) {
+      return account != selectedAccount.value;
+    }).toList();
+
+    return Container(
+      height: 600,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: whiteColor,
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 40,
+                    height: 3,
+                    decoration: BoxDecoration(
+                        color: blackColor,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return AppCustomerAccountButtons(
+                        nairaFormat: nairaFormat,
+                        accountNo:
+                            customerAccounts[index].primaryAccountNo["_number"],
+                        accountBalance:
+                            customerAccounts[index].availableBalance,
+                        onClick: () {
+                          Navigator.pop(context);
+                          accountState
+                              .changeSelectedAccount(customerAccounts[index]);
+                        },
+                      );
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(
+                          height: 10,
+                        ),
+                    itemCount: customerAccounts.length)
+              ]),
         ),
       ),
     );
