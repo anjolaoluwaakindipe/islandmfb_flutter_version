@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
@@ -48,13 +49,12 @@ class _LoginPageState extends State<LoginPage> {
         passwordTextController.text,
       );
 
-      await userState.setUserStateFromLogin();
+      await userState.setUserStateFromToken();
 
       if (user.containsKey("customer_no")) {
         await accountState
             .setAccountStateFromLogin(user["customer_no"].toString());
       }
-
 
       context.loaderOverlay.hide();
 
@@ -149,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                         key: Key(2.toString()),
                         textController: passwordTextController,
                         onChanged: isTextFieldBlankValidation,
+                        isPassword: true,
                       ),
                       const SizedBox(
                         height: 20,
@@ -178,6 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                       Center(
                         child: RichText(
                           text: TextSpan(
+                            style: GoogleFonts.poppins(),
                             children: <TextSpan>[
                               const TextSpan(
                                 text: "Don't have an account? ",

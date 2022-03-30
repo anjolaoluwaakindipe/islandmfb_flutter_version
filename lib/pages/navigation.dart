@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
 
 abstract class AppRoutes {
   static const homePage = "/home";
@@ -39,7 +39,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.transferPage,
-      page: () => TransferPage(),
+      page: () => TransferToOtherBanksPage(),
     )
   ];
 }

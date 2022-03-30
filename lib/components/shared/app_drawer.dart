@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
+import 'package:islandmfb_flutter_version/pages/another_transfer_page.dart';
 
 import 'package:islandmfb_flutter_version/pages/bill_payment_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
@@ -13,7 +14,7 @@ import 'package:islandmfb_flutter_version/pages/profile_set_pin.dart';
 import 'package:islandmfb_flutter_version/pages/loan_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
 
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
@@ -45,14 +46,16 @@ class AppDrawer extends StatelessWidget {
                 contentColor: blackColor,
                 actions: [
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      await Get.offAll(const LoginPage(),
+                          transition: Transition.zoom);
                       userState.clearUserState();
                       accountState.clearAccoutState();
                       transactionState.clearTransactionState();
                       tokenState.clearTokenState();
                       SecureStorage.deleteAValue("access_token");
                       SecureStorage.deleteAValue("refresh_token");
-                      Get.to(const LoginPage());
                     },
                     child: const Text(
                       "Yes",
@@ -130,7 +133,7 @@ class AppDrawer extends StatelessWidget {
                     name: "Transfer",
                     svgUrl: "assets/images/drawerTransfer.svg",
                     onClickHandler: () {
-                      Get.to(TransferPage());
+                      Get.to(const TransferTypePage());
                     },
                   ),
                   DrawerNavButtons(

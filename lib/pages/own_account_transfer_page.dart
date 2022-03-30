@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,8 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_customer_accounts_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
+import 'package:islandmfb_flutter_version/models/transfer.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
+import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class OwnAccountTransferPage extends StatefulWidget {
@@ -23,12 +28,56 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
   TextEditingController narrationTextController = TextEditingController();
   TextEditingController pinTextController = TextEditingController();
 
-  // Account Value
-  String? fromAccountNo;
-  String? toAccountNo;
+  // State
+  final transferState = Get.put(TransferStateController());
+
+  // Verify Button State
+  final _isButtonDisabled = true.obs;
+  final _buttonText = "Verify".obs;
+  final _isloading = false.obs;
+
+  bool get isButtonDisabled {
+    if (transferState.transferToOwnAccountState.value.toAccountNo == null ||
+        transferState.transferToOwnAccountState.value.fromAccountNo == null ||
+        transferState.transferToOwnAccountState.value.toAccountNo ==
+            transferState.transferToOwnAccountState.value.fromAccountNo ||
+        amountTextController.text.isEmpty ||
+        narrationTextController.text.isEmpty ||
+        double.parse(amountTextController.text.replaceAll(",", "")) <= 0 ||
+        pinTextController.text.isEmpty) {
+      _isButtonDisabled.value = true;
+    } else {
+      _isButtonDisabled.value = false;
+    }
+
+    _isButtonDisabled.refresh();
+
+    return _isButtonDisabled.value;
+  }
+
+  Future onVerifyButtonHandler() async {
+    transferState.setAmountNarrationPinField(TransferType.toOwnAccount,
+        amount: double.parse(amountTextController.text.replaceAll(",", "")),
+        narration: narrationTextController.text,
+        pin: pinTextController.text);
+    _isloading.value = true;
+    _buttonText.value = "Loading...";
+
+    _isButtonDisabled.refresh();
+    _buttonText.refresh();
+    await transferState.makeTransaction(TransferType.toOwnAccount);
+
+    _isloading.value = false;
+    _buttonText.value = "Verify";
+
+    _isButtonDisabled.refresh();
+    _buttonText.refresh();
+    await Get.put(AccountStateController()).refreshAccountsState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(DateTime.now().millisecondsSinceEpoch);
     return Scaffold(
       // APPBAR
       appBar: AppBar(
@@ -37,6 +86,7 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
           child: IconButton(
             onPressed: () {
               Get.back();
+              transferState.clearTransferState(TransferType.toOwnAccount);
             },
             icon: SvgPicture.asset(
               "assets/images/back.svg",
@@ -67,10 +117,13 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
           horizontal: 30.0,
           vertical: 20,
         ),
-        child: AppButton(
-          text: "Verify",
-          onPress: () {},
-        ),
+        child: Obx(() => AppButton(
+              text: _buttonText.value,
+              isDisabled: _isloading.value || isButtonDisabled,
+              onPress: () async {
+                await onVerifyButtonHandler();
+              },
+            )),
       ),
 
       // APP BODY
@@ -99,7 +152,7 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return OwnAccountPageBottomSheet(
-                          selectionType: SelectionType.from,
+                          selectionType: TansferSelectionType.from,
                         );
                       });
                 },
@@ -116,11 +169,16 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text("Select Account",
-                              style: TextStyle(
-                                  color: lightextColor, fontSize: 16)),
-                          Icon(
+                        children: [
+                          Obx(() {
+                            return Text(
+                                transferState.transferToOwnAccountState.value
+                                        .fromAccountNo ??
+                                    "Select Account",
+                                style: const TextStyle(
+                                    color: lightextColor, fontSize: 16));
+                          }),
+                          const Icon(
                             Icons.arrow_drop_down,
                             color: greyColor,
                           )
@@ -150,7 +208,7 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return OwnAccountPageBottomSheet(
-                          selectionType: SelectionType.to,
+                          selectionType: TansferSelectionType.to,
                         );
                       });
                 },
@@ -167,11 +225,16 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text("Select Account",
-                              style: TextStyle(
-                                  color: lightextColor, fontSize: 16)),
-                          Icon(
+                        children: [
+                          Obx(() {
+                            return Text(
+                                transferState.transferToOwnAccountState.value
+                                        .toAccountNo ??
+                                    "Select Account",
+                                style: const TextStyle(
+                                    color: lightextColor, fontSize: 16));
+                          }),
+                          const Icon(
                             Icons.arrow_drop_down,
                             color: greyColor,
                           )
@@ -184,13 +247,36 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
               const SizedBox(height: 20),
               AppTextField(
                 textController: amountTextController,
+                prefixIcon: Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: const BoxDecoration(
+                      color: primaryColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10))),
+                  width: 60,
+                  child: const Center(
+                    child: Text("N",
+                        style: TextStyle(
+                            color: whiteColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900)),
+                  ),
+                ),
                 label: "Amount",
                 hint: "Input Amount...",
                 textInputType: const TextInputType.numberWithOptions(
-                    decimal: false, signed: false),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
+                    decimal: true, signed: false),
+                inputFormatters: [CurrencyTextInputFormatter(symbol: "")],
+                onChanged: (value) {
+                  isButtonDisabled;
+                  String convertedMoneyText = NumberFormat.decimalPattern("en")
+                      .format(int.parse(value));
+                  amountTextController.value = TextEditingValue(
+                      text: convertedMoneyText,
+                      selection: TextSelection.collapsed(
+                          offset: convertedMoneyText.length));
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -199,6 +285,9 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                 textController: narrationTextController,
                 label: "Narration",
                 hint: "Give a narration...",
+                onChanged: (value) {
+                  isButtonDisabled;
+                },
               ),
               const SizedBox(
                 height: 20,
@@ -214,6 +303,9 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(4),
                 ],
+                onChanged: (value) {
+                  isButtonDisabled;
+                },
               ),
               const SizedBox(
                 height: 40,
@@ -226,15 +318,16 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
   }
 }
 
-enum SelectionType { to, from }
+enum TansferSelectionType { to, from }
 
 class OwnAccountPageBottomSheet extends StatelessWidget {
   OwnAccountPageBottomSheet({Key? key, required this.selectionType})
       : super(key: key);
 
   final nairaFormat = NumberFormat.currency(name: "N  ");
-  SelectionType selectionType;
+  TansferSelectionType selectionType;
   final accountState = Get.put(AccountStateController());
+  final transferState = Get.put(TransferStateController());
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +371,17 @@ class OwnAccountPageBottomSheet extends StatelessWidget {
                             customerAccounts[index].availableBalance,
                         onClick: () {
                           Navigator.pop(context);
-                          if (selectionType == SelectionType.to) {}
+                          if (selectionType == TansferSelectionType.to) {
+                            transferState.setTransfertoField(
+                                TransferType.toOwnAccount,
+                                accountNumber: customerAccounts[index]
+                                    .primaryAccountNo["_number"]);
+                          } else {
+                            transferState.setTransferFromField(
+                                TransferType.toOwnAccount,
+                                accountNumber: customerAccounts[index]
+                                    .primaryAccountNo["_number"]);
+                          }
                         },
                       );
                     },

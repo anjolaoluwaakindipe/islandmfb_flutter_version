@@ -26,6 +26,7 @@ class _AppButtonState extends State<AppButton> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
+        
         onPressed: widget.isDisabled ? null : widget.onPress,
         child: Padding(
             padding: const EdgeInsets.all(15.0),

@@ -35,7 +35,7 @@ class _AppDropdownState extends State<AppDropdown> {
       Text(
         widget.text,
         style: const TextStyle(
-            fontSize: 15, color: blackColor, fontWeight: FontWeight.w500),
+            fontSize: 15, color: blackColor, fontWeight: FontWeight.w600),
       ),
       const SizedBox(height: 10),
       DropdownButtonHideUnderline(

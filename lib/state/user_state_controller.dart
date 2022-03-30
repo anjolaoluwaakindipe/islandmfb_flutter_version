@@ -5,7 +5,7 @@ import 'package:islandmfb_flutter_version/storage/secure_storage.dart';
 class UserStateController extends GetxController {
   final user = {}.obs;
 
-  Future setUserStateFromLogin() async {
+  Future setUserStateFromToken() async {
     String? accessToken = await SecureStorage.readAValue("access_token");
 
     if (accessToken != null) {

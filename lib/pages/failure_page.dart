@@ -27,9 +27,7 @@ class FailurePage extends StatelessWidget {
         leading: Padding(
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton(
-            onPressed: () {
-              Get.back();
-            },
+            onPressed: () {},
             icon: SvgPicture.asset(
               "assets/images/back.svg",
               height: 20,
@@ -90,7 +88,7 @@ class FailurePage extends StatelessWidget {
                     style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
-                    Get.to(nextPage);
+                    Get.off(nextPage);
                   },
                 ),
               ),

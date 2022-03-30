@@ -149,7 +149,7 @@ class _StatementOfAccountPageState extends State<StatementOfAccountPage> {
                   style: TextStyle(
                       fontSize: 15,
                       color: blackColor,
-                      fontWeight: FontWeight.w200),
+                      fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(
                   height: 10,
@@ -197,7 +197,7 @@ class _StatementOfAccountPageState extends State<StatementOfAccountPage> {
                   style: TextStyle(
                       fontSize: 15,
                       color: blackColor,
-                      fontWeight: FontWeight.w200),
+                      fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(
                   height: 10,

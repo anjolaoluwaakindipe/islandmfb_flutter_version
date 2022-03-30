@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -175,9 +173,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       body: RefreshIndicator(
         onRefresh: () => Future.sync(() => _pageController.refresh()),
         backgroundColor: primaryColor,
-        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
         color: whiteColor,
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(

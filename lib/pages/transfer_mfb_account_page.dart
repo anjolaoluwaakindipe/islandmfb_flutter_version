@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
 
 import '../components/shared/app_button.dart';
 import '../components/shared/app_textfield.dart';
@@ -49,7 +50,7 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
             padding: const EdgeInsets.only(left: 20.0),
             child: IconButton(
               onPressed: () {
-                Get.to(const HomePage());
+                Get.back();
               },
               icon: SvgPicture.asset(
                 "assets/images/back.svg",
@@ -77,21 +78,25 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
           child: Column(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
                   "Account Number",
                   style: TextStyle(
-                    color: greyColor,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 InkWell(
-                  child: Text(
+                  onTap: () {
+                    Get.to(ChooseBeneficiary());
+                  },
+
+                  child: const Text(
                     "Find Beneficiary",
                     style: TextStyle(
                       color: primaryColor,
-                      fontSize: 15,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -99,10 +104,10 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
                 )
               ],
             ),
+            const SizedBox(height: 10),
             AppTextField(
               textController: accountNumberText,
               hint: "Input account Number",
-              labelColor: greyColor,
               onChanged: (text) {
                 buttonValidationCheck();
               },
@@ -114,7 +119,6 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
               textController: accountNameText,
               label: "Account Name",
               hint: "Account name",
-              labelColor: greyColor,
               onChanged: (text) {
                 buttonValidationCheck();
               },
@@ -126,7 +130,6 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
               hint: "Input Amount",
               textController: amountText,
               label: "Amount",
-              labelColor: greyColor,
               onChanged: (text) {
                 buttonValidationCheck();
               },
@@ -137,7 +140,6 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
             AppTextField(
               textController: narrationText,
               label: "Narration",
-              labelColor: greyColor,
               onChanged: (text) {
                 buttonValidationCheck();
               },
@@ -148,7 +150,6 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
             AppTextField(
               textController: pinText,
               label: "Pin",
-              labelColor: greyColor,
               onChanged: (text) {
                 buttonValidationCheck();
               },

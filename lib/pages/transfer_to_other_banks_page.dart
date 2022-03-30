@@ -1,23 +1,27 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
+import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
-class TransferPage extends StatefulWidget {
-  TransferPage({Key? key}) : super(key: key);
+class TransferToOtherBanksPage extends StatefulWidget {
+  TransferToOtherBanksPage({Key? key}) : super(key: key);
 
   @override
-  State<TransferPage> createState() => _TransferPageState();
+  State<TransferToOtherBanksPage> createState() =>
+      _TransferToOtherBanksPageState();
 }
 
-class _TransferPageState extends State<TransferPage> {
+class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   final bankItems = ["UBA", "GTB", "Access Bank", "EcoBank"];
   String? bankValue;
 
@@ -36,7 +40,7 @@ class _TransferPageState extends State<TransferPage> {
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton(
             onPressed: () {
-              Get.to(const HomePage());
+              Get.back();
             },
             icon: SvgPicture.asset(
               "assets/images/back.svg",
@@ -74,17 +78,31 @@ class _TransferPageState extends State<TransferPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Bank",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: blackColor,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text("Bank",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: blackColor,
+                      )),
+                  RichText(
+                      text: TextSpan(
+                          text: "Find Beneficiary",
+                          style: GoogleFonts.poppins(
+                            color: primaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Get.to(ChooseBeneficiary());
+                            }))
+                ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
                     color: accentColor,
