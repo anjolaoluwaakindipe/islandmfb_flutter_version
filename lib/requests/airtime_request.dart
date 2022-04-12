@@ -1,11 +1,10 @@
-
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
 const devAirtimeUsername = "Anjolaoluwaakindipe";
-const devAirtimeCountry = "Nigeria";
+const devAirtimeCountry = "NG";
 const devtoken = "vjBwgBcDn5jUWFMz4AeEtVM5fHH3P";
 
 String sha512hasher(String token, String email, String username) {
@@ -15,18 +14,19 @@ String sha512hasher(String token, String email, String username) {
   return sha512Result.toString();
 }
 
-
 Future<Map> getProductList(String phoneNumber) {
+  String hash =
+      sha512hasher(devtoken, "anjyakindipe@gmail.com", "Anjolaoluwaakindipe");
   Map<String, String> body = {
-    "username": devAirtimeCountry,
-    "hash": "",
+    "username": devAirtimeUsername,
+    "hash": hash,
     "phone": phoneNumber,
     "country": devAirtimeCountry,
   };
 
   String urlString = "https://estoresms.com/network_list/v/2";
 
-  return http.post(Uri.parse(urlString), body: body).then((value) {
+  return http.post(Uri.parse(urlString), body: json.encode(body),).then((value) {
     if (value.statusCode == 200) {
       return {"success": true, "data": json.decode(value.body)};
     }
@@ -40,5 +40,5 @@ Future<Map> getProductList(String phoneNumber) {
 }
 
 void main() async {
-  print(await getProductList("+23470444529"));
+  print(await getProductList("+22347030444529"));
 }
