@@ -28,5 +28,5 @@ Future getAccountInfo(String customerNo) async {
 }
 
 void main() async {
-  print(await getAccountInfo("0002"));
+  print(await getAccountInfo("6758"));
 }

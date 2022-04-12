@@ -9,7 +9,6 @@ class AppButton extends StatelessWidget {
 
   final dynamic onPress;
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

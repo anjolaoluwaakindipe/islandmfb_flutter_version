@@ -4,15 +4,20 @@ import 'package:flutter/material.dart';
 import '../../utilities/colors.dart';
 
 class AppTextField extends StatelessWidget {
-  AppTextField({Key? key, this.label = "", this.hint = ""}) : super(key: key);
+  AppTextField(
+      {Key? key, this.label = "", this.hint = "", this.obscureText = false})
+      : super(key: key);
 
   String label;
   String hint;
+  bool obscureText;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -24,6 +29,7 @@ class AppTextField extends StatelessWidget {
             ),
           ),
           TextFormField(
+            obscureText: obscureText,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: hint,
