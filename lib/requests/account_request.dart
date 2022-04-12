@@ -1,18 +1,19 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+import 'package:islandmfb_flutter_version/models/account.dart';
 import 'package:islandmfb_flutter_version/requests/request_settings.dart';
 
 import 'package:http/http.dart' as http;
 
-Future getAccountInfo(String customerNo) async {
+Future<Map> getCustomerAccounts(String customerNo) async {
   String urlString =
       accountUrl + "/getCustomerAccounts?CustomerNo=" + customerNo;
-  return await http.get(
+  return await http
+      .get(
     Uri.parse(urlString),
-    headers: {
-      "Accept": "application/json",
-    },
-  ).then(
+  )
+      .then(
     (value) {
       if (value.statusCode == 200) {
         return {
@@ -27,6 +28,69 @@ Future getAccountInfo(String customerNo) async {
   );
 }
 
+Future<Map> getCustomerDetails(String customerNo) async {
+  String urlString =
+      accountUrl + "/getCustomerDetails?CustomerNo=" + customerNo;
+
+  return await http.get(Uri.parse(urlString)).then((value) {
+    if (value.statusCode == 200) {
+      return {
+        "success": true,
+        "data": json.decode(value.body),
+      };
+    } else {
+      return {
+        "success": false,
+      };
+    }
+  });
+}
+
+Future<Map> getCustomerRecentTransactions(String accountNo) async {
+  String urlString =
+      accountUrl + "/getAccountRecentTxns?AccountNo=" + accountNo;
+
+  return await http.get(Uri.parse(urlString)).then((value) {
+    if (value.statusCode == 200) {
+      return {"success": true, "data": json.decode(value.body)};
+    } else {
+      return {"success": false, "statusCode": value.statusCode};
+    }
+  });
+}
+
+Future<Map> getCustomerTransactionsSpecifically(
+    String endDate, String accountNo,
+    {int page = 0, int size = 0, String startDate = "19500101"}) async {
+  String urlStrinng = accountUrl +
+      "/getAccountTransactionsPaged?accountno=" +
+      accountNo +
+      "&fromdate=" +
+      startDate +
+      "&todate=" +
+      endDate +
+      "&page=" +
+      (page != 0 ? page.toString() : "") +
+      "&size=" +
+      (size != 0 ? size.toString() : "");
+  return await http.get(Uri.parse(urlStrinng)).then((value) {
+    if (value.statusCode == 200) {
+      return {"success": true, "data": json.decode(value.body)};
+    } else {
+      return {"success": false, "statusCode": value.statusCode};
+    }
+  });
+}
+
 void main() async {
-  print(await getAccountInfo("6758"));
+  // print(await getCustomerAccounts("0002"));
+  // print(await getCustomerRecentTransactions(1000021.toString()));
+
+  var ans = await getCustomerTransactionsSpecifically(
+          20200923.toString(), 1000021.toString(),
+          page: 1, size: 1)
+      .then((value) => value["data"]["content"]);
+  print(ans.length);
+
+  // print(DateFormat("yyyyMMdd").format(DateTime.now()));
 }
