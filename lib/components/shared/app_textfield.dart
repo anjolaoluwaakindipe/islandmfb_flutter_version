@@ -76,6 +76,7 @@ class _AppTextFieldState extends State<AppTextField> {
             : Container(
                 height: 0,
               ),
+              
         widget.label != ""
             ? const SizedBox(
                 height: 10,
@@ -87,69 +88,64 @@ class _AppTextFieldState extends State<AppTextField> {
           decoration: const BoxDecoration(
             color: Colors.transparent,
           ),
-          child: IntrinsicHeight(
-            child: TextFormField(
-              keyboardType: widget.textInputType,
-              maxLength: widget.maxCharacterLength,
-              obscureText:
-                  widget.hideText || (widget.isPassword && !passwordvisible),
-              cursorColor: primaryColor,
-              cursorWidth: 2,
-              enableSuggestions: !isPassword!,
-              autocorrect: !isPassword!,
-              decoration: InputDecoration(
-                prefixIconConstraints: const BoxConstraints(
-                  minWidth: 1,
-                  minHeight: 1,
-                ),
-                isDense: true,
-                contentPadding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 25, bottom: 25),
-                isCollapsed: true,
-                prefixIcon: widget.prefixIcon,
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                hintText: widget.hint,
-                filled: true,
-                errorStyle: const TextStyle(color: primaryColor),
-                fillColor: accentColor,
-                hoverColor: accentColor,
-                suffixIcon: widget.isPassword
-                    ? Container(
-                        padding: const EdgeInsets.only(right: 20),
-                        width: 40,
-                        child: Center(
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                passwordvisible = !passwordvisible;
-                              });
-                            },
-                            child: !passwordvisible
-                                ? const Icon(
-                                    Icons.visibility_outlined,
-                                    size: 25,
-                                    color: greyColor,
-                                  )
-                                : const Icon(
-                                    Icons.visibility_off_outlined,
-                                    size: 25,
-                                    color: greyColor,
-                                  ),
-                          ),
-                        ),
-                      )
-                    : widget.suffixIconWidget,
+          child: TextFormField(
+            keyboardType: widget.textInputType,
+            maxLength: widget.maxCharacterLength,
+          
+            obscureText:
+                widget.hideText || (widget.isPassword && !passwordvisible),
+            cursorColor: primaryColor,
+            cursorWidth: 2,
+            enableSuggestions: !isPassword!,
+            autocorrect: !isPassword!,
+            decoration: InputDecoration(
+
+              isDense: true,
+              contentPadding: const EdgeInsets.only(
+                  left: 10, right: 10, top: 25, bottom: 25),
+              prefixIcon: widget.prefixIcon,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              controller: widget.textController,
-              onChanged: widget.onChanged,
-              inputFormatters: widget.inputFormatters,
-              validator: widget.validator,
-              readOnly: widget.readOnly,
-              enabled: widget.enabled,
+              hintText: widget.hint,
+              filled: true,
+              errorStyle: const TextStyle(color: primaryColor),
+              fillColor: accentColor,
+              hoverColor: accentColor,
+              suffixIcon: widget.isPassword
+                  ? Container(
+                      padding: const EdgeInsets.only(right: 20),
+                      width: 40,
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              passwordvisible = !passwordvisible;
+                            });
+                          },
+                          child: !passwordvisible
+                              ? const Icon(
+                                  Icons.visibility_outlined,
+                                  size: 25,
+                                  color: greyColor,
+                                )
+                              : const Icon(
+                                  Icons.visibility_off_outlined,
+                                  size: 25,
+                                  color: greyColor,
+                                ),
+                        ),
+                      ),
+                    )
+                  : widget.suffixIconWidget,
             ),
+            controller: widget.textController,
+            onChanged: widget.onChanged,
+            inputFormatters: widget.inputFormatters,
+            validator: widget.validator,
+            readOnly: widget.readOnly,
+            enabled: widget.enabled,
           ),
         ),
       ],

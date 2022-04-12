@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     Future(() async {
-      if (userState.user.isEmpty) {
+      if (userState.user.isEmpty || accountState.customerAccounts.isEmpty) {
         Get.to(const LoginPage());
       }
     });
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
-    if (userState.user.isEmpty) {
+    if (userState.user.isEmpty || accountState.customerAccounts.isEmpty) {
       return Container();
     }
 
@@ -86,8 +86,9 @@ class _HomePageState extends State<HomePage> {
           triggerMode: RefreshIndicatorTriggerMode.onEdge,
           color: whiteColor,
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
             scrollDirection: Axis.vertical,
-            physics: const AlwaysScrollableScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -223,6 +224,8 @@ class _HomePageState extends State<HomePage> {
                     height: 10,
                   ),
                   SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
@@ -342,7 +345,7 @@ class HomePageBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedAccount = accountState.selectedAccount;
 
-    final customerAccounts = accountState.customerAccounts.where((account) {
+    final otherAccounts = accountState.customerAccounts.where((account) {
       return account != selectedAccount.value;
     }).toList();
 
@@ -374,26 +377,34 @@ class HomePageBottomSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                ListView.separated(
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return AppCustomerAccountButtons(
-                        nairaFormat: nairaFormat,
-                        accountNo: customerAccounts[index]
-                            .primaryAccountNo?["_number"],
-                        accountBalance:
-                            customerAccounts[index].availableBalance ?? 0,
-                        onClick: () {
-                          Navigator.pop(context);
-                          accountState
-                              .changeSelectedAccount(customerAccounts[index]);
+                otherAccounts.isEmpty
+                    ? const Center(
+                        child: Text("No other accounts available",
+                            style: TextStyle(
+                              color: greyColor,
+                              fontSize: 18,
+                            )),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return AppCustomerAccountButtons(
+                            nairaFormat: nairaFormat,
+                            accountNo: otherAccounts[index]
+                                .primaryAccountNo?["_number"],
+                            accountBalance:
+                                otherAccounts[index].availableBalance ?? 0,
+                            onClick: () {
+                              Navigator.pop(context);
+                              accountState
+                                  .changeSelectedAccount(otherAccounts[index]);
+                            },
+                          );
                         },
-                      );
-                    },
-                    separatorBuilder: (context, index) => const SizedBox(
-                          height: 10,
-                        ),
-                    itemCount: customerAccounts.length)
+                        separatorBuilder: (context, index) => const SizedBox(
+                              height: 10,
+                            ),
+                        itemCount: otherAccounts.length)
               ]),
         ),
       ),

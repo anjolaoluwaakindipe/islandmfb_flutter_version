@@ -3,6 +3,7 @@ import 'package:islandmfb_flutter_version/models/transfer.dart';
 import 'package:islandmfb_flutter_version/pages/failure_page.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
+import 'package:islandmfb_flutter_version/pages/mfb_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/own_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/success_page.dart';
 import 'package:islandmfb_flutter_version/requests/transfer_request.dart';
@@ -28,7 +29,11 @@ class TransferStateController extends GetxController {
         break;
       case TransferType.toMFBAccount:
         {
-          transferToMFBAccountState.value.toAccountNo = accountNumber;
+          transferToMFBAccountState.value.toAccountNo =
+              Get.put(AccountStateController())
+                  .selectedAccount
+                  .value
+                  .primaryAccountNo!["_number"];
           transferToMFBAccountState.refresh();
         }
         break;
@@ -78,7 +83,33 @@ class TransferStateController extends GetxController {
         }
         break;
       case TransferType.toMFBAccount:
-        {}
+        {
+          transferToMFBAccountState.value.reference =
+              ShortUuid.init().generate().substring(0, 13);
+          var transferResponse = await intraBankTransfer(
+              transferToMFBAccountState.value.amount!,
+              transferToMFBAccountState.value.fromAccountNo!,
+              transferToMFBAccountState.value.narration!,
+              transferToMFBAccountState.value.toAccountNo!,
+              transferToMFBAccountState.value.fullname!,
+              transferToMFBAccountState.value.customerNo!,
+              transferToMFBAccountState.value.reference!);
+
+          if (transferResponse["success"] == true &&
+              transferResponse["data"]!["postedOK"] == true) {
+            clearTransferState(TransferType.toMFBAccount);
+            Get.to(SuccessPage(
+                buttonText: "Continue",
+                successMessage: "Transfer was successfull!!!",
+                nextPage: const HomePage()));
+          } else {
+            Get.to(FailurePage(
+              buttonText: "Continue",
+              failureMessage: "Unsuccessful Transaction",
+              nextPage: MfbAccountTransferPage(),
+            ));
+          }
+        }
         break;
       case TransferType.toOtherBanks:
         {}
@@ -165,6 +196,33 @@ class TransferStateController extends GetxController {
     }
   }
 
+  // LOAD RECIPIENT NAME
+  Future loadRecipientName(TransferType transferType, String accountNo) async {
+    switch (transferType) {
+      case TransferType.toMFBAccount:
+        {
+          transferToMFBAccountState.value.receipientName = null;
+          transferToMFBAccountState.refresh();
+          final response = await recipientInfo(accountNo);
+
+          if (response["success"] == true) {
+            final accountName = response["data"]!["customerName"];
+            transferToMFBAccountState.value.receipientName = accountName;
+            transferToMFBAccountState.refresh();
+            return;
+          } else {
+            transferToMFBAccountState.value.receipientName = null;
+            transferToMFBAccountState.refresh();
+            return response["data"];
+          }
+        }
+      default:
+        {
+          return "";
+        }
+    }
+  }
+
   // CLEAR EACH TRANSFER REQUEST
   void clearTransferState(TransferType transferType) {
     switch (transferType) {
@@ -187,6 +245,7 @@ class TransferStateController extends GetxController {
           transferToMFBAccountState.value.narration = null;
           transferToMFBAccountState.value.pin = null;
           transferToMFBAccountState.value.reference = null;
+          transferToMFBAccountState.value.receipientName = null;
 
           transferToMFBAccountState.refresh();
         }

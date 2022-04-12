@@ -12,8 +12,10 @@ class Transfer {
   String? fullname;
 
   String? customerNo;
-  
+
   String? reference;
+
+  String? receipientName;
 
   Transfer._toOwnAccountConstructor();
 

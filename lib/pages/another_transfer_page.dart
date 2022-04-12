@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/pages/own_account_transfer_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_mfb_account_page.dart';
+import 'package:islandmfb_flutter_version/pages/mfb_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 

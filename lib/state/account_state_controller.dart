@@ -11,7 +11,7 @@ class AccountStateController extends GetxController {
 
   Future setAccountStateFromLogin(String customerNo) async {
     var customerAccountsResponse = await getCustomerAccounts(customerNo);
-    print(customerAccountsResponse);
+
     var customerDetailsResponse = await getCustomerDetails(customerNo);
     if (customerAccountsResponse["success"] == true &&
         customerDetailsResponse["success"] == true) {
@@ -20,6 +20,8 @@ class AccountStateController extends GetxController {
           .toList();
       selectedAccount.value = customerAccounts[0];
       customerDetails.value = customerDetailsResponse["data"];
+    } else {
+      return customerAccountsResponse["error"];
     }
   }
 
@@ -44,9 +46,12 @@ class AccountStateController extends GetxController {
     Get.put(TransactionStateController()).setRecentTransactionHistory();
   }
 
-  void clearAccoutState() {
+  void clearAccountState() {
     customerAccounts.value = [];
     selectedAccount.value = const Account();
     customerDetails.value = {};
+    customerAccounts.refresh();
+    selectedAccount.refresh();
+    customerDetails.refresh();
   }
 }

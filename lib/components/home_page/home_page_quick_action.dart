@@ -19,7 +19,7 @@ class HomePageQuicActionButtons extends StatelessWidget {
     return InkWell(
       splashColor: whiteColor,
       onTap: onTap,
-      child: Ink(
+      child: Container(
         height: 80,
         width: 80,
         decoration: BoxDecoration(

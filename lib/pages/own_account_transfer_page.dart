@@ -4,6 +4,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
@@ -11,6 +12,7 @@ import 'package:islandmfb_flutter_version/components/shared/app_customer_account
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
+import 'package:islandmfb_flutter_version/pages/own_account_transfer_verification_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
@@ -28,6 +30,9 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
   TextEditingController narrationTextController = TextEditingController();
   TextEditingController pinTextController = TextEditingController();
 
+  // Global keys
+  GlobalKey<FormState> ownAccountTransferPageFormKey = GlobalKey<FormState>();
+
   // State
   final transferState = Get.put(TransferStateController());
 
@@ -35,6 +40,24 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
   final _isButtonDisabled = true.obs;
   final _buttonText = "Verify".obs;
   final _isloading = false.obs;
+
+  // amount validation
+  String? amountChecker(String? fieldContent) {
+    double amount = double.parse(amountTextController.text.replaceAll(",", ""));
+    String? accountNo =
+        transferState.transferToOwnAccountState.value.fromAccountNo;
+    double? availableBalance = Get.put(AccountStateController())
+        .customerAccounts
+        .firstWhere(
+            (account) => account.primaryAccountNo!["_number"] == accountNo!)
+        .availableBalance;
+    if (accountNo != null &&
+        availableBalance != null &&
+        amount > availableBalance) {
+      return "Balance exceeded!";
+    }
+    return null;
+  }
 
   bool get isButtonDisabled {
     if (transferState.transferToOwnAccountState.value.toAccountNo == null ||
@@ -56,23 +79,14 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
   }
 
   Future onVerifyButtonHandler() async {
-    transferState.setAmountNarrationPinField(TransferType.toOwnAccount,
-        amount: double.parse(amountTextController.text.replaceAll(",", "")),
-        narration: narrationTextController.text,
-        pin: pinTextController.text);
-    _isloading.value = true;
-    _buttonText.value = "Loading...";
+    if (ownAccountTransferPageFormKey.currentState!.validate()) {
+      transferState.setAmountNarrationPinField(TransferType.toOwnAccount,
+          amount: double.parse(amountTextController.text.replaceAll(",", "")),
+          narration: narrationTextController.text,
+          pin: pinTextController.text);
 
-    _isButtonDisabled.refresh();
-    _buttonText.refresh();
-    await transferState.makeTransaction(TransferType.toOwnAccount);
-
-    _isloading.value = false;
-    _buttonText.value = "Verify";
-
-    _isButtonDisabled.refresh();
-    _buttonText.refresh();
-    await Get.put(AccountStateController()).refreshAccountsState();
+      Get.to(OwnAccountTransferVerificationPage());
+    }
   }
 
   @override
@@ -128,189 +142,190 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
 
       // APP BODY
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "From",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: blackColor,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      context: context,
-                      builder: (BuildContext context) {
-                        return OwnAccountPageBottomSheet(
-                          selectionType: TansferSelectionType.from,
-                        );
-                      });
-                },
-                child: Container(
-                  height: 70,
-                  padding: const EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    color: accentColor,
-                    borderRadius: BorderRadius.circular(10),
+          child: Form(
+            key: ownAccountTransferPageFormKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "From",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor,
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(() {
-                            return Text(
-                                transferState.transferToOwnAccountState.value
-                                        .fromAccountNo ??
-                                    "Select Account",
-                                style: const TextStyle(
-                                    color: lightextColor, fontSize: 16));
-                          }),
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            color: greyColor,
-                          )
-                        ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return OwnAccountPageBottomSheet(
+                            selectionType: TansferSelectionType.from,
+                          );
+                        });
+                  },
+                  child: Container(
+                    height: 70,
+                    padding: const EdgeInsets.only(left: 10, right: 20),
+                    decoration: BoxDecoration(
+                      color: accentColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Obx(() {
+                              return Text(
+                                  transferState.transferToOwnAccountState.value
+                                          .fromAccountNo ??
+                                      "Select Account",
+                                  style: const TextStyle(
+                                      color: lightextColor, fontSize: 16));
+                            }),
+                            const Icon(
+                              Icons.arrow_drop_down,
+                              color: greyColor,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "To",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        context: context,
+                        builder: (BuildContext context) {
+                          return OwnAccountPageBottomSheet(
+                            selectionType: TansferSelectionType.to,
+                          );
+                        });
+                  },
+                  child: Container(
+                    height: 70,
+                    padding: const EdgeInsets.only(left: 10, right: 20),
+                    decoration: BoxDecoration(
+                      color: accentColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Obx(() {
+                              return Text(
+                                  transferState.transferToOwnAccountState.value
+                                          .toAccountNo ??
+                                      "Select Account",
+                                  style: const TextStyle(
+                                      color: lightextColor, fontSize: 16));
+                            }),
+                            const Icon(
+                              Icons.arrow_drop_down,
+                              color: greyColor,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                AppTextField(
+                  textController: amountTextController,
+                  prefixIcon: Container(
+                    child: Center(
+                      child: SvgPicture.asset(
+                        "assets/images/naira.svg",
+                        color: primaryColor,
+                        height: 20,
                       ),
-                    ],
+                    ),
+                    width: 50,
                   ),
+                  label: "Amount",
+                  hint: "Input Amount...",
+                  textInputType: const TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
+                  inputFormatters: [CurrencyTextInputFormatter(symbol: "")],
+                  onChanged: (value) {
+                    isButtonDisabled;
+                    String convertedMoneyText =
+                        NumberFormat.decimalPattern("en")
+                            .format(int.parse(value));
+                    amountTextController.value = TextEditingValue(
+                        text: convertedMoneyText,
+                        selection: TextSelection.collapsed(
+                            offset: convertedMoneyText.length));
+                  },
+                  validator: amountChecker,
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "To",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: blackColor,
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      context: context,
-                      builder: (BuildContext context) {
-                        return OwnAccountPageBottomSheet(
-                          selectionType: TansferSelectionType.to,
-                        );
-                      });
-                },
-                child: Container(
-                  height: 70,
-                  padding: const EdgeInsets.only(left: 10, right: 20),
-                  decoration: BoxDecoration(
-                    color: accentColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(() {
-                            return Text(
-                                transferState.transferToOwnAccountState.value
-                                        .toAccountNo ??
-                                    "Select Account",
-                                style: const TextStyle(
-                                    color: lightextColor, fontSize: 16));
-                          }),
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            color: greyColor,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                AppTextField(
+                  textController: narrationTextController,
+                  label: "Narration",
+                  hint: "Give a narration...",
+                  onChanged: (value) {
+                    isButtonDisabled;
+                  },
                 ),
-              ),
-              const SizedBox(height: 20),
-              AppTextField(
-                textController: amountTextController,
-                prefixIcon: Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: const BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10))),
-                  width: 60,
-                  child: const Center(
-                    child: Text("N",
-                        style: TextStyle(
-                            color: whiteColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900)),
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
-                label: "Amount",
-                hint: "Input Amount...",
-                textInputType: const TextInputType.numberWithOptions(
-                    decimal: true, signed: false),
-                inputFormatters: [CurrencyTextInputFormatter(symbol: "")],
-                onChanged: (value) {
-                  isButtonDisabled;
-                  String convertedMoneyText = NumberFormat.decimalPattern("en")
-                      .format(int.parse(value));
-                  amountTextController.value = TextEditingValue(
-                      text: convertedMoneyText,
-                      selection: TextSelection.collapsed(
-                          offset: convertedMoneyText.length));
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AppTextField(
-                textController: narrationTextController,
-                label: "Narration",
-                hint: "Give a narration...",
-                onChanged: (value) {
-                  isButtonDisabled;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              AppTextField(
-                textController: pinTextController,
-                label: "Pin",
-                hint: "****",
-                hideText: true,
-                textInputType: const TextInputType.numberWithOptions(
-                    decimal: false, signed: false),
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4),
-                ],
-                onChanged: (value) {
-                  isButtonDisabled;
-                },
-              ),
-              const SizedBox(
-                height: 40,
-              )
-            ],
+                AppTextField(
+                  textController: pinTextController,
+                  label: "Pin",
+                  hint: "****",
+                  hideText: true,
+                  textInputType: const TextInputType.numberWithOptions(
+                      decimal: false, signed: false),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(4),
+                  ],
+                  onChanged: (value) {
+                    isButtonDisabled;
+                  },
+                ),
+                const SizedBox(
+                  height: 40,
+                )
+              ],
+            ),
           ),
         ),
       ),
