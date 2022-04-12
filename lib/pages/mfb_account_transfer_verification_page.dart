@@ -5,45 +5,42 @@ import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_switch.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
-import 'package:islandmfb_flutter_version/pages/home_page.dart';
-import 'package:islandmfb_flutter_version/pages/success_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
-import 'package:islandmfb_flutter_version/state/airtime_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
-class OwnAccountTransferVerificationPage extends StatefulWidget {
-  const OwnAccountTransferVerificationPage({Key? key}) : super(key: key);
+class MfbAccountTransferVerificationPage extends StatefulWidget {
+  MfbAccountTransferVerificationPage({Key? key}) : super(key: key);
 
   @override
-  State<OwnAccountTransferVerificationPage> createState() =>
-      _OwnAccountTransferVerificationPageState();
+  State<MfbAccountTransferVerificationPage> createState() =>
+      _MfbAccountTransferVerificationPageState();
 }
 
-class _OwnAccountTransferVerificationPageState
-    extends State<OwnAccountTransferVerificationPage> {
+class _MfbAccountTransferVerificationPageState
+    extends State<MfbAccountTransferVerificationPage> {
   // naira formatter
   final nairaFormat = NumberFormat.currency(name: "N  ");
-  final _isloading = false.obs;
 
   // State
   final transferState = Get.put(TransferStateController());
 
   // button Handler
-  final _buttonText = "Send".obs;
+  String _buttonText = "Send";
+  bool _isloading = false;
 
   void onPayHandler() async {
-    _isloading.value = true;
-    _buttonText.value = "Loading...";
+    setState(() {
+      _isloading = true;
+      _buttonText = "Loading...";
+    });
 
-    _buttonText.refresh();
-    await transferState.makeTransaction(TransferType.toOwnAccount);
+    await transferState.makeTransaction(TransferType.toMFBAccount);
 
-    _isloading.value = false;
-    _buttonText.value = "Verify";
-
-    _isloading.refresh();
-    _buttonText.refresh();
+    setState(() {
+      _isloading = false;
+      _buttonText = "Verify";
+    });
     await Get.put(AccountStateController()).refreshAccountsState();
   }
 
@@ -85,13 +82,13 @@ class _OwnAccountTransferVerificationPageState
           horizontal: 30.0,
           vertical: 20,
         ),
-        child: Obx(() => AppButton(
-              text: _buttonText.value,
-              onPress: () {
-                onPayHandler();
-              },
-              isDisabled: _isloading.value,
-            )),
+        child: AppButton(
+          text: _buttonText,
+          onPress: () {
+            onPayHandler();
+          },
+          isDisabled: _isloading,
+        ),
       ),
 
       // BODY
@@ -116,7 +113,7 @@ class _OwnAccountTransferVerificationPageState
                     Center(
                       child: Text(
                         nairaFormat.format(transferState
-                                .transferToOwnAccountState.value.amount ??
+                                .transferToMFBAccountState.value.amount ??
                             0),
                         style: const TextStyle(
                           color: primaryColor,
@@ -170,7 +167,7 @@ class _OwnAccountTransferVerificationPageState
                                     fontWeight: FontWeight.w600,
                                   )),
                               Text(
-                                  transferState.transferToOwnAccountState.value
+                                  transferState.transferToMFBAccountState.value
                                           .toAccountNo ??
                                       "",
                                   textAlign: TextAlign.right,
@@ -190,8 +187,8 @@ class _OwnAccountTransferVerificationPageState
                                     fontWeight: FontWeight.w600,
                                   )),
                               Text(
-                                  transferState.transferToOwnAccountState.value
-                                          .fullname ??
+                                  transferState.transferToMFBAccountState.value
+                                          .receipientName ??
                                       "",
                                   textAlign: TextAlign.right,
                                   style: const TextStyle(
@@ -216,7 +213,7 @@ class _OwnAccountTransferVerificationPageState
                               Expanded(
                                 child: Text(
                                     nairaFormat.format(transferState
-                                            .transferToOwnAccountState
+                                            .transferToMFBAccountState
                                             .value
                                             .amount ??
                                         0),
@@ -253,6 +250,19 @@ class _OwnAccountTransferVerificationPageState
                   ])),
             ),
             const SizedBox(height: 10),
+            Row(
+              children: [
+                const Text("Save as beneficiary"),
+                const SizedBox(
+                  width: 30,
+                ),
+                AppSwitch(ontoggleChange: (value) {
+                  print(value);
+                }),
+              ],
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
           ]),
         ),
       ),

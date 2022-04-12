@@ -33,5 +33,6 @@ class TokenStateController extends GetxController {
 
   void clearTokenState() {
     tokenState.value = {};
+    tokenState.refresh();
   }
 }

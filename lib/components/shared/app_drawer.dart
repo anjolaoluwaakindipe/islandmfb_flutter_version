@@ -51,7 +51,7 @@ class AppDrawer extends StatelessWidget {
                       await Get.offAll(const LoginPage(),
                           transition: Transition.zoom);
                       userState.clearUserState();
-                      accountState.clearAccoutState();
+                      accountState.clearAccountState();
                       transactionState.clearTransactionState();
                       tokenState.clearTokenState();
                       SecureStorage.deleteAValue("access_token");

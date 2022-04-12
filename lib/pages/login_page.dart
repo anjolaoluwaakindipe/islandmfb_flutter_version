@@ -50,22 +50,25 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       await userState.setUserStateFromToken();
-
+      late String? accountError;
       if (user.containsKey("customer_no")) {
-        await accountState
+        accountError = await accountState
             .setAccountStateFromLogin(user["customer_no"].toString());
       }
 
       context.loaderOverlay.hide();
 
-      if (token.containsKey("access_token") && user.isNotEmpty) {
+      if (token.containsKey("access_token") &&
+          user.isNotEmpty &&
+          accountState.customerAccounts.isNotEmpty) {
         Get.to(() => const HomePage());
       } else {
         showDialog(
             context: context,
             builder: (_) => AppAlertDialogue(
                   content: token["error_description"] ??
-                      "An error occurred while login in. Please try again",
+                      (accountError ??
+                          "An unexpected error occurred while login in. Please try again"),
                   contentColor: primaryColor,
                   actions: [
                     TextButton(

@@ -22,7 +22,7 @@ Future<Map> getCustomerAccounts(String customerNo) async {
           "msg": "Account Info Generated"
         };
       } else {
-        return {"success": false, "msg": "An error occured please try again"};
+        return {"success": false, "error": "An error occured while getting your account information, please try again later"};
       }
     },
   );
