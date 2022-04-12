@@ -1,9 +1,19 @@
+
+import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
 const devAirtimeUsername = "Anjolaoluwaakindipe";
 const devAirtimeCountry = "Nigeria";
+
+String sha512hasher(String token, String email, String username) {
+  List<int> byte = utf8.encode(token + email + username);
+  Digest sha512Result = sha512.convert(byte);
+
+  return sha512Result.toString();
+}
+
 
 Future<Map> getProductList(String phoneNumber) {
   Map<String, String> body = {
