@@ -1,6 +1,10 @@
 import 'package:bs_flutter/bs_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:form_validator/form_validator.dart';
+import 'package:get/get.dart';
+import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 
 import '../components/shared/app_button.dart';
 import '../utilities/colors.dart';
@@ -15,6 +19,7 @@ class ProfileSetPinPage extends StatefulWidget {
 class _ProfileSetPinPageState extends State<ProfileSetPinPage> {
   // button state
   bool isButtonDisabled = true;
+  GlobalKey<FormState> pinPageFormKey = GlobalKey<FormState>();
   String? text = "";
   bool setMe = true;
 
@@ -22,114 +27,137 @@ class _ProfileSetPinPageState extends State<ProfileSetPinPage> {
   TextEditingController enterPinTextController = TextEditingController();
   TextEditingController confirmPinTextController = TextEditingController();
 
-  unDisableButton() {
-    if (enterPinTextController.text.length == 4 &&
-        confirmPinTextController.text.length == 4 &&
-        enterPinTextController.text == confirmPinTextController.text) {
+  // button handler
+  buttonStateHandler() {
+    if (enterPinTextController.text.length < 4 ||
+        confirmPinTextController.text.length < 4 ||
+        enterPinTextController.text != confirmPinTextController.text) {
       setState(() {
-        isButtonDisabled = false;
-        setMe = false;
-        text = "";
+        isButtonDisabled = true;
       });
     } else {
       setState(() {
-        isButtonDisabled = true;
-        setMe = false;
-        text = "PIN must be four digits only.";
+        isButtonDisabled = false;
       });
     }
   }
 
+  // pin logic
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20.0),
-          child: IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              "assets/images/back.svg",
-              height: 20,
-            ),
-          ),
-        ),
-        backgroundColor: whiteColor,
-        title: const Text(
-          "Set PIN",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-            color: blackColor,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        toolbarHeight: 80,
-      ),
-      backgroundColor: whiteColor,
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              "Enter PIN",
-              style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            BsInput(
-                controller: enterPinTextController,
-                autofocus: true,
-                obscureText: true,
-                suffixIcon: Icons.block),
-            const SizedBox(
-              height: 5,
-            ),
-            Text("$text"),
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              "Confirm PIN",
-              style: TextStyle(
-                  fontSize: 17,
-                  color: lightextColor,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            BsInput(
-              controller: confirmPinTextController,
-              autofocus: true,
-              obscureText: true,
-              onChange: (value) {
-                unDisableButton();
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          currentFocus.focusedChild?.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: IconButton(
+              onPressed: () {
+                Get.back();
               },
-              suffixIcon: Icons.block,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Offstage(
-              offstage: setMe,
-              child: AppButton(
-                text: "Set Pin",
-                onPress: () {},
-                isDisabled: isButtonDisabled,
+              icon: SvgPicture.asset(
+                "assets/images/back.svg",
+                height: 20,
               ),
             ),
-          ]),
+          ),
+          backgroundColor: whiteColor,
+          title: const Text(
+            "Set PIN",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: blackColor,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          toolbarHeight: 80,
+        ),
+        backgroundColor: whiteColor,
+        body: Container(
+          height: double.maxFinite,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Form(
+                key: pinPageFormKey,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text(
+                        "Please provide a four digit pin you would like to use.",
+                        style: TextStyle(
+                          color: lightextColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      AppTextField(
+                        textController: enterPinTextController,
+                        onChanged: (String value) {
+                          buttonStateHandler();
+                        },
+                        label: "Enter PIN",
+                        hideText: true,
+                        textInputType: const TextInputType.numberWithOptions(
+                            decimal: false, signed: false),
+                        inputFormatters: <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(4),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      AppTextField(
+                        textController: confirmPinTextController,
+                        label: "Confirm PIN",
+                        onChanged: (String value) {
+                          buttonStateHandler();
+                        },
+                        validator: ValidationBuilder()
+                            .minLength(4)
+                            .maxLength(4)
+                            .build(),
+                        hideText: true,
+                        textInputType: const TextInputType.numberWithOptions(
+                            decimal: false, signed: false),
+                        inputFormatters: <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(4),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                    ]),
+              ),
+            ),
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 30.0,
+            vertical: 20,
+          ),
+          child: AppButton(
+            text: "Confirm",
+            onPress: () {},
+            isDisabled: isButtonDisabled,
+          ),
         ),
       ),
     );

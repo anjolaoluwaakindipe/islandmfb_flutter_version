@@ -106,7 +106,7 @@ class TransferStateController extends GetxController {
             Get.to(FailurePage(
               buttonText: "Continue",
               failureMessage: "Unsuccessful Transaction",
-              nextPage: MfbAccountTransferPage(),
+              nextPage:const MfbAccountTransferPage(),
             ));
           }
         }

@@ -68,7 +68,7 @@ class LetsGetStartedPage extends StatelessWidget {
               height: 25,
             ),
             AppButton(
-              text: "Set Up Profile",
+              text: "Sign Up",
               onPress: () {
                 Get.to(SignUpActivePage());
               },

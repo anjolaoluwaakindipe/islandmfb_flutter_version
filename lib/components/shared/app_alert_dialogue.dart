@@ -19,7 +19,7 @@ class AppAlertDialogue extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
         elevation: 2,
-        title: Text(title, style: const TextStyle(fontSize: 8)),
+        title: Text(title, style: const TextStyle(fontSize: 20, ), textAlign: TextAlign.center),
         content: Text(content, style: TextStyle(color: contentColor)),
         actions: actions);
   }

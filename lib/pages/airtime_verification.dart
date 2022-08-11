@@ -32,7 +32,7 @@ class _AirtimeVerificationPageState extends State<AirtimeVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> airtimeReceipt = airtimeState.airtimeState;
+  
 
     return Scaffold(
       // APP BAR
@@ -99,7 +99,7 @@ class _AirtimeVerificationPageState extends State<AirtimeVerificationPage> {
               child: Obx(() => Column(children: [
                     Center(
                       child: Text(
-                        nairaFormat.format(airtimeReceipt["amount"] ?? 0),
+                        nairaFormat.format(airtimeState.amount.value),
                         style: const TextStyle(
                           color: primaryColor,
                           fontSize: 20,
@@ -133,7 +133,7 @@ class _AirtimeVerificationPageState extends State<AirtimeVerificationPage> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              Text(airtimeReceipt["biller"] ?? "",
+                              Text(airtimeState.biller.value,
                                   textAlign: TextAlign.right,
                                   style: const TextStyle(
                                     fontSize: 16,
@@ -151,7 +151,7 @@ class _AirtimeVerificationPageState extends State<AirtimeVerificationPage> {
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   )),
-                              Text(airtimeReceipt["product"] ?? "",
+                              Text(airtimeState.product.value,
                                   textAlign: TextAlign.right,
                                   style: const TextStyle(
                                     fontSize: 16,
@@ -191,7 +191,7 @@ class _AirtimeVerificationPageState extends State<AirtimeVerificationPage> {
                               ),
                               Expanded(
                                 child:
-                                    Text(airtimeReceipt["mobileNumber"] ?? "",
+                                    Text(airtimeState.mobileNumber.value,
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(
                                           fontSize: 16,

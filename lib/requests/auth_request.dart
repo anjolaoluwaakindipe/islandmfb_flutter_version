@@ -1,5 +1,7 @@
 // helper functions
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/requests/request_settings.dart';
@@ -37,15 +39,44 @@ Future loginUserWithUsernameAndPassword(
       customRealm +
       "/protocol/openid-connect/token";
 
-  return await http
-      .post(Uri.parse(uri),
-          headers: {"Content-Type": "application/x-www-form-urlencoded"},
-          body: body)
-      .then(
-    (value) {
-      return json.decode(value.body);
-    },
-  );
+  try {
+    return await http
+        .post(Uri.parse(uri),
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: body)
+        .then(
+      (value) {
+        if (value.statusCode == 200 || value.statusCode == 201) {
+          return {
+            "success": true,
+            "data": json.decode(value.body),
+          };
+        } else if (value.statusCode == 401) {
+          return {
+            "success": true,
+            "data": json.decode(value.body),
+          };
+        } else if (value.statusCode == 408) {
+          return {
+            "success": false,
+            "message": "Process Timeout, please try again later"
+          };
+        }
+      },
+    ).timeout(
+      const Duration(seconds: 40),
+    );
+  } on SocketException catch (_) {
+    return {
+      "success": false,
+      "message": "Not connected to internet please try again later"
+    };
+  } on TimeoutException catch (_) {
+    return {
+      "success": false,
+      "message": "Process Timeout, please try again later"
+    };
+  }
 }
 
 Future reLoginWithRefreshToken() async {
@@ -82,11 +113,11 @@ Future reLoginWithRefreshToken() async {
       } else {
         SecureStorage.deleteAValue("refresh_token");
         SecureStorage.deleteAValue("access_token");
-        Get.to(LoginPage());
+        Get.to(const LoginPage());
       }
     });
   } else {
-    Get.to(LoginPage());
+    Get.to(const LoginPage());
   }
 }
 
@@ -109,7 +140,7 @@ Future getUserInfo(String token) async {
         reLoginWithRefreshToken();
         return;
       } else {
-        Get.to(LoginPage());
+        Get.to(const LoginPage());
       }
     },
   );

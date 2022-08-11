@@ -51,6 +51,7 @@ dependencies:
   short_uuids: ^2.0.0
   confetti: ^0.6.0
   convert: ^3.0.1
+  geolocator: ^9.0.1
   
   # network_info_plus: ^2.1.3
 

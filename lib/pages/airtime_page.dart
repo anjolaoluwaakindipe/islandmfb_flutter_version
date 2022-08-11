@@ -1,15 +1,18 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_verification.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/state/airtime_state_controller.dart';
 import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dart';
+import 'package:islandmfb_flutter_version/textValidations/is_below_balance.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AirtimePage extends StatefulWidget {
@@ -34,8 +37,6 @@ class _AirtimePageState extends State<AirtimePage> {
   TextEditingController mobileNumberTextController = TextEditingController();
   TextEditingController narrationTextController = TextEditingController();
   TextEditingController pinTextController = TextEditingController();
-
-  
 
   // state controllers
   AirtimeStateController airtimeState = Get.put(AirtimeStateController());
@@ -71,7 +72,7 @@ class _AirtimePageState extends State<AirtimePage> {
         biller: billerValue,
         product: productValue,
         narration: narrationTextController.text,
-        mobileNumber: mobileNumberTextController.text,
+        mobileNumber: "+234" + mobileNumberTextController.text,
       );
 
       Get.to(const AirtimeVerificationPage());
@@ -197,23 +198,43 @@ class _AirtimePageState extends State<AirtimePage> {
                           ),
                           AppTextField(
                             textController: amountTextController,
+                            prefixIcon: SizedBox(
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  "assets/images/naira.svg",
+                                  color: primaryColor,
+                                  height: 20,
+                                ),
+                              ),
+                              width: 50,
+                            ),
                             label: "Amount",
                             labelColor: lightextColor,
+                            hint: "Input Amount...",
                             textInputType:
                                 const TextInputType.numberWithOptions(
-                                    decimal: true),
-                            onChanged: (value) {
+                                    decimal: true, signed: false),
+                            inputFormatters: [
+                              CurrencyTextInputFormatter(symbol: "")
+                            ],
+                            onChanged: (String value) {
                               unDisableButton();
                             },
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d*\.?\d{0,2}')),
-                            ],
+                            validator: (fieldContent) =>
+                              isBelowBalance(
+                                  fieldContent, amountTextController)
+                            ,
                           ),
                           const SizedBox(
                             height: 15,
                           ),
                           AppTextField(
+                            prefixIcon: const SizedBox(
+                              child:  Center(
+                                child: Text("+234", style:TextStyle(color: lightextColor, fontWeight: FontWeight.w900))
+                              ),
+                              width: 50,
+                            ),
                             textController: mobileNumberTextController,
                             label: "Mobile Number",
                             labelColor: lightextColor,
@@ -230,7 +251,7 @@ class _AirtimePageState extends State<AirtimePage> {
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
                                   RegExp(r'[0-9]')),
-                              LengthLimitingTextInputFormatter(11)
+                              LengthLimitingTextInputFormatter(10)
                             ],
                           ),
                           const SizedBox(

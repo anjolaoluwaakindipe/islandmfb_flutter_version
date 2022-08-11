@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
       context.loaderOverlay.hide();
 
-      if (token.containsKey("access_token") &&
+      if (token["data"]?["access_token"] != null &&
           user.isNotEmpty &&
           accountState.customerAccounts.isNotEmpty) {
         Get.to(() => const HomePage());
@@ -67,8 +67,9 @@ class _LoginPageState extends State<LoginPage> {
             context: context,
             builder: (_) => AppAlertDialogue(
                   content: token["error_description"] ??
-                      (accountError ??
-                          "An unexpected error occurred while login in. Please try again"),
+                      (token["message"] ??
+                          (accountError ??
+                              "An unexpected error occurred while login in. Please try again")),
                   contentColor: primaryColor,
                   actions: [
                     TextButton(
@@ -102,110 +103,119 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     return LoaderOverlay(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: whiteColor,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            reverse: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 80,
-                      ),
-                      SvgPicture.asset("assets/images/logo.svg",
-                          semanticsLabel: 'Island Logo'),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      const Text(
-                        "Use your email address, phone number or account number as your login id",
-                        style: TextStyle(
-                          color: greyColor,
-                          fontSize: 17,
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            currentFocus.focusedChild?.unfocus();
+          }
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: whiteColor,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              reverse: true,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 80,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      AppTextField(
-                        label: "Login ID",
-                        hint: "login id",
-                        key: Key(1.toString()),
-                        textController: loginIdController,
-                        onChanged: isTextFieldBlankValidation,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      AppTextField(
-                        label: "Password",
-                        hint: "***********",
-                        key: Key(2.toString()),
-                        textController: passwordTextController,
-                        onChanged: isTextFieldBlankValidation,
-                        isPassword: true,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                            text: "Forgot Password?",
-                            style: TextStyle(color: blackColor)),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      AppButton(
-                        text: "Sign In",
-                        onPress: userLoginOnClick,
-                        isDisabled: isButtonDisabled,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: RichText(
-                          text: TextSpan(
-                            style: GoogleFonts.poppins(),
-                            children: <TextSpan>[
-                              const TextSpan(
-                                text: "Don't have an account? ",
-                                style: TextStyle(color: blackColor),
-                              ),
-                              TextSpan(
-                                text: "Get Started",
-                                style: const TextStyle(color: successColor),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Get.to(const LetsGetStartedPage());
-                                  },
-                              ),
-                            ],
+                        SvgPicture.asset("assets/images/logo.svg",
+                            semanticsLabel: 'Island Logo'),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        const Text(
+                          "Use your email address, phone number or account number as your login id",
+                          style: TextStyle(
+                            color: greyColor,
+                            fontSize: 17,
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        AppTextField(
+                          label: "Login ID",
+                          hint: "login id",
+                          key: Key(1.toString()),
+                          textController: loginIdController,
+                          onChanged: isTextFieldBlankValidation,
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        AppTextField(
+                          label: "Password",
+                          hint: "***********",
+                          key: Key(2.toString()),
+                          textController: passwordTextController,
+                          onChanged: isTextFieldBlankValidation,
+                          isPassword: true,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        RichText(
+                          text: const TextSpan(
+                              text: "Forgot Password?",
+                              style: TextStyle(color: blackColor)),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        )
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        AppButton(
+                          text: "Sign In",
+                          onPress: userLoginOnClick,
+                          isDisabled: isButtonDisabled,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: RichText(
+                            text: TextSpan(
+                              style: GoogleFonts.poppins(),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                  text: "Don't have an account? ",
+                                  style: TextStyle(color: blackColor),
+                                ),
+                                TextSpan(
+                                  text: "Get Started",
+                                  style: const TextStyle(color: successColor),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Get.to(const LetsGetStartedPage());
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

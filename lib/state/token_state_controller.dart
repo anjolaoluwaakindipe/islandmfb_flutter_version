@@ -20,14 +20,16 @@ class TokenStateController extends GetxController {
   }
 
   Future setTokenFromLogin(String username, String password) async {
+    SecureStorage.deleteAValue("refresh_token");
+    SecureStorage.deleteAValue("access_token");
     Map tokenInfo = await loginUserWithUsernameAndPassword(username, password);
     tokenState.value = tokenInfo;
 
-    if (tokenState.containsKey("access_token")) {
+    if (tokenState["success"]) {
       await SecureStorage.writeAValue(
-          "refresh_token", tokenState["refresh_token"]);
+          "refresh_token", tokenState["data"]["refresh_token"]);
       await SecureStorage.writeAValue(
-          "access_token", tokenState["access_token"]);
+          "access_token", tokenState["data"]["access_token"]);
     }
   }
 

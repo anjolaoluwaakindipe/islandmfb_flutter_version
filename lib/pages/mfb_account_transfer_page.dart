@@ -12,6 +12,7 @@ import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
 import 'package:islandmfb_flutter_version/pages/mfb_account_transfer_verification_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
+import 'package:islandmfb_flutter_version/textValidations/is_below_balance.dart';
 
 import '../components/shared/app_button.dart';
 import '../components/shared/app_textfield.dart';
@@ -38,24 +39,6 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
 
   // State
   final transferState = Get.put(TransferStateController());
-
-  // amount validation
-  String? _amountChecker(String? fieldContent) {
-    double amount = double.parse(amountTextController.text.replaceAll(",", ""));
-    String? accountNo =
-        transferState.transferToMFBAccountState.value.fromAccountNo;
-    double? availableBalance = Get.put(AccountStateController())
-        .customerAccounts
-        .firstWhere(
-            (account) => account.primaryAccountNo!["_number"] == accountNo!)
-        .availableBalance;
-    if (accountNo != null &&
-        availableBalance != null &&
-        amount > availableBalance) {
-      return "Balance exceeded!";
-    }
-    return null;
-  }
 
   // Verify button state handlers
   bool _isButtonDisabled = true;
@@ -138,187 +121,193 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // APPBAR
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: whiteColor,
-        leading: SizedBox(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: IconButton(
-              onPressed: () {
-                transferState.clearTransferState(TransferType.toMFBAccount);
-                Get.back();
-              },
-              icon: SvgPicture.asset(
-                "assets/images/back.svg",
-                height: 20,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          currentFocus.focusedChild?.unfocus();
+        }
+      },
+      child: Scaffold(
+        // APPBAR
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: whiteColor,
+          leading: SizedBox(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: IconButton(
+                onPressed: () {
+                  transferState.clearTransferState(TransferType.toMFBAccount);
+                  Get.back();
+                },
+                icon: SvgPicture.asset(
+                  "assets/images/back.svg",
+                  height: 20,
+                ),
               ),
             ),
           ),
-        ),
-        title: const Text(
-          "Transfer",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-            color: blackColor,
+          title: const Text(
+            "Transfer",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: blackColor,
+            ),
           ),
+          centerTitle: true,
+          toolbarHeight: 80,
         ),
-        centerTitle: true,
-        toolbarHeight: 80,
-      ),
 
-      // BODY BACKGROUND COLOR
-      backgroundColor: whiteColor,
+        // BODY BACKGROUND COLOR
+        backgroundColor: whiteColor,
 
-      // BODY
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Form(
-            key: mfbTransferPageFormKey,
-            child: Column(children: [
-              // ACCOUNT NUMBER HEADER WITH FIND BENEFICIARY BUTTON
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text(
-                    "Account Number",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.to(ChooseBeneficiary());
-                    },
-
-                    child: const Text(
-                      "Find Beneficiary",
+        // BODY
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Form(
+              key: mfbTransferPageFormKey,
+              child: Column(children: [
+                // ACCOUNT NUMBER HEADER WITH FIND BENEFICIARY BUTTON
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      "Account Number",
                       style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 12,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    // onTap: () {},
-                  )
-                ],
-              ),
-              const SizedBox(height: 10),
+                    InkWell(
+                      onTap: () {
+                        Get.to(ChooseBeneficiary());
+                      },
 
-              // ACCOUNT NUMBER TEXTFIELD
-              AppTextField(
-                textController: accountNumberTextController,
-                hint: "Input account Number",
-                onChanged: (text) {
-                  buttonStateHandler();
-                },
-                textInputType: const TextInputType.numberWithOptions(
-                    signed: false, decimal: false),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-
-              // STATEFUL ACCOUNT NAME TEXTFIELD
-              // AppTextField(
-              //   textController: accountNameTextController,
-              //   label: "Account Name",
-              //   readOnly: true,
-              //   onChanged: (text) {
-              //     buttonStateHandler();
-              //   },
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-
-              // AMOUNT TEXTFIELD
-              AppTextField(
-                textController: amountTextController,
-                prefixIcon: Container(
-                  child: Center(
-                    child: SvgPicture.asset(
-                      "assets/images/naira.svg",
-                      color: primaryColor,
-                      height: 20,
-                    ),
-                  ),
-                  width: 50,
+                      child: const Text(
+                        "Find Beneficiary",
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      // onTap: () {},
+                    )
+                  ],
                 ),
-                label: "Amount",
-                hint: "Input Amount...",
-                textInputType: const TextInputType.numberWithOptions(
-                    decimal: true, signed: false),
-                inputFormatters: [CurrencyTextInputFormatter(symbol: "")],
-                onChanged: (value) {
-                  String convertedMoneyText = NumberFormat.decimalPattern("en")
-                      .format(int.parse(value));
-                  amountTextController.value = TextEditingValue(
-                      text: convertedMoneyText,
-                      selection: TextSelection.collapsed(
-                          offset: convertedMoneyText.length));
-                  buttonStateHandler();
-                },
-                validator: _amountChecker,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+                const SizedBox(height: 10),
 
-              // NARRATION TEXT FIELD
-              AppTextField(
-                textController: narrationTextController,
-                label: "Narration",
-                onChanged: (text) {
-                  buttonStateHandler();
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+                // ACCOUNT NUMBER TEXTFIELD
+                AppTextField(
+                  textController: accountNumberTextController,
+                  hint: "Input account Number",
+                  onChanged: (text) {
+                    buttonStateHandler();
+                  },
+                  textInputType: const TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
 
-              // PIN TEXT FIELD
-              AppTextField(
-                textController: pinTextController,
-                label: "Pin",
-                onChanged: (text) {
-                  buttonStateHandler();
-                },
-                hideText: true,
-                hint: "****",
-                textInputType: const TextInputType.numberWithOptions(
-                    decimal: false, signed: false),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4)
-                ],
-              )
-            ]),
+                // STATEFUL ACCOUNT NAME TEXTFIELD
+                // AppTextField(
+                //   textController: accountNameTextController,
+                //   label: "Account Name",
+                //   readOnly: true,
+                //   onChanged: (text) {
+                //     buttonStateHandler();
+                //   },
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+
+                // AMOUNT TEXTFIELD
+                AppTextField(
+                  textController: amountTextController,
+                  prefixIcon: Container(
+                    child: Center(
+                      child: SvgPicture.asset(
+                        "assets/images/naira.svg",
+                        color: primaryColor,
+                        height: 20,
+                      ),
+                    ),
+                    width: 50,
+                  ),
+                  label: "Amount",
+                  hint: "Input Amount...",
+                  textInputType: const TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
+                  inputFormatters: [
+                    CurrencyTextInputFormatter(symbol: "", decimalDigits: 2)
+                  ],
+                  onChanged: (String value) {
+                    buttonStateHandler();
+                  },
+                  validator: (fieldContent) =>
+                      isBelowBalance(fieldContent, amountTextController),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                // NARRATION TEXT FIELD
+                AppTextField(
+                  textController: narrationTextController,
+                  label: "Narration",
+                  onChanged: (text) {
+                    buttonStateHandler();
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                // PIN TEXT FIELD
+                AppTextField(
+                  textController: pinTextController,
+                  label: "Pin",
+                  onChanged: (text) {
+                    buttonStateHandler();
+                  },
+                  hideText: true,
+                  hint: "****",
+                  textInputType: const TextInputType.numberWithOptions(
+                      decimal: false, signed: false),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(4)
+                  ],
+                )
+              ]),
+            ),
           ),
         ),
-      ),
 
-      // BOTTOM BUTTON
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
-        child: AppButton(
-          text: _buttonText,
-          onPress: () {
-            onVerifyHandler(context);
-          },
-          isDisabled: _isLoading || _isButtonDisabled,
+        // BOTTOM BUTTON
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
+          child: AppButton(
+            text: _buttonText,
+            onPress: () {
+              onVerifyHandler(context);
+            },
+            isDisabled: _isLoading || _isButtonDisabled,
+          ),
         ),
       ),
     );

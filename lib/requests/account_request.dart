@@ -7,8 +7,7 @@ import 'package:islandmfb_flutter_version/requests/request_settings.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map> getCustomerAccounts(String customerNo) async {
-  String urlString =
-      accountUrl + "/getCustomerAccounts?CustomerNo=" + customerNo;
+  String urlString = isslapi + "/getCustomerAccounts?CustomerNo=" + customerNo;
   return await http
       .get(
     Uri.parse(urlString),
@@ -22,15 +21,18 @@ Future<Map> getCustomerAccounts(String customerNo) async {
           "msg": "Account Info Generated"
         };
       } else {
-        return {"success": false, "error": "An error occured while getting your account information, please try again later"};
+        return {
+          "success": false,
+          "error":
+              "An error occured while getting your account information, please try again later"
+        };
       }
     },
   );
 }
 
 Future<Map> getCustomerDetails(String customerNo) async {
-  String urlString =
-      accountUrl + "/getCustomerDetails?CustomerNo=" + customerNo;
+  String urlString = isslapi + "/getCustomerDetails?CustomerNo=" + customerNo;
 
   return await http.get(Uri.parse(urlString)).then((value) {
     if (value.statusCode == 200) {
@@ -47,8 +49,7 @@ Future<Map> getCustomerDetails(String customerNo) async {
 }
 
 Future<Map> getCustomerRecentTransactions(String accountNo) async {
-  String urlString =
-      accountUrl + "/getAccountRecentTxns?AccountNo=" + accountNo;
+  String urlString = isslapi + "/getAccountRecentTxns?AccountNo=" + accountNo;
 
   return await http.get(Uri.parse(urlString)).then((value) {
     if (value.statusCode == 200) {
@@ -62,7 +63,7 @@ Future<Map> getCustomerRecentTransactions(String accountNo) async {
 Future<Map> getCustomerTransactionsSpecifically(
     String endDate, String accountNo,
     {int page = 0, int size = 0, String startDate = "19500101"}) async {
-  String urlStrinng = accountUrl +
+  String urlStrinng = isslapi +
       "/getAccountTransactionsPaged?accountno=" +
       accountNo +
       "&fromdate=" +
