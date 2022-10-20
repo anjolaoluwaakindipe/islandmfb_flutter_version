@@ -20,6 +20,8 @@ class AccountStateController extends GetxController {
           .toList();
       selectedAccount.value = customerAccounts[0];
       customerDetails.value = customerDetailsResponse["data"];
+      customerAccounts.refresh();
+      selectedAccount.refresh();
     } else {
       return customerAccountsResponse["error"];
     }

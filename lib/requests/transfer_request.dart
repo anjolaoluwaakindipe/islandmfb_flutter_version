@@ -100,7 +100,7 @@ Future<Map> intraBankTransfer(
   );
 }
 
-Future<Map> recipientInfo(String accountNo) async {
+Future<Map> getIslandAccountRecipientInfo(String accountNo) async {
   String urlString =
       isslapi + "/getCustomerAccount2" + "?accountno=" + accountNo;
   return http.get(Uri.parse(urlString), headers: {
@@ -179,13 +179,15 @@ Future<ResponseM> interBankTransfer({
     "valueDate": DateTime.now().toUtc().toIso8601String().toString()
   };
 
+  print(body);
+
   // send info to api
   var reponse = await http.post(Uri.parse(urlString),
       headers: {"Content-Type": "application/json", "X-TENANTID": xtenantid},
       body: json.encode(body));
 
   // get reponse form api
-  return ResponseM(HttpStatus(reponse.statusCode), null);
+  return ResponseM(status: HttpStatus(reponse.statusCode), data: null);
 }
 
 Future<ResponseM<List<BankInfo>>> getAllBanks() async {
@@ -197,8 +199,8 @@ Future<ResponseM<List<BankInfo>>> getAllBanks() async {
 
   // convert json to bankInfo object
   return ResponseM(
-      HttpStatus(response.statusCode),
-      (json.decode(response.body) as List<dynamic>)
+      status: HttpStatus(response.statusCode),
+      data: (json.decode(response.body) as List<dynamic>)
           .map((e) => BankInfo.fromJson(e))
           .toList());
 }
@@ -217,8 +219,9 @@ Future<ResponseM<String?>> getOtherBankRecipientAccountName(
       headers: {"Content-Type": "application/json", "X-TENANTID": xtenantid});
 
   // convert json to bankInfo object
-  return ResponseM(HttpStatus(response.statusCode),
-      (json.decode(response.body)["account_name"] as String?));
+  return ResponseM(
+      status: HttpStatus(response.statusCode),
+      data: (json.decode(response.body)["account_name"] as String?));
 }
 
 void main() async {

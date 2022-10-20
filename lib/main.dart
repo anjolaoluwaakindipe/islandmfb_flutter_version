@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/pages/splash_screen_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
-import 'package:islandmfb_flutter_version/requests/transfer_request.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
             bodyColor: const Color(0xFF333333),
             displayColor: const Color(0xFF333333)),
       ),
-      home: SplashScreenPage(),
+      home: const SplashScreenPage(),
     );
   }
 }

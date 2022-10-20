@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 class GetStartedPage extends StatefulWidget {
   GetStartedPage({Key? key}) : super(key: key);
 
-  TokenStateController tokenInfoController = Get.put(TokenStateController());
+  AuthStateController tokenInfoController = Get.put(AuthStateController());
 
   @override
   State<GetStartedPage> createState() => _GetStartedPageState();

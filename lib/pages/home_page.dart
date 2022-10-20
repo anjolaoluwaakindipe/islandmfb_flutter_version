@@ -30,7 +30,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final userState = Get.put(UserStateController());
-  final tokenState = Get.put(TokenStateController());
+  final tokenState = Get.put(AuthStateController());
   final accountState = Get.put(AccountStateController());
   final transactionState = Get.put(TransactionStateController());
 

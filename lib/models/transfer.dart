@@ -17,6 +17,10 @@ class Transfer {
 
   String? receipientName;
 
+  String? bankCode;
+
+  String? bankName;
+
   Transfer._toOwnAccountConstructor();
 
   static final Transfer _toOwnAccount = Transfer._toOwnAccountConstructor();

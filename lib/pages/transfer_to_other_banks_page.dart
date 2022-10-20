@@ -12,6 +12,8 @@ import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/models/bank_info_model.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
 import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
+import 'package:islandmfb_flutter_version/pages/own_account_transfer_verification_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_verification_page.dart';
 import 'package:islandmfb_flutter_version/requests/transfer_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
@@ -35,8 +37,9 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   bool loadingBanks = true;
   bool loadingBankError = false;
 
-  // State
+  // state controllers
   final transferState = Get.put(TransferStateController());
+  final accountState = Get.put(AccountStateController());
 
   // text controllers
   TextEditingController accountNumberTextController = TextEditingController();
@@ -48,18 +51,23 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   // on submission of details
   Future onVerifyButtonHandler() async {
     if (transferToOtherBanksFormKey.currentState!.validate()) {
-      transferState.setAmountNarrationPinField(TransferType.toOwnAccount,
+      transferState.setTransfertoField(TransferType.toOtherBanks,
+          accountNumber: accountNumberTextController.text);
+      transferState.setBankNameBankCodeAndToAccountNameForOtherBanksTransfer(
+          bankValue!.name, bankValue!.code, accountNameTextController.text);
+      transferState.setAmountNarrationPinField(TransferType.toOtherBanks,
           amount: double.parse(amountTextController.text.replaceAll(",", "")),
           narration: narrativeTextController.text,
           pin: pinTextController.text);
 
-      // Get.to(OwnAccountTransferVerificationPage());
+      Get.to(TransferToOtherBanksVerificationPage());
     }
   }
 
   // control button state
   bool _isButtonDisabled = true;
   void buttonStateHandler() {
+    // check vailidation rules before allowing button to  be enabled
     if (accountNumberTextController.text.length != 10 ||
         accountNameTextController.text.length < 3 ||
         accountNameTextController.text == "Invalid Account Number" ||
@@ -78,7 +86,9 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
 
   // amount validation
   String? amountChecker(String? fieldContent) {
+    // remove commas from amount input text
     double amount = double.parse(amountTextController.text.replaceAll(",", ""));
+    // get the available balance from the selected account number
     String? accountNo =
         transferState.transferToOwnAccountState.value.fromAccountNo;
     double? availableBalance = Get.put(AccountStateController())
@@ -86,6 +96,8 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
         .firstWhere(
             (account) => account.primaryAccountNo!["_number"] == accountNo!)
         .availableBalance;
+
+    // warn user if the amount entered is greater than the available balance of the account number selected
     if (accountNo != null &&
         availableBalance != null &&
         amount > availableBalance) {
@@ -97,13 +109,17 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   // initialize the list of banks
   initializeBankList() async {
     try {
+      // get bank list from api
       var bankInfoResponse = await getAllBanks();
-      if (bankInfoResponse.status.code == HttpStatus.ok) {
+      // if status code is 200 set bankItems
+      if (bankInfoResponse.status != null &&
+          bankInfoResponse.status!.code == HttpStatus.ok) {
         setState(() {
-          bankItems = bankInfoResponse.data;
+          bankItems = bankInfoResponse.data!;
         });
       }
     } catch (e) {
+      // if an error occurs set loadingBank error and send an alert to the user
       setState(() {
         loadingBankError = true;
       });
@@ -134,21 +150,19 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
 
   // get Account name of beneficiary
   getAccountName() async {
-    try {
-      if (accountNumberTextController.text.length == 10 && bankValue != null) {
-        var accountNameResponse = await getOtherBankRecipientAccountName(
-            bankCode: bankValue!.code,
-            accountNumber: accountNumberTextController.text);
+    if (accountNumberTextController.text.length == 10 && bankValue != null) {
+      var accountNameResponse = await getOtherBankRecipientAccountName(
+          bankCode: bankValue!.code,
+          accountNumber: accountNumberTextController.text);
 
-        print(accountNameResponse.data);
-        if (accountNameResponse.status.code == HttpStatus.ok) {
-          accountNameTextController.text =
-              accountNameResponse.data ?? "Invalid Account Number";
-        }
-      } else {
-        accountNameTextController.text = "";
+      if (accountNameResponse.status != null &&
+          accountNameResponse.status!.code == HttpStatus.ok) {
+        accountNameTextController.text =
+            accountNameResponse.data ?? "Invalid Account Number";
       }
-    } catch (e) {}
+    } else {
+      accountNameTextController.text = "";
+    }
   }
 
   // onMount
@@ -156,7 +170,14 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initializeBankList();
+
+    Future(() {
+      initializeBankList();
+      print(accountState.selectedAccount.value.primaryAccountNo["_number"]);
+      transferState.setTransferFromField(TransferType.toOtherBanks,
+          accountNumber:
+              accountState.selectedAccount.value.primaryAccountNo["_number"]);
+    });
   }
 
   @override
@@ -175,6 +196,7 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
             padding: const EdgeInsets.only(left: 20.0),
             child: IconButton(
               onPressed: () {
+                transferState.clearTransferState(TransferType.toOtherBanks);
                 Get.back();
               },
               icon: SvgPicture.asset(
@@ -205,7 +227,7 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
           child: AppButton(
             text: "Verify",
             isDisabled: _isButtonDisabled,
-            onPress: () {},
+            onPress: onVerifyButtonHandler,
           ),
         ),
         body: SingleChildScrollView(

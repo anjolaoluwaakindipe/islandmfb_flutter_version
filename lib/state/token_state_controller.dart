@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
+import 'package:islandmfb_flutter_version/models/response_model.dart';
 import 'package:islandmfb_flutter_version/requests/auth_request.dart';
 import 'package:islandmfb_flutter_version/storage/secure_storage.dart';
 
-class TokenStateController extends GetxController {
-  late RxMap tokenState = {}.obs;
+class AuthStateController extends GetxController {
+  late RxMap<String, dynamic> tokenState = RxMap<String, dynamic>();
+  RxString loginErrorMessage = "".obs;
 
   @override
   void onInit() async {
@@ -16,20 +19,36 @@ class TokenStateController extends GetxController {
       return;
     }
 
-    tokenState.value = {}.obs;
+    tokenState.value = RxMap<String, dynamic>();
   }
 
   Future setTokenFromLogin(String username, String password) async {
+    loginErrorMessage.value = "";
+    loginErrorMessage.refresh();
     SecureStorage.deleteAValue("refresh_token");
     SecureStorage.deleteAValue("access_token");
-    Map tokenInfo = await loginUserWithUsernameAndPassword(username, password);
-    tokenState.value = tokenInfo;
+    ResponseM<Map<String, dynamic>> tokenInfo =
+        await loginUserWithUsernameAndPassword(username, password);
 
-    if (tokenState["success"]) {
+    if (tokenInfo.customErrorMessage != null &&
+        tokenInfo.customErrorMessage!.isNotEmpty) {
+      loginErrorMessage.value = tokenInfo.customErrorMessage ?? "";
+      return;
+    }
+
+    if (tokenInfo.data != null &&
+        tokenInfo.status != null &&
+        tokenInfo.status!.isOk) {
+      tokenState.value = tokenInfo.data ?? tokenState;
       await SecureStorage.writeAValue(
-          "refresh_token", tokenState["data"]["refresh_token"]);
+          "refresh_token", tokenInfo.data!["refresh_token"]);
       await SecureStorage.writeAValue(
-          "access_token", tokenState["data"]["access_token"]);
+          "access_token", tokenInfo.data!["access_token"]);
+
+      tokenState.refresh();
+      return;
+    } else if (tokenInfo.status != null && tokenInfo.status!.isUnauthorized) {
+      loginErrorMessage.value = "Invalid Username or Password";
     }
   }
 

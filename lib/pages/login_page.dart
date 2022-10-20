@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   final loginIdController = TextEditingController();
 
   // State controllers
-  final tokenState = Get.put(TokenStateController());
+  final tokenState = Get.put(AuthStateController());
   final accountState = Get.put(AccountStateController());
   final userState = Get.put(UserStateController());
 
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     void userLoginOnClick() async {
       context.loaderOverlay.show();
-
+      late String? accountError;
       final token = tokenState.tokenState;
       final user = userState.user;
       await tokenState.setTokenFromLogin(
@@ -49,16 +49,18 @@ class _LoginPageState extends State<LoginPage> {
         passwordTextController.text,
       );
 
-      await userState.setUserStateFromToken();
-      late String? accountError;
-      if (user.containsKey("customer_no")) {
-        accountError = await accountState
-            .setAccountStateFromLogin(user["customer_no"].toString());
+      if (tokenState.loginErrorMessage.isEmpty) {
+        await userState.setUserStateFromToken();
+
+        if (user.containsKey("customer_no")) {
+          accountError = await accountState
+              .setAccountStateFromLogin(user["customer_no"].toString());
+        }
       }
 
       context.loaderOverlay.hide();
 
-      if (token["data"]?["access_token"] != null &&
+      if (token["access_token"] != null &&
           user.isNotEmpty &&
           accountState.customerAccounts.isNotEmpty) {
         Get.to(() => const HomePage());
@@ -66,10 +68,14 @@ class _LoginPageState extends State<LoginPage> {
         showDialog(
             context: context,
             builder: (_) => AppAlertDialogue(
-                  content: token["error_description"] ??
-                      (token["message"] ??
-                          (accountError ??
-                              "An unexpected error occurred while login in. Please try again")),
+                  content: tokenState.loginErrorMessage.value.isNotEmpty
+                      ? tokenState.loginErrorMessage.value
+                      : accountError ??
+                          "An unexpected error occurred while login in. Please try again",
+                  // content: token["error_description"] ??
+                  //     (token["message"] ??
+                  //         (accountError ??
+                  //             "An unexpected error occurred while login in. Please try again")),
                   contentColor: primaryColor,
                   actions: [
                     TextButton(

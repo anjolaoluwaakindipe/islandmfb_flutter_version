@@ -31,7 +31,7 @@ class AppDrawer extends StatelessWidget {
   final accountState = Get.put(AccountStateController());
 
   final userState = Get.put(UserStateController());
-  final tokenState = Get.put(TokenStateController());
+  final tokenState = Get.put(AuthStateController());
   final transactionState = Get.put(TransactionStateController());
 
   @override

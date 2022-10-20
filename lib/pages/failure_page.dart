@@ -7,7 +7,7 @@ import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
-class FailurePage extends StatelessWidget {
+class FailurePage extends StatefulWidget {
   FailurePage(
       {Key? key,
       this.nextPage,
@@ -19,6 +19,11 @@ class FailurePage extends StatelessWidget {
   String buttonText;
   String failureMessage;
 
+  @override
+  State<FailurePage> createState() => _FailurePageState();
+}
+
+class _FailurePageState extends State<FailurePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +72,7 @@ class FailurePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 1.0),
                 child: Text(
-                  failureMessage,
+                  widget.failureMessage,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.w100),
@@ -84,11 +89,11 @@ class FailurePage extends StatelessWidget {
                     elevation: MaterialStateProperty.all(0),
                   ),
                   child: Text(
-                    buttonText,
+                    widget.buttonText,
                     style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
-                    Get.off(nextPage);
+                    Get.back();
                   },
                 ),
               ),

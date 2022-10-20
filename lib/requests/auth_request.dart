@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
+import 'package:islandmfb_flutter_version/models/response_model.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/requests/request_settings.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +25,7 @@ String xformurlencoder(Map<dynamic, dynamic> bodyFields) {
 }
 
 // requests
-Future loginUserWithUsernameAndPassword(
+Future<ResponseM<Map<String, dynamic>>> loginUserWithUsernameAndPassword(
     String username, String password) async {
   Map loginInfo = {
     "username": username,
@@ -46,36 +48,48 @@ Future loginUserWithUsernameAndPassword(
             body: body)
         .then(
       (value) {
-        if (value.statusCode == 200 || value.statusCode == 201) {
-          return {
-            "success": true,
-            "data": json.decode(value.body),
-          };
-        } else if (value.statusCode == 401) {
-          return {
-            "success": true,
-            "data": json.decode(value.body),
-          };
-        } else if (value.statusCode == 408) {
-          return {
-            "success": false,
-            "message": "Process Timeout, please try again later"
-          };
-        }
+        // if (value.statusCode == 200 || value.statusCode == 201) {
+        //   return {
+        //     "success": true,
+        //     "data": json.decode(value.body),
+        //   };
+        // } else if (value.statusCode == 401) {
+        //   return {
+        //     "success": true,
+        //     "data": json.decode(value.body),
+        //   };
+        // } else if (value.statusCode == 408) {
+        //   return {
+        //     "success": false,
+        //     "message": "Process Timeout, please try again later"
+        //   };
+        // }
+        return ResponseM(
+            status: HttpStatus(value.statusCode),
+            data: json.decode(value.body) as Map<String, dynamic>);
       },
     ).timeout(
-      const Duration(seconds: 40),
+      const Duration(seconds: 60),
     );
   } on SocketException catch (_) {
-    return {
-      "success": false,
-      "message": "Not connected to internet please try again later"
-    };
+    return ResponseM(
+        customErrorMessage: "Not connected to internet please try again later");
+    // return {
+    //   "success": false,
+    //   "message": "Not connected to internet please try again later"
+    // };
   } on TimeoutException catch (_) {
-    return {
-      "success": false,
-      "message": "Process Timeout, please try again later"
-    };
+    return ResponseM(
+        customErrorMessage: "Process Timeout, please try again later");
+
+    // return {
+    //   "success": false,
+    //   "message": "Process Timeout, please try again later"
+    // };
+  } on Error catch (_) {
+    return ResponseM(
+        customErrorMessage:
+            'An unexpected error occured, please try again later');
   }
 }
 
@@ -104,7 +118,8 @@ Future reLoginWithRefreshToken() async {
         .then((value) async {
       if (value.statusCode == 200) {
         Map tokenInformation = json.decode(value.body);
-        Get.put(TokenStateController()).tokenState.value = tokenInformation;
+        Get.put(AuthStateController()).tokenState.value =
+            tokenInformation as Map<String, dynamic>;
         await SecureStorage.writeAValue(
             "refresh_token", tokenInformation["refresh_token"]);
         await SecureStorage.writeAValue(
@@ -238,14 +253,14 @@ Future logoutUser(String refreshToken) async {
   );
 }
 
-void main() async {
-  var tokenInfo = await loginUserWithUsernameAndPassword("aji", "test1234");
-  print(tokenInfo);
-  var user = await getUserInfo(tokenInfo["access_token"]);
+// void main() async {
+//   var tokenInfo = await loginUserWithUsernameAndPassword("aji", "test1234");
+//   print(tokenInfo);
+//   var user = await getUserInfo(tokenInfo["access_token"]);
 
-  print(await logoutUser(tokenInfo["refresh_token"]));
-  // var adminToken = await getAdminToken();
-  // print(adminToken);
-  // print(await registerUser("Anjy", "Olamide", "email@gsd.com", "aji",
-  //     "test1234", adminToken["access_token"]));
-}
+//   print(await logoutUser(tokenInfo["refresh_token"]));
+//   // var adminToken = await getAdminToken();
+//   // print(adminToken);
+//   // print(await registerUser("Anjy", "Olamide", "email@gsd.com", "aji",
+//   //     "test1234", adminToken["access_token"]));
+// }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_util';
 
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +28,13 @@ class MfbAccountTransferPage extends StatefulWidget {
 }
 
 class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
+  String accountNameDisplay = "...";
+
   // Text controllers
   final amountTextController = TextEditingController();
   final narrationTextController = TextEditingController();
   final pinTextController = TextEditingController();
-  // final accountNameTextController = TextEditingController(text: "...");
+  final accountNameTextController = TextEditingController();
   final accountNumberTextController = TextEditingController();
 
   // Form key
@@ -40,11 +43,31 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
   // State
   final transferState = Get.put(TransferStateController());
 
+  getRecipientName(String accountNo) async {
+    if (accountNumberTextController.text.isBlank!) return;
+
+    accountNameTextController.text = "";
+    setState(() {
+      accountNameDisplay = "...";
+    });
+    String? recipientName = await transferState.loadRecipientName(
+        TransferType.toMFBAccount, accountNo);
+
+    if (recipientName != "" && recipientName != null) {
+      print(recipientName);
+      accountNameTextController.text = recipientName;
+    } else {
+      setState(() {
+        accountNameDisplay = "Could not get recipient!";
+      });
+    }
+  }
+
   // Verify button state handlers
   bool _isButtonDisabled = true;
   void buttonStateHandler() {
     if (accountNumberTextController.text.isEmpty ||
-        // accountNameTextController.text.length < 3 ||
+        accountNameTextController.text == "" ||
         amountTextController.text.length < 2 ||
         narrationTextController.text.isEmpty ||
         pinTextController.text.length < 4) {
@@ -210,6 +233,7 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
                   textController: accountNumberTextController,
                   hint: "Input account Number",
                   onChanged: (text) {
+                    getRecipientName(text);
                     buttonStateHandler();
                   },
                   textInputType: const TextInputType.numberWithOptions(
@@ -223,17 +247,18 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
                 ),
 
                 // STATEFUL ACCOUNT NAME TEXTFIELD
-                // AppTextField(
-                //   textController: accountNameTextController,
-                //   label: "Account Name",
-                //   readOnly: true,
-                //   onChanged: (text) {
-                //     buttonStateHandler();
-                //   },
-                // ),
-                // const SizedBox(
-                //   height: 20,
-                // ),
+                AppTextField(
+                  textController: accountNameTextController,
+                  label: "Account Name",
+                  readOnly: true,
+                  hint: accountNameDisplay,
+                  onChanged: (text) {
+                    buttonStateHandler();
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
 
                 // AMOUNT TEXTFIELD
                 AppTextField(

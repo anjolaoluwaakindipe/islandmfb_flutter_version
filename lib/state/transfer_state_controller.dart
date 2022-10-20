@@ -6,6 +6,7 @@ import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/mfb_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/own_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/success_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
 import 'package:islandmfb_flutter_version/requests/transfer_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/user_state_controller.dart';
@@ -50,7 +51,7 @@ class TransferStateController extends GetxController {
   }
 
   // MAKE TRANSFER REQUEST
-  Future makeTransaction(TransferType transferType) async {
+  Future<String?> makeTransaction(TransferType transferType) async {
     switch (transferType) {
       case TransferType.toOwnAccount:
         {
@@ -106,18 +107,47 @@ class TransferStateController extends GetxController {
             Get.to(FailurePage(
               buttonText: "Continue",
               failureMessage: "Unsuccessful Transaction",
-              nextPage:const MfbAccountTransferPage(),
+              nextPage: const MfbAccountTransferPage(),
             ));
           }
         }
         break;
       case TransferType.toOtherBanks:
-        {}
+        {
+          try {
+            var transferResponse = await interBankTransfer(
+                amount: transferToOtherBanksState.value.amount!,
+                bankCode: transferToOtherBanksState.value.bankCode!,
+                narrative: transferToOtherBanksState.value.narration!,
+                fullName: transferToOtherBanksState.value.fullname!,
+                fromAccountNo: transferToOtherBanksState.value.fromAccountNo!,
+                toAccountNo: transferToOtherBanksState.value.toAccountNo!,
+                customerNo: transferToOtherBanksState.value.customerNo!);
+
+            if (transferResponse.status!.isOk &&
+                transferResponse.data!["postedOK"] == true) {
+              clearTransferState(TransferType.toMFBAccount);
+              Get.to(SuccessPage(
+                  buttonText: "Continue",
+                  successMessage: "Transfer was successfull!!!",
+                  nextPage: const HomePage()));
+            } else {
+              Get.to(FailurePage(
+                buttonText: "Continue",
+                failureMessage: "Unsuccessful Transaction",
+                nextPage: TransferToOtherBanksPage(),
+              ));
+            }
+          } catch (err) {
+            return err.toString();
+          }
+        }
         break;
       default:
         {}
         break;
     }
+    return null;
   }
 
   // SET FULL NAME AND CUSTOMER NUMBER
@@ -196,24 +226,33 @@ class TransferStateController extends GetxController {
     }
   }
 
+  void setBankNameBankCodeAndToAccountNameForOtherBanksTransfer(
+      String bankName, String bankCode, String accountName) {
+    transferToOtherBanksState.value.receipientName = accountName;
+    transferToOtherBanksState.value.bankCode = bankCode;
+    transferToOtherBanksState.value.bankName = bankName;
+    transferToOtherBanksState.refresh();
+  }
+
   // LOAD RECIPIENT NAME
-  Future loadRecipientName(TransferType transferType, String accountNo) async {
+  Future<String?> loadRecipientName(
+      TransferType transferType, String accountNo) async {
     switch (transferType) {
       case TransferType.toMFBAccount:
         {
           transferToMFBAccountState.value.receipientName = null;
           transferToMFBAccountState.refresh();
-          final response = await recipientInfo(accountNo);
+          final response = await getIslandAccountRecipientInfo(accountNo);
 
           if (response["success"] == true) {
             final accountName = response["data"]!["customerName"];
             transferToMFBAccountState.value.receipientName = accountName;
             transferToMFBAccountState.refresh();
-            return;
+            return response["data"]!["customerName"];
           } else {
             transferToMFBAccountState.value.receipientName = null;
             transferToMFBAccountState.refresh();
-            return response["data"];
+            return "";
           }
         }
       default:
@@ -228,36 +267,42 @@ class TransferStateController extends GetxController {
     switch (transferType) {
       case TransferType.toOwnAccount:
         {
-          transferToOwnAccountState.value.amount = null;
-          transferToOwnAccountState.value.toAccountNo = null;
-          transferToOwnAccountState.value.fromAccountNo = null;
-          transferToOwnAccountState.value.narration = null;
-          transferToOwnAccountState.value.pin = null;
-          transferToOwnAccountState.value.reference = null;
+          // transferToOwnAccountState.value.amount = null;
+          // transferToOwnAccountState.value.toAccountNo = null;
+          // transferToOwnAccountState.value.fromAccountNo = null;
+          // transferToOwnAccountState.value.narration = null;
+          // transferToOwnAccountState.value.pin = null;
+          // transferToOwnAccountState.value.reference = null;
+          transferToOwnAccountState.value = Transfer.toOwnAccount().obs.value;
           transferToOwnAccountState.refresh();
         }
         break;
       case TransferType.toMFBAccount:
         {
-          transferToMFBAccountState.value.amount = null;
-          transferToMFBAccountState.value.toAccountNo = null;
-          transferToMFBAccountState.value.fromAccountNo = null;
-          transferToMFBAccountState.value.narration = null;
-          transferToMFBAccountState.value.pin = null;
-          transferToMFBAccountState.value.reference = null;
-          transferToMFBAccountState.value.receipientName = null;
+          // transferToMFBAccountState.value.amount = null;
+          // transferToMFBAccountState.value.toAccountNo = null;
+          // transferToMFBAccountState.value.fromAccountNo = null;
+          // transferToMFBAccountState.value.narration = null;
+          // transferToMFBAccountState.value.pin = null;
+          // transferToMFBAccountState.value.reference = null;
+          // transferToMFBAccountState.value.receipientName = null;
+          transferToMFBAccountState.value = Transfer.toMFBAccount().obs.value;
 
           transferToMFBAccountState.refresh();
         }
         break;
       case TransferType.toOtherBanks:
         {
-          transferToOtherBanksState.value.amount = null;
-          transferToOtherBanksState.value.toAccountNo = null;
-          transferToOtherBanksState.value.fromAccountNo = null;
-          transferToOtherBanksState.value.narration = null;
-          transferToOtherBanksState.value.pin = null;
-          transferToOtherBanksState.value.reference = null;
+          // transferToOtherBanksState.value.amount = null;
+          // transferToOtherBanksState.value.toAccountNo = null;
+          // transferToOtherBanksState.value.fromAccountNo = null;
+          // transferToOtherBanksState.value.narration = null;
+          // transferToOtherBanksState.value.pin = null;
+          // transferToOtherBanksState.value.reference = null;
+          // transferToOtherBanksState.value.bankCode = null;
+          // transferToOtherBanksState.value.bankName = null;
+          // transferToOtherBanksState.value.receipientName = null;
+          transferToOtherBanksState.value = Transfer.toOwnAccount().obs.value;
           transferToOtherBanksState.refresh();
         }
         break;
