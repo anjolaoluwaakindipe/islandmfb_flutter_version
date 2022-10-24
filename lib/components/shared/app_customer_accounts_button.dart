@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AppCustomerAccountButtons extends StatelessWidget {
-  AppCustomerAccountButtons(
+  const AppCustomerAccountButtons(
       {Key? key,
       required this.nairaFormat,
       this.accountBalance,
@@ -14,8 +13,8 @@ class AppCustomerAccountButtons extends StatelessWidget {
 
   final NumberFormat nairaFormat;
   final String accountNo;
-  double? accountBalance;
-  Function onClick;
+  final double? accountBalance;
+  final Function onClick;
 
   @override
   Widget build(BuildContext context) {

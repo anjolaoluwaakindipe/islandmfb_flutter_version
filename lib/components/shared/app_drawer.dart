@@ -7,14 +7,11 @@ import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/another_transfer_page.dart';
 
 import 'package:islandmfb_flutter_version/pages/bill_payment_page.dart';
-import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/profile_main_page.dart';
 import 'package:islandmfb_flutter_version/pages/profile_set_pin.dart';
 import 'package:islandmfb_flutter_version/pages/loan_page.dart';
-import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/self_service_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
 
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
@@ -215,7 +212,7 @@ class DrawerNavButtons extends StatelessWidget {
 
   final String name;
   final String svgUrl;
-  final onClickHandler;
+  final Function onClickHandler;
 
   @override
   Widget build(BuildContext context) {

@@ -88,7 +88,7 @@ class FailurePage extends StatelessWidget {
                     style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
-                    Get.off(nextPage);
+                    Get.back();
                   },
                 ),
               ),

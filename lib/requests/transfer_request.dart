@@ -114,29 +114,29 @@ Future<Map> recipientInfo(String accountNo) async {
   });
 }
 
-void main() async {
-  // print(DateTime.now().toUtc().toIso8601String().toString());
-  // print();
-  // print(ShortUuid.init().generate().substring(0, 13));
+// void main() async {
+//   // print(DateTime.now().toUtc().toIso8601String().toString());
+//   // print();
+//   // print(ShortUuid.init().generate().substring(0, 13));
 
-  // print(await ownAccountTransfer(
-  //     1.00,
-  //     2067581.toString(),
-  //     "Credit",
-  //     "6767581",
-  //     "Ayodele Olafoluso Bolaji Oliyide",
-  //     "0002",
-  //     ShortUuid.init().generate().substring(0, 15)));
+//   // print(await ownAccountTransfer(
+//   //     1.00,
+//   //     2067581.toString(),
+//   //     "Credit",
+//   //     "6767581",
+//   //     "Ayodele Olafoluso Bolaji Oliyide",
+//   //     "0002",
+//   //     ShortUuid.init().generate().substring(0, 15)));
 
-  // print(await recipientInfo("6767581"));
+//   // print(await recipientInfo("6767581"));
 
-    print(await  intraBankTransfer(
-      500.00,
-      3067581.toString(),
-      "Credit",
-      "2088011",
-      "SAMUEL,ARIT ALFRED",
-      "0002",
-      ShortUuid.init().generate().substring(0, 15)));
+//     print(await  intraBankTransfer(
+//       500.00,
+//       3067581.toString(),
+//       "Credit",
+//       "2088011",
+//       "SAMUEL,ARIT ALFRED",
+//       "0002",
+//       ShortUuid.init().generate().substring(0, 15)));
 
-}
+// }

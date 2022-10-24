@@ -17,7 +17,7 @@ class HomePageTransactionHistoryButtons extends StatelessWidget {
   final NumberFormat nairaFormat;
   final String accountOwner;
   final String otherAccount;
-  final moneyAmount;
+  final dynamic moneyAmount;
   final bool isCredit;
   final String date;
   final String narrative;

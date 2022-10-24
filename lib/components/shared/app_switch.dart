@@ -18,12 +18,11 @@ class _AppSwitchState extends State<AppSwitch> {
       setState(() {
         isSwitched = true;
       });
-      print('Switch Button is ON');
+
     } else {
       setState(() {
         isSwitched = false;
       });
-      print('Switch Button is OFF');
     }
   }
 

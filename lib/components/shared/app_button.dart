@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class AppButton extends StatefulWidget {
-  AppButton(
+  const AppButton(
       {Key? key,
       required this.text,
       required this.onPress,
@@ -12,7 +11,7 @@ class AppButton extends StatefulWidget {
       : super(key: key);
 
   final String text;
-  IconData? iconic;
+  final IconData? iconic;
   final dynamic onPress;
   final bool isDisabled;
 

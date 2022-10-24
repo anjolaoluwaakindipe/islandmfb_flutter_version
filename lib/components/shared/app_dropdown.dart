@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../utilities/colors.dart';
 
 class AppDropdown extends StatefulWidget {
-  AppDropdown(
+  const AppDropdown(
       {Key? key,
       required this.requiredItems,
       required this.itemValue,
@@ -13,15 +13,23 @@ class AppDropdown extends StatefulWidget {
       : super(key: key);
 
   final List<String> requiredItems;
-  String? itemValue;
-  String text;
-  String hintText;
+  final String? itemValue;
+  final String text;
+  final String hintText;
 
   @override
   State<AppDropdown> createState() => _AppDropdownState();
 }
 
 class _AppDropdownState extends State<AppDropdown> {
+  String? _itemValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _itemValue = widget.itemValue;
+  }
+
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
       child: Text(item),
@@ -41,10 +49,10 @@ class _AppDropdownState extends State<AppDropdown> {
       DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           items: widget.requiredItems.map(buildMenuItem).toList(),
-          onChanged: (value) => setState(() => widget.itemValue = value),
+          onChanged: (value) => setState(() => _itemValue = value),
           hint: Text(widget.hintText),
           isExpanded: true,
-          value: widget.itemValue,
+          value: _itemValue,
           buttonHeight: 70,
           buttonPadding:
               const EdgeInsets.symmetric(horizontal: 15.0, vertical: 4),
@@ -60,7 +68,6 @@ class _AppDropdownState extends State<AppDropdown> {
           ),
         ),
       ),
-      
     ]);
   }
 }
