@@ -11,7 +11,7 @@ import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import '../models/transfer.dart';
 
 class TransferToOtherBanksVerificationPage extends StatefulWidget {
-  TransferToOtherBanksVerificationPage({Key? key}) : super(key: key);
+  const TransferToOtherBanksVerificationPage({Key? key}) : super(key: key);
 
   @override
   State<TransferToOtherBanksVerificationPage> createState() =>
@@ -256,6 +256,8 @@ class _TransferToOtherBanksVerificationPageState
             ),
             const SizedBox(height: 10),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text("Save as beneficiary"),
                 const SizedBox(
@@ -265,8 +267,6 @@ class _TransferToOtherBanksVerificationPageState
                   print(value);
                 }),
               ],
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
             ),
           ]),
         ),

@@ -138,7 +138,7 @@ class _TransferTypePageState extends State<TransferTypePage> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(TransferToOtherBanksPage(),
+                  Get.to(const TransferToOtherBanksPage(),
                       transition: Transition.rightToLeft);
                 },
                 child: Container(
@@ -195,7 +195,7 @@ class _TransferTypePageState extends State<TransferTypePage> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(OwnAccountTransferPage(),
+                  Get.to(const OwnAccountTransferPage(),
                       transition: Transition.rightToLeft);
                 },
                 child: Container(

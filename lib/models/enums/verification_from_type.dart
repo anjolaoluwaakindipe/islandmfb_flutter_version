@@ -1,0 +1,6 @@
+enum VerificationFromType {
+  setUpOnlineProfile,
+  createAccount,
+}
+
+

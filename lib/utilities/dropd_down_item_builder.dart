@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 DropdownMenuItem<String> buildMenuItem(String item) {
   return DropdownMenuItem(
-    child: Text(item),
     value: item,
+    child: Text(item),
   );
 }

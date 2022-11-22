@@ -10,7 +10,7 @@ import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dar
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class LinkBVNPage extends StatefulWidget {
-  LinkBVNPage({Key? key}) : super(key: key);
+  const LinkBVNPage({Key? key}) : super(key: key);
 
   @override
   State<LinkBVNPage> createState() => _LinkBVNPageState();
@@ -96,7 +96,7 @@ class _LinkBVNPageState extends State<LinkBVNPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 30,
           ),
           child: Column(

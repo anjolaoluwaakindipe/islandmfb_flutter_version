@@ -35,8 +35,8 @@ class _InternetServicePageState extends State<InternetServicePage> {
   // drop down menu items builder
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
-      child: Text(item),
       value: item,
+      child: Text(item),
     );
   }
 

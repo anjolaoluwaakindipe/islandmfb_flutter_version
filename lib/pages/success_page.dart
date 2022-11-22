@@ -1,13 +1,9 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
-import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
@@ -16,12 +12,14 @@ class SuccessPage extends StatefulWidget {
       {Key? key,
       this.nextPage,
       required this.buttonText,
-      required this.successMessage})
+      required this.successMessage,
+      this.offAll})
       : super(key: key);
 
   Widget? nextPage;
   String buttonText;
   String successMessage;
+  bool? offAll;
 
   @override
   State<SuccessPage> createState() => _SuccessPageState();
@@ -77,7 +75,11 @@ class _SuccessPageState extends State<SuccessPage>
         child: AppButton(
           text: widget.buttonText,
           onPress: () {
-            Get.off(widget.nextPage);
+            if (widget.offAll != null && widget.offAll == true) {
+              Get.offAll(widget.nextPage);
+            } else {
+              Get.off(() => widget.nextPage);
+            }
           },
         ),
       ),

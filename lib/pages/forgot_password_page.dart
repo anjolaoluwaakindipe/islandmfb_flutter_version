@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_validator/form_validator.dart';
@@ -20,7 +19,7 @@ class ForgotPasswordPage extends StatelessWidget {
 
   void onContinueHandler() {
     if (_forgotPasswordPageFormKey.currentState!.validate()) {
-      Get.to(ForgotPasswordVerificationPage());
+      Get.to(const ForgotPasswordVerificationPage());
     }
   }
 
@@ -75,7 +74,7 @@ class ForgotPasswordPage extends StatelessWidget {
               "Enter your email to recover your password",
               style: TextStyle(fontSize: 16),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Form(

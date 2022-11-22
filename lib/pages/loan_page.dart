@@ -9,7 +9,7 @@ import 'package:islandmfb_flutter_version/requests/auth_request.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class LoanPage extends StatefulWidget {
-  LoanPage({Key? key}) : super(key: key);
+  const LoanPage({Key? key}) : super(key: key);
 
   @override
   State<LoanPage> createState() => _LoanPageState();
@@ -66,7 +66,7 @@ class _LoanPageState extends State<LoanPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hi Akinloluwa",
+              const Text("Hi Akinloluwa",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -128,17 +128,17 @@ class _LoanPageState extends State<LoanPage> {
                     subtitle: "See what loans you qualify for",
                     title: "Apply for Loan",
                     onClick: () {
-                      Get.to(LoanProductPage());
+                      Get.to(const LoanProductPage());
                     },
                   ),
                   const SizedBox(height: 20),
-                  LoanPageQuickActions(
+                  const LoanPageQuickActions(
                     iconUrlString: "assets/images/loanLoanRepayment.svg",
                     subtitle: "Repay your loans in time to access more",
                     title: "Loan Repayment",
                   ),
                   const SizedBox(height: 20),
-                  LoanPageQuickActions(
+                  const LoanPageQuickActions(
                     iconUrlString: "assets/images/loanLoanTransaction.svg",
                     subtitle: "Check out you loan(s) transactions",
                     title: " Loan Transaction",

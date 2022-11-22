@@ -18,7 +18,7 @@ String xformurlencoder(Map<dynamic, dynamic> bodyFields) {
     if (encodedStr.isNotEmpty) {
       encodedStr += "&";
     }
-    encodedStr += (field + "=" + bodyFields[field]);
+    encodedStr += ("$field=" + bodyFields[field]);
   }
 
   return encodedStr;
@@ -36,10 +36,8 @@ Future<ResponseM<Map<String, dynamic>>> loginUserWithUsernameAndPassword(
 
   String body = xformurlencoder(loginInfo);
 
-  String uri = keycloakBaseUrl +
-      "/auth/realms/" +
-      customRealm +
-      "/protocol/openid-connect/token";
+  String uri =
+      "$keycloakBaseUrl/auth/realms/$customRealm/protocol/openid-connect/token";
 
   try {
     return await http
@@ -104,10 +102,8 @@ Future reLoginWithRefreshToken() async {
 
     String body = xformurlencoder(loginInfo);
 
-    String uri = keycloakBaseUrl +
-        "/auth/realms/" +
-        customRealm +
-        "/protocol/openid-connect/token";
+    String uri =
+        "$keycloakBaseUrl/auth/realms/$customRealm/protocol/openid-connect/token";
 
     return await http
         .post(
@@ -124,7 +120,7 @@ Future reLoginWithRefreshToken() async {
             "refresh_token", tokenInformation["refresh_token"]);
         await SecureStorage.writeAValue(
             "access_token", tokenInformation["access_token"]);
-        await getUserInfo(tokenInformation["access_token"]);
+        await getUserInfoKeycloak(tokenInformation["access_token"]);
       } else {
         SecureStorage.deleteAValue("refresh_token");
         SecureStorage.deleteAValue("access_token");
@@ -136,16 +132,14 @@ Future reLoginWithRefreshToken() async {
   }
 }
 
-Future getUserInfo(String token) async {
+Future getUserInfoKeycloak(String token) async {
   String? refreshToken = await SecureStorage.readAValue("refresh_token");
 
-  String uriString = keycloakBaseUrl +
-      "/auth/realms/" +
-      customRealm +
-      "/protocol/openid-connect/userinfo";
+  String uriString =
+      "$keycloakBaseUrl/auth/realms/$customRealm/protocol/openid-connect/userinfo";
 
   return await http.get(Uri.parse(uriString), headers: {
-    "Authorization": "Bearer " + token,
+    "Authorization": "Bearer $token",
     "Accept": "application/json"
   }).then(
     (value) {
@@ -161,67 +155,174 @@ Future getUserInfo(String token) async {
   );
 }
 
-Future getAdminToken() async {
-  const adminTokenInfo = {
-    "client_secret": clientSecret,
-    "grant_type": clientCredientialGrantType,
-    "client_id": adminClientId,
-  };
+Future<ResponseM<String>> getAdminToken() async {
+  try {
+    const adminTokenInfo = {
+      "client_secret": clientSecret,
+      "grant_type": clientCredientialGrantType,
+      "client_id": adminClientId,
+    };
 
-  String body = xformurlencoder(adminTokenInfo);
-  String urlString = keycloakBaseUrl +
-      "/auth/realms/" +
-      customRealm +
-      "/protocol/openid-connect/token";
+    String body = xformurlencoder(adminTokenInfo);
+    String urlString =
+        "$keycloakBaseUrl/auth/realms/$customRealm/protocol/openid-connect/token";
 
-  return http
-      .post(Uri.parse(urlString),
-          headers: {"Content-Type": "application/x-www-form-urlencoded"},
-          body: body)
-      .then(
-        (value) => json.decode(value.body),
-      );
+    var getAdminTokenresponse = await http.post(Uri.parse(urlString),
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: body);
+
+    if (getAdminTokenresponse.statusCode == HttpStatus.internalServerError) {
+      return ResponseM(
+          customErrorMessage:
+              "Our servers are currently down. Please try again later.");
+    } else if (getAdminTokenresponse.statusCode != HttpStatus.ok) {
+      return ResponseM(
+          customErrorMessage:
+              "An error occured while creating your online profile. Please try again later");
+    }
+    Map<String, dynamic> adminBody =
+        json.decode(getAdminTokenresponse.body) as Map<String, dynamic>;
+
+    return ResponseM(data: adminBody["access_token"] as String);
+  } on SocketException {
+    return ResponseM(
+        customErrorMessage:
+            "Could not connect to server. Please check your internet connection");
+  } catch (e) {
+    return ResponseM(
+        customErrorMessage: "An error occured. Please Try again later");
+  }
 }
 
-Future registerUser(
+// registers user to keycloak
+Future<ResponseM<String>> registerUser(
   String firstName,
   String lastName,
   String email,
   String username,
   String password,
   String adminToken,
+  String customerNo
 ) async {
-  Map<String, dynamic> body = {
-    "firstName": firstName,
-    "lastName": lastName,
-    "email": email,
-    "username": username,
-    "enabled": true,
-    "emailVerified": true,
-    "credentials": [
-      {"value": password, "type": "password", "temporary": false}
-    ]
-  };
+  try {
+    Map<String, dynamic> body = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "username": username,
+      "enabled": true,
+      "emailVerified": true,
+      "attributes": {
+        "customer_no": customerNo
+      },
+      "credentials": [
+        {"value": password, "type": "password", "temporary": false}
+      ]
+    };
 
-  String uriString =
-      keycloakBaseUrl + "/auth/admin/realms/" + customRealm + "/users";
+    String uriString = "$keycloakBaseUrl/auth/admin/realms/$customRealm/users";
 
-  return http
-      .post(Uri.parse(uriString),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + adminToken
-          },
-          body: json.encode(body))
-      .then(
-    (value) {
-      if (value.statusCode == 201) {
-        return {"success": true, "msg": "Account Created"};
-      } else {
-        return {"success": false, "msg": json.decode(value.body)};
-      }
-    },
-  );
+    var registerResponse = await http.post(Uri.parse(uriString),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $adminToken"
+        },
+        body: json.encode(body));
+
+    if (registerResponse.statusCode == HttpStatus.internalServerError) {
+      return ResponseM(
+          customErrorMessage:
+              "Our servers are currently down. Please try again later.");
+    } else if (registerResponse.statusCode != HttpStatus.created) {
+      return ResponseM(
+          customErrorMessage:
+              "An error occured while registering your online profile. Please try again later.");
+    }
+
+    return ResponseM(data: "Online Profile Created!!!");
+  } on SocketException {
+    return ResponseM(
+        customErrorMessage:
+            "Could not connect to server. Please check your internet connection");
+  } catch (e) {
+    return ResponseM(
+        customErrorMessage:
+            "An unexpected error occured while registering your online profile. Please try again later.");
+  }
+}
+
+// check if email exists
+Future<ResponseM<bool>> doesLoginIDExists(
+    String loginID, String adminToken) async {
+  try {
+    var loginIdCheckResponse = await http.get(
+        Uri.parse(
+            "$keycloakBaseUrl/auth/admin/realms/$customRealm/users?username=$loginID&exact=true"),
+        headers: {"Authorization": "Bearer $adminToken"});
+
+    if (loginIdCheckResponse.statusCode == HttpStatus.internalServerError) {
+      return ResponseM(
+          customErrorMessage:
+              "Something is currently wrong with our servers. Please try again later.");
+    } else if (loginIdCheckResponse.statusCode == HttpStatus.unauthorized) {
+      return ResponseM(
+          customErrorMessage: "Request timed out! Please try again later");
+    } else if (loginIdCheckResponse.statusCode != HttpStatus.ok) {
+      return ResponseM(
+          customErrorMessage: "An error occured while processing this request");
+    }
+
+    var loginIdCheckBody =
+        json.decode(loginIdCheckResponse.body) as List<dynamic>;
+
+    if (loginIdCheckBody.isEmpty) {
+      return ResponseM(data: false);
+    }
+    return ResponseM(data: true);
+  } on SocketException {
+    return ResponseM(
+        customErrorMessage: "Please check your network connection");
+  } catch (_) {
+    return ResponseM(
+        customErrorMessage:
+            "An unexpectd error occured while setting up your online profile. Please try again later.");
+  }
+}
+
+// check if email exists
+Future<ResponseM<bool>> doesEmailExists(String email, String adminToken) async {
+  try {
+    var emailCheckResponse = await http.get(
+        Uri.parse(
+            "$keycloakBaseUrl/auth/admin/realms/$customRealm/users?email=$email&exact=true"),
+        headers: {"Authorization": "Bearer $adminToken"});
+
+    if (emailCheckResponse.statusCode == HttpStatus.internalServerError) {
+      return ResponseM(
+          customErrorMessage:
+              "Something is currently wrong with our servers. Please try again later.");
+    } else if (emailCheckResponse.statusCode == HttpStatus.unauthorized) {
+      return ResponseM(
+          customErrorMessage: "Request timed out! Please try again later");
+    } else if (emailCheckResponse.statusCode != HttpStatus.ok) {
+      return ResponseM(
+          customErrorMessage: "An error occured while processing this request");
+    }
+
+    var emailCheckBody = json.decode(emailCheckResponse.body) as List<dynamic>;
+
+    if (emailCheckBody.isEmpty) {
+      return ResponseM(data: false);
+    }
+    return ResponseM(data: true);
+  } on SocketException {
+    return ResponseM(
+        customErrorMessage: "Please check your network connection");
+  } catch (_) {
+    return ResponseM(
+        customErrorMessage:
+            "An unexpectd error occured while setting up your online profile. Please try again later.");
+  }
 }
 
 Future logoutUser(String refreshToken) async {
@@ -231,10 +332,8 @@ Future logoutUser(String refreshToken) async {
   };
 
   String body = xformurlencoder(logoutInfo);
-  String urlString = keycloakBaseUrl +
-      "/auth/realms/" +
-      customRealm +
-      "/protocol/openid-connect/logout";
+  String urlString =
+      "$keycloakBaseUrl/auth/realms/$customRealm/protocol/openid-connect/logout";
 
   return await http
       .post(

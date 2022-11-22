@@ -4,21 +4,19 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_customer_accounts_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
-import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/own_account_transfer_verification_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class OwnAccountTransferPage extends StatefulWidget {
-  OwnAccountTransferPage({Key? key}) : super(key: key);
+  const OwnAccountTransferPage({Key? key}) : super(key: key);
 
   @override
   State<OwnAccountTransferPage> createState() => _OwnAccountTransferPageState();
@@ -85,7 +83,7 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
           narration: narrationTextController.text,
           pin: pinTextController.text);
 
-      Get.to(OwnAccountTransferVerificationPage());
+      Get.to(const OwnAccountTransferVerificationPage());
     }
   }
 
@@ -272,7 +270,8 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                   const SizedBox(height: 20),
                   AppTextField(
                     textController: amountTextController,
-                    prefixIcon: Container(
+                    prefixIcon: SizedBox(
+                      width: 50,
                       child: Center(
                         child: SvgPicture.asset(
                           "assets/images/naira.svg",
@@ -280,7 +279,6 @@ class _OwnAccountTransferPageState extends State<OwnAccountTransferPage> {
                           height: 20,
                         ),
                       ),
-                      width: 50,
                     ),
                     label: "Amount",
                     hint: "Input Amount...",

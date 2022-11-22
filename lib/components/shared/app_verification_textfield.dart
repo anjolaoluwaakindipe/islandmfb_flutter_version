@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CodeInput extends StatelessWidget {
   final FocusNode focusNode0;
@@ -26,11 +25,11 @@ class CodeInput extends StatelessWidget {
             onChanged: (str) {
               if (str.length == 1) {
                 FocusScope.of(context).requestFocus(focusNode2);
-              } else if (str.length == 0) {
+              } else if (str.isEmpty) {
                 FocusScope.of(context).requestFocus(focusNode0);
               }
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "*",
               hintStyle: TextStyle(color: Colors.grey),
               counterText: "",

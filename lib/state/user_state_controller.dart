@@ -3,18 +3,18 @@ import 'package:islandmfb_flutter_version/requests/auth_request.dart';
 import 'package:islandmfb_flutter_version/storage/secure_storage.dart';
 
 class UserStateController extends GetxController {
-  final user = {}.obs;
+  final keycloakUserInfo = {}.obs;
 
-  Future setUserStateFromToken() async {
+  Future setKeycloakUserInfoStateFromToken() async {
     String? accessToken = await SecureStorage.readAValue("access_token");
 
     if (accessToken != null) {
-      user.value = await getUserInfo(accessToken);
-      user.refresh();
+      keycloakUserInfo.value = await getUserInfoKeycloak(accessToken);
+      keycloakUserInfo.refresh();
     }
   }
 
   void clearUserState() {
-    user.value = {};
+    keycloakUserInfo.value = {};
   }
 }

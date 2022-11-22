@@ -41,7 +41,7 @@ class _StatementOfAccountPageState extends State<StatementOfAccountPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: primaryColor, // header background color
               onPrimary: whiteColor, // header text color
               onSurface: lightextColor, // body text color
@@ -178,7 +178,7 @@ class _StatementOfAccountPageState extends State<StatementOfAccountPage> {
                                     ? DateFormat("dd/MM/yyyy")
                                         .format(dates["startDate"]!)
                                     : "dd/mm/yy",
-                                style: TextStyle(color: lightextColor)),
+                                style: const TextStyle(color: lightextColor)),
                             const Icon(
                               Icons.arrow_drop_down,
                               color: greyColor,

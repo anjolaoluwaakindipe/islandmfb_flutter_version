@@ -4,11 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/models/beneficiary.dart';
-import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class ChooseBeneficiary extends StatefulWidget {
-  ChooseBeneficiary({Key? key}) : super(key: key);
+  const ChooseBeneficiary({Key? key}) : super(key: key);
 
   @override
   State<ChooseBeneficiary> createState() => _ChooseBeneficiaryState();
@@ -197,7 +196,7 @@ class ChooseBeneficiaryBeneficiaryButtons extends StatelessWidget {
           children: [
             Initicon(
               text: name,
-              color: whiteColor,
+              style: const TextStyle(color: whiteColor),
               backgroundColor: primaryColor,
             ),
             const SizedBox(
@@ -208,7 +207,7 @@ class ChooseBeneficiaryBeneficiaryButtons extends StatelessWidget {
               children: [
                 Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
                 Text(
-                  "Account #" + accountNo,
+                  "Account #$accountNo",
                   style: const TextStyle(
                       fontSize: 12, color: lightextColor, letterSpacing: 0.8),
                 ),

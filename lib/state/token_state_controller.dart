@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:islandmfb_flutter_version/models/response_model.dart';
 import 'package:islandmfb_flutter_version/requests/auth_request.dart';
 import 'package:islandmfb_flutter_version/storage/secure_storage.dart';

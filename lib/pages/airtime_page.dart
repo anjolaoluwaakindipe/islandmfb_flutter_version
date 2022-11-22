@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_verification.dart';
@@ -72,7 +71,7 @@ class _AirtimePageState extends State<AirtimePage> {
         biller: billerValue,
         product: productValue,
         narration: narrationTextController.text,
-        mobileNumber: "+234" + mobileNumberTextController.text,
+        mobileNumber: "+234${mobileNumberTextController.text}",
       );
 
       Get.to(const AirtimeVerificationPage());
@@ -199,6 +198,7 @@ class _AirtimePageState extends State<AirtimePage> {
                           AppTextField(
                             textController: amountTextController,
                             prefixIcon: SizedBox(
+                              width: 50,
                               child: Center(
                                 child: SvgPicture.asset(
                                   "assets/images/naira.svg",
@@ -206,7 +206,6 @@ class _AirtimePageState extends State<AirtimePage> {
                                   height: 20,
                                 ),
                               ),
-                              width: 50,
                             ),
                             label: "Amount",
                             labelColor: lightextColor,
@@ -230,10 +229,10 @@ class _AirtimePageState extends State<AirtimePage> {
                           ),
                           AppTextField(
                             prefixIcon: const SizedBox(
+                              width: 50,
                               child:  Center(
                                 child: Text("+234", style:TextStyle(color: lightextColor, fontWeight: FontWeight.w900))
                               ),
-                              width: 50,
                             ),
                             textController: mobileNumberTextController,
                             label: "Mobile Number",

@@ -3,12 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/components/shared/app_switch.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
-import 'package:islandmfb_flutter_version/pages/home_page.dart';
-import 'package:islandmfb_flutter_version/pages/success_page.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
-import 'package:islandmfb_flutter_version/state/airtime_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 

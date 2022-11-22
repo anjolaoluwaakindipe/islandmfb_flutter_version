@@ -75,7 +75,7 @@ class SelfServicePage extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.to(LinkBVNPage());
+                Get.to(const LinkBVNPage());
               },
               child: Ink(
                 padding:

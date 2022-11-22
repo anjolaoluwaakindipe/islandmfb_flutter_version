@@ -8,9 +8,7 @@ import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
-import 'package:islandmfb_flutter_version/requests/account_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
-import 'package:islandmfb_flutter_version/state/loading_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/user_state_controller.dart';
 
@@ -43,14 +41,14 @@ class _LoginPageState extends State<LoginPage> {
       context.loaderOverlay.show();
       late String? accountError;
       final token = tokenState.tokenState;
-      final user = userState.user;
+      final user = userState.keycloakUserInfo;
       await tokenState.setTokenFromLogin(
         loginIdController.text,
         passwordTextController.text,
       );
 
       if (tokenState.loginErrorMessage.isEmpty) {
-        await userState.setUserStateFromToken();
+        await userState.setKeycloakUserInfoStateFromToken();
 
         if (user.containsKey("customer_no")) {
           accountError = await accountState

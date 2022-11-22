@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/getwidget.dart';
 
 import '../components/shared/app_button.dart';
-import '../components/shared/app_textfield.dart';
 import '../utilities/colors.dart';
 
 class ProfileProofOfAddressPage extends StatefulWidget {
@@ -33,8 +32,8 @@ class _ProfileProofOfAddressPageState extends State<ProfileProofOfAddressPage> {
   // drop down menu items builder
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
-      child: Text(item),
       value: item,
+      child: Text(item),
     );
   }
 

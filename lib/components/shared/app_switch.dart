@@ -6,7 +6,7 @@ class AppSwitch extends StatefulWidget {
   final Function(bool) ontoggleChange;
 
   @override
-  _AppSwitchState createState() => _AppSwitchState();
+  State<AppSwitch> createState() => _AppSwitchState();
 }
 
 class _AppSwitchState extends State<AppSwitch> {
@@ -18,12 +18,11 @@ class _AppSwitchState extends State<AppSwitch> {
       setState(() {
         isSwitched = true;
       });
-      print('Switch Button is ON');
+
     } else {
       setState(() {
         isSwitched = false;
       });
-      print('Switch Button is OFF');
     }
   }
 

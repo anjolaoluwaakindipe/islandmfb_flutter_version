@@ -1,7 +1,5 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import '../components/shared/app_dropdown.dart';
 import '../components/shared/app_textfield.dart';
@@ -75,8 +73,8 @@ class _ProfileNextOfKinPageState extends State<ProfileNextOfKinPage> {
   // drop down menu items builder
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
-      child: Text(item),
       value: item,
+      child: Text(item),
     );
   }
 

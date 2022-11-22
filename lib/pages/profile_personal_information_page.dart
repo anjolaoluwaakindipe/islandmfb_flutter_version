@@ -1,10 +1,6 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../components/shared/app_dropdown.dart';
 import '../components/shared/app_textfield.dart';
@@ -90,8 +86,8 @@ class _ProfilePersonalInformationPageState
   // drop down menu items builder
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
-      child: Text(item),
       value: item,
+      child: Text(item),
     );
   }
 
@@ -150,10 +146,6 @@ class _ProfilePersonalInformationPageState
         actions: <Widget>[
           TextButton(
             onPressed: () {},
-            child: const Text(
-              "Save",
-              style: TextStyle(fontSize: 14),
-            ),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(blackColor),
               overlayColor: MaterialStateProperty.all<Color>(accentColor),
@@ -162,6 +154,10 @@ class _ProfilePersonalInformationPageState
                   side: BorderSide(color: Colors.transparent),
                 ),
               ),
+            ),
+            child: const Text(
+              "Save",
+              style: TextStyle(fontSize: 14),
             ),
           ),
           const SizedBox(

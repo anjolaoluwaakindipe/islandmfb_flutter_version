@@ -1,4 +1,3 @@
-import 'package:islandmfb_flutter_version/models/account.dart';
 
 class AccountDetail {
   // CUSTOMER

@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../utilities/colors.dart';
 
 class AppTextField extends StatefulWidget {
-  AppTextField(
+  const AppTextField(
       {Key? key,
       this.label = "",
       this.hint = "",
@@ -26,23 +25,23 @@ class AppTextField extends StatefulWidget {
       this.prefixIcon})
       : super(key: key);
 
-  String label;
-  String hint;
-  TextEditingController textController;
-  Color? labelColor;
-  var onChanged;
-  TextInputType? textInputType;
-  int? maxCharacterLength;
-  bool hideText;
-  List<TextInputFormatter>? inputFormatters;
-  Widget? suffixIconWidget;
-  String? Function(String?)? validator;
-  bool readOnly;
-  bool? enabled;
-  Widget? suffixIcon;
-  bool isPassword;
-  int? maxLines;
-  Widget? prefixIcon;
+  final String label;
+  final String hint;
+  final TextEditingController textController;
+  final Color? labelColor;
+  final Function(String)? onChanged;
+  final TextInputType? textInputType;
+  final int? maxCharacterLength;
+  final bool hideText;
+  final List<TextInputFormatter>? inputFormatters;
+  final Widget? suffixIconWidget;
+  final String? Function(String?)? validator;
+  final bool readOnly;
+  final bool? enabled;
+  final Widget? suffixIcon;
+  final bool isPassword;
+  final int? maxLines;
+  final Widget? prefixIcon;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -54,7 +53,6 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isPassword = widget.isPassword;
   }

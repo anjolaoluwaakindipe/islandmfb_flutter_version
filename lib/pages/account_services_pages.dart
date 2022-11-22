@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
-import 'package:islandmfb_flutter_version/pages/verification_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
-import '../components/shared/app_textfield.dart';
 
 class AccountServicesPage extends StatefulWidget {
   const AccountServicesPage({Key? key}) : super(key: key);
@@ -187,7 +183,7 @@ class _AccountServicesState extends State<AccountServicesPage> {
                         buttonStateHandler();
                       },
                     ),
-                    Text("Debit Only")
+                    const Text("Debit Only")
                   ],
                 ),
               ],

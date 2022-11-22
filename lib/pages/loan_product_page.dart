@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/loan_product_form_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class LoanProductPage extends StatefulWidget {
-  LoanProductPage({Key? key}) : super(key: key);
+  const LoanProductPage({Key? key}) : super(key: key);
 
   @override
   State<LoanProductPage> createState() => _LoanProductPageState();
@@ -156,6 +155,9 @@ class LoanProductPageLoanProductButtons extends StatelessWidget {
               alignment: Alignment.topRight,
               child: ElevatedButton(
                 onPressed: onClick,
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(primaryColor)),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
                   child: Text(
@@ -163,9 +165,6 @@ class LoanProductPageLoanProductButtons extends StatelessWidget {
                     style: TextStyle(color: whiteColor),
                   ),
                 ),
-                style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all(primaryColor)),
               ),
             )
           ],

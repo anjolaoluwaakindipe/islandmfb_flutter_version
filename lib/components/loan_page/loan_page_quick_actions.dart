@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class LoanPageQuickActions extends StatefulWidget {
-  LoanPageQuickActions(
+  const LoanPageQuickActions(
       {Key? key,
       required this.title,
       required this.iconUrlString,
@@ -11,10 +11,10 @@ class LoanPageQuickActions extends StatefulWidget {
       this.onClick})
       : super(key: key);
 
-  String title;
-  String subtitle;
-  String iconUrlString;
-  void Function()? onClick;
+  final String title;
+  final String subtitle;
+  final String iconUrlString;
+  final void Function()? onClick;
 
   @override
   State<LoanPageQuickActions> createState() => _LoanPageQuickActionsState();

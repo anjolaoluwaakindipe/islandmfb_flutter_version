@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
-import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
-import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 
@@ -90,7 +86,7 @@ class _FailurePageState extends State<FailurePage> {
                   ),
                   child: Text(
                     widget.buttonText,
-                    style: TextStyle(color: primaryColor),
+                    style: const TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
                     Get.back();

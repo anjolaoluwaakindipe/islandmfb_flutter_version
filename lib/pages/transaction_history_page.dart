@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,7 @@ import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class TransactionHistoryPage extends StatefulWidget {
-  TransactionHistoryPage({Key? key}) : super(key: key);
+  const TransactionHistoryPage({Key? key}) : super(key: key);
 
   @override
   State<TransactionHistoryPage> createState() => _TransactionHistoryPageState();

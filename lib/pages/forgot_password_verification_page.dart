@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/pages/reset_password_page.dart';
-import 'package:islandmfb_flutter_version/pages/success_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../components/shared/app_textfield.dart';
-import '../components/shared/app_verification_textfield.dart';
 
 class ForgotPasswordVerificationPage extends StatefulWidget {
   const ForgotPasswordVerificationPage({Key? key}) : super(key: key);
@@ -40,7 +36,7 @@ class _ForgotPasswordVerificationPageState
   }
 
   void onContinueHandler() {
-    Get.to(ResetPasswordPage());
+    Get.to(const ResetPasswordPage());
   }
 
   @override

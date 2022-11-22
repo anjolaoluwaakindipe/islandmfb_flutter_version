@@ -1,12 +1,9 @@
-import 'dart:async';
-import 'dart:js_util';
 
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
 import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
@@ -18,7 +15,6 @@ import 'package:islandmfb_flutter_version/textValidations/is_below_balance.dart'
 import '../components/shared/app_button.dart';
 import '../components/shared/app_textfield.dart';
 import '../utilities/colors.dart';
-import 'home_page.dart';
 
 class MfbAccountTransferPage extends StatefulWidget {
   const MfbAccountTransferPage({Key? key}) : super(key: key);
@@ -105,7 +101,7 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
         transferState.transferToMFBAccountState.value.amount =
             double.parse(amountTextController.text.replaceAll(",", ""));
 
-        await Get.to(MfbAccountTransferVerificationPage());
+        await Get.to(const MfbAccountTransferVerificationPage());
       } else {
         showDialog(
             context: context,
@@ -211,7 +207,7 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.to(ChooseBeneficiary());
+                        Get.to(const ChooseBeneficiary());
                       },
 
                       child: const Text(
@@ -263,7 +259,8 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
                 // AMOUNT TEXTFIELD
                 AppTextField(
                   textController: amountTextController,
-                  prefixIcon: Container(
+                  prefixIcon: SizedBox(
+                    width: 50,
                     child: Center(
                       child: SvgPicture.asset(
                         "assets/images/naira.svg",
@@ -271,7 +268,6 @@ class _MfbAccountTransferPageState extends State<MfbAccountTransferPage> {
                         height: 20,
                       ),
                     ),
-                    width: 50,
                   ),
                   label: "Amount",
                   hint: "Input Amount...",

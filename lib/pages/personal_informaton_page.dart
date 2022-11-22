@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:intl/intl.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/components/shared/app_dropdown.dart';
 import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
 import 'package:islandmfb_flutter_version/storage/dropdowns_build_menu_items.dart';
 
@@ -209,7 +208,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                       setState(() => genderValue = value);
                       buttonStateHandler();
                     },
-                    hint: Text("Select your Gender"),
+                    hint: const Text("Select your Gender"),
                     isExpanded: true,
                     value: genderValue,
                     buttonHeight: 60,
@@ -264,7 +263,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                                     ? DateFormat("dd/MM/yyyy")
                                         .format(dateOfBirth!)
                                     : "dd/mm/yy",
-                                style: TextStyle(color: lightextColor)),
+                                style: const TextStyle(color: lightextColor)),
                             const Icon(
                               Icons.arrow_drop_down,
                               color: greyColor,

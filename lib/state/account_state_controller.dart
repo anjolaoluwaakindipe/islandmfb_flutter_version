@@ -29,8 +29,8 @@ class AccountStateController extends GetxController {
 
   Future refreshAccountsState() async {
     final userState = Get.put(UserStateController());
-    var customerAccountsResponse =
-        await getCustomerAccounts(userState.user["customer_no"].toString());
+    var customerAccountsResponse = await getCustomerAccounts(
+        userState.keycloakUserInfo["customer_no"].toString());
     if (customerAccountsResponse["success"] == true) {
       customerAccounts.value = (customerAccountsResponse["data"])
           .map<Account>((account) => Account.fromJson(account))

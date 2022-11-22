@@ -12,7 +12,6 @@ import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/models/bank_info_model.dart';
 import 'package:islandmfb_flutter_version/models/transfer.dart';
 import 'package:islandmfb_flutter_version/pages/choose_beneficiary.dart';
-import 'package:islandmfb_flutter_version/pages/own_account_transfer_verification_page.dart';
 import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_verification_page.dart';
 import 'package:islandmfb_flutter_version/requests/transfer_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
@@ -20,7 +19,7 @@ import 'package:islandmfb_flutter_version/state/transfer_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class TransferToOtherBanksPage extends StatefulWidget {
-  TransferToOtherBanksPage({Key? key}) : super(key: key);
+  const TransferToOtherBanksPage({Key? key}) : super(key: key);
 
   @override
   State<TransferToOtherBanksPage> createState() =>
@@ -60,7 +59,7 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
           narration: narrativeTextController.text,
           pin: pinTextController.text);
 
-      Get.to(TransferToOtherBanksVerificationPage());
+      Get.to(const TransferToOtherBanksVerificationPage());
     }
   }
 
@@ -71,6 +70,8 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
     if (accountNumberTextController.text.length != 10 ||
         accountNameTextController.text.length < 3 ||
         accountNameTextController.text == "Invalid Account Number" ||
+        accountNameTextController.text ==
+            "An error occured while fetching account name" ||
         amountTextController.text.length < 2 ||
         narrativeTextController.text.isEmpty ||
         pinTextController.text.length < 4) {
@@ -114,15 +115,19 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
       // if status code is 200 set bankItems
       if (bankInfoResponse.status != null &&
           bankInfoResponse.status!.code == HttpStatus.ok) {
-        setState(() {
-          bankItems = bankInfoResponse.data!;
-        });
+        if (mounted) {
+          setState(() {
+            bankItems = bankInfoResponse.data!;
+          });
+        }
       }
     } catch (e) {
       // if an error occurs set loadingBank error and send an alert to the user
-      setState(() {
-        loadingBankError = true;
-      });
+      if (mounted) {
+        setState(() {
+          loadingBankError = true;
+        });
+      }
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -151,6 +156,7 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   // get Account name of beneficiary
   getAccountName() async {
     if (accountNumberTextController.text.length == 10 && bankValue != null) {
+      accountNameTextController.text = "...";
       var accountNameResponse = await getOtherBankRecipientAccountName(
           bankCode: bankValue!.code,
           accountNumber: accountNumberTextController.text);
@@ -159,6 +165,9 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
           accountNameResponse.status!.code == HttpStatus.ok) {
         accountNameTextController.text =
             accountNameResponse.data ?? "Invalid Account Number";
+      } else {
+        accountNumberTextController.text =
+            "An error occured while fetching account name";
       }
     } else {
       accountNameTextController.text = "";
@@ -168,16 +177,19 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
   // onMount
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    Future(() {
-      initializeBankList();
-      print(accountState.selectedAccount.value.primaryAccountNo["_number"]);
-      transferState.setTransferFromField(TransferType.toOtherBanks,
-          accountNumber:
-              accountState.selectedAccount.value.primaryAccountNo["_number"]);
-    });
+    transferState.setTransferFromField(TransferType.toOtherBanks,
+        accountNumber:
+            accountState.selectedAccount.value.primaryAccountNo["_number"]);
+    if (mounted) {
+      Future(() {
+        initializeBankList();
+        print(accountState.selectedAccount.value.primaryAccountNo["_number"]);
+
+        if (mounted) {}
+      });
+    }
   }
 
   @override
@@ -260,7 +272,7 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Get.to(ChooseBeneficiary());
+                                  Get.to(const ChooseBeneficiary());
                                 }))
                     ],
                   ),
@@ -277,36 +289,40 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
                         selectedItem:
                             bankValue != null ? bankValue?.name : null,
                         onChanged: (value) {
-                          buttonStateHandler();
-                          getAccountName();
                           setState(() {
                             bankValue = bankItems
                                 .where((element) => element.name == value)
                                 .first;
                           });
+                          getAccountName();
+                          buttonStateHandler();
                         },
-                        mode: Mode.BOTTOM_SHEET,
-                        popupBackgroundColor: whiteColor,
-                        popupElevation: 0,
-                        showSearchBox: true,
-                        maxHeight: MediaQuery.of(context).size.height / 2,
-                        dropdownSearchDecoration: InputDecoration(
-                          iconColor: loadingBankError && loadingBanks
-                              ? Colors.transparent
-                              : null,
-                          focusColor: accentColor,
-                          fillColor: accentColor,
-                          hintText: loadingBanks
-                              ? "Getting Banks..."
-                              : (loadingBankError
-                                  ? "Error while loading banks"
-                                  : "Select A Bank"),
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(12, 12, 0, 0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none,
+                        dropdownDecoratorProps: DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            iconColor: loadingBankError && loadingBanks
+                                ? Colors.transparent
+                                : null,
+                            focusColor: accentColor,
+                            fillColor: accentColor,
+                            hintText: loadingBanks
+                                ? "Getting Banks..."
+                                : (loadingBankError
+                                    ? "Error while loading banks"
+                                    : "Select A Bank"),
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(12, 12, 0, 0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
+                        ),
+                        popupProps: const PopupProps.bottomSheet(
+                          bottomSheetProps: BottomSheetProps(
+                            backgroundColor: whiteColor,
+                            elevation: 0,
+                          ),
+                          showSearchBox: true,
                         ),
                       ),
                     ),
@@ -320,8 +336,8 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
                     label: "Account Number",
                     maxCharacterLength: 10,
                     onChanged: (String value) {
-                      buttonStateHandler();
                       getAccountName();
+                      buttonStateHandler();
                     },
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(

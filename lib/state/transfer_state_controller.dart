@@ -78,7 +78,7 @@ class TransferStateController extends GetxController {
             Get.to(FailurePage(
               buttonText: "Continue",
               failureMessage: "Unsuccessful Transaction",
-              nextPage: OwnAccountTransferPage(),
+              nextPage: const OwnAccountTransferPage(),
             ));
           }
         }
@@ -123,9 +123,12 @@ class TransferStateController extends GetxController {
                 fromAccountNo: transferToOtherBanksState.value.fromAccountNo!,
                 toAccountNo: transferToOtherBanksState.value.toAccountNo!,
                 customerNo: transferToOtherBanksState.value.customerNo!);
+            print(transferResponse.data);
+            print(transferResponse.status?.code);
 
             if (transferResponse.status!.isOk &&
-                transferResponse.data!["postedOK"] == true) {
+                transferResponse.data != null &&
+                transferResponse.data["postedOK"] == true) {
               clearTransferState(TransferType.toMFBAccount);
               Get.to(SuccessPage(
                   buttonText: "Continue",
@@ -135,7 +138,7 @@ class TransferStateController extends GetxController {
               Get.to(FailurePage(
                 buttonText: "Continue",
                 failureMessage: "Unsuccessful Transaction",
-                nextPage: TransferToOtherBanksPage(),
+                nextPage: const TransferToOtherBanksPage(),
               ));
             }
           } catch (err) {
@@ -152,7 +155,8 @@ class TransferStateController extends GetxController {
 
   // SET FULL NAME AND CUSTOMER NUMBER
   void setfullNameAndCustomerNoAutomatically() {
-    final customerNo = Get.put(UserStateController()).user["customer_no"];
+    final customerNo =
+        Get.put(UserStateController()).keycloakUserInfo["customer_no"];
     final fullName = Get.put(AccountStateController()).customerDetails["name"];
 
     if (customerNo == null || fullName == null) {

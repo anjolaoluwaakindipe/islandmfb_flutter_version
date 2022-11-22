@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,10 +5,9 @@ import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
-import 'package:islandmfb_flutter_version/requests/auth_request.dart';
+import 'package:islandmfb_flutter_version/pages/navigation.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
-import 'package:get/get.dart';
 
 class GetStartedPage extends StatefulWidget {
   GetStartedPage({Key? key}) : super(key: key);
@@ -65,7 +63,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
             AppButton(
               text: "Get Started",
               onPress: () {
-                Get.to(const LetsGetStartedPage());
+                Get.toNamed(AppRoutes.letsGetStartedPage);
               },
             ),
             const SizedBox(

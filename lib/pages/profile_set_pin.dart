@@ -1,4 +1,3 @@
-import 'package:bs_flutter/bs_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -82,7 +81,7 @@ class _ProfileSetPinPageState extends State<ProfileSetPinPage> {
           toolbarHeight: 80,
         ),
         backgroundColor: whiteColor,
-        body: Container(
+        body: SizedBox(
           height: double.maxFinite,
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,

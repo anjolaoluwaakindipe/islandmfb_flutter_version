@@ -10,10 +10,7 @@ import 'package:islandmfb_flutter_version/components/shared/app_drawer.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/another_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
-import 'package:islandmfb_flutter_version/pages/own_account_transfer_page.dart';
 import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
-import 'package:islandmfb_flutter_version/pages/transfer_to_other_banks_page.dart';
-import 'package:islandmfb_flutter_version/requests/account_request.dart';
 import 'package:islandmfb_flutter_version/requests/auth_request.dart';
 import 'package:islandmfb_flutter_version/state/account_state_controller.dart';
 import 'package:islandmfb_flutter_version/state/token_state_controller.dart';
@@ -40,7 +37,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     Future(() async {
-      if (userState.user.isEmpty || accountState.customerAccounts.isEmpty) {
+      if (userState.keycloakUserInfo.isEmpty ||
+          accountState.customerAccounts.isEmpty) {
         Get.to(const LoginPage());
       }
     });
@@ -66,7 +64,8 @@ class _HomePageState extends State<HomePage> {
           });
     }
 
-    if (userState.user.isEmpty || accountState.customerAccounts.isEmpty) {
+    if (userState.keycloakUserInfo.isEmpty ||
+        accountState.customerAccounts.isEmpty) {
       return Container();
     }
 
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         body: RefreshIndicator(
           onRefresh: () async {
             await reLoginWithRefreshToken();
-            await userState.setUserStateFromToken();
+            await userState.setKeycloakUserInfoStateFromToken();
             await accountState.refreshAccountsState();
           },
           backgroundColor: primaryColor,
@@ -99,12 +98,11 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Obx(() => Text(
-                            "Hi " +
-                                (customerDetail["name"]
+                            "Hi ${customerDetail["name"]
                                         ?.split(" ")?[0]!
                                         .toString()
                                         .capitalize ??
-                                    " "),
+                                    " "}",
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -149,9 +147,8 @@ class _HomePageState extends State<HomePage> {
                                   color: blackColor, fontSize: 10),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: ((selectedAccount.value.product) ??
-                                          "Savings Account") +
-                                      "  ",
+                                  text: "${(selectedAccount.value.product) ??
+                                          "Savings Account"}  ",
                                 ),
                                 TextSpan(
                                   text: (selectedAccount.value
@@ -244,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                         HomePageQuicActionButtons(
                           name: "Airtime",
                           onTap: () {
-                            Get.to(AirtimePage());
+                            Get.to(const AirtimePage());
                           },
                           svgUrlString: "assets/images/airtimeQuickActions.svg",
                         ),
@@ -274,7 +271,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.to(TransactionHistoryPage());
+                          Get.to(const TransactionHistoryPage());
                         },
                         child: const Text(
                           "View all",

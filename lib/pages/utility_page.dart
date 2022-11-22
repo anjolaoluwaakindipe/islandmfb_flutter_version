@@ -40,8 +40,8 @@ class _UtilityPageState extends State<UtilityPage> {
   // drop down menu items builder
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
-      child: Text(item),
       value: item,
+      child: Text(item),
     );
   }
 

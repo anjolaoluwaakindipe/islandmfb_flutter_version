@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoanRepaymentPage extends StatefulWidget {
-  LoanRepaymentPage({Key? key}) : super(key: key);
+  const LoanRepaymentPage({Key? key}) : super(key: key);
 
   @override
   State<LoanRepaymentPage> createState() => _LoanRepaymentPageState();

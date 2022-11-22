@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islandmfb_flutter_version/components/account_type_page.dart/account_type_button.dart';
-import 'package:islandmfb_flutter_version/components/get_started_page/get_started_sign_in_link.dart';
-import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
-import 'package:islandmfb_flutter_version/pages/account_services_pages.dart';
-import 'package:islandmfb_flutter_version/pages/personal_informaton_page.dart';
-import 'package:islandmfb_flutter_version/pages/verification_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
 
-import '../components/shared/app_textfield.dart';
 
 class AccountTypePage extends StatelessWidget {
   const AccountTypePage({Key? key}) : super(key: key);

@@ -17,7 +17,7 @@ Future<Map> ownAccountTransfer(
     String fullName,
     String customerNo,
     String reference) async {
-  String urlString = isslapi + "/ownaccounttransfer";
+  String urlString = "$isslapi/ownaccounttransfer";
   String ipAddress = await Ipify.ipv4();
   Map<String, dynamic> body = {
     "amount": amount,
@@ -62,7 +62,7 @@ Future<Map> intraBankTransfer(
     String fullName,
     String customerNo,
     String reference) async {
-  String urlString = isslapi + "/intrabanktransfer";
+  String urlString = "$isslapi/intrabanktransfer";
   String ipAddress = await Ipify.ipv4();
 
   Map<String, dynamic> body = {
@@ -102,7 +102,7 @@ Future<Map> intraBankTransfer(
 
 Future<Map> getIslandAccountRecipientInfo(String accountNo) async {
   String urlString =
-      isslapi + "/getCustomerAccount2" + "?accountno=" + accountNo;
+      "$isslapi/getCustomerAccount2?accountno=$accountNo";
   return http.get(Uri.parse(urlString), headers: {
     "Content-Type": "application/json",
     "X-TENANTID": xtenantid
@@ -127,7 +127,7 @@ Future<ResponseM> interBankTransfer({
   required String toAccountNo,
   required String customerNo,
 }) async {
-  String urlString = isslapi + "/interbanktransfer";
+  String urlString = "$isslapi/interbanktransfer";
   String ipAddress = await Ipify.ipv4();
 
   // CHECKING FOR LOCATION
@@ -158,10 +158,13 @@ Future<ResponseM> interBankTransfer({
   // continue accessing the position of the device.
   Position location = await Geolocator.getCurrentPosition();
 
+  String environment =
+      const String.fromEnvironment("ENV", defaultValue: "development");
+
   // BODY OF JSON REQUEST
   Map<String, dynamic> body = {
     "amount": amount,
-    "bankCode": bankCode,
+    "bankCode": environment == "development" ? "999998" : bankCode,
     "bfyNarrative": narrative,
     "channel": "mobileApp",
     "fromAccountKycLevel": "1",
@@ -170,7 +173,7 @@ Future<ResponseM> interBankTransfer({
     "location": location.toString(),
     "narrative": narrative,
     "reference": ShortUuid.init().generate().substring(0, 15),
-    "toAccountNo": toAccountNo,
+    "toAccountNo": environment == "development" ? "0051762787" : toAccountNo,
     "user": {
       "fullName": fullName,
       "ipAddress": ipAddress,
@@ -178,20 +181,20 @@ Future<ResponseM> interBankTransfer({
     },
     "valueDate": DateTime.now().toUtc().toIso8601String().toString()
   };
-
   print(body);
-
   // send info to api
-  var reponse = await http.post(Uri.parse(urlString),
+  var response = await http.post(Uri.parse(urlString),
       headers: {"Content-Type": "application/json", "X-TENANTID": xtenantid},
       body: json.encode(body));
 
   // get reponse form api
-  return ResponseM(status: HttpStatus(reponse.statusCode), data: null);
+  return ResponseM(
+      status: HttpStatus(response.statusCode),
+      data: json.decode(response.body));
 }
 
 Future<ResponseM<List<BankInfo>>> getAllBanks() async {
-  const url = isslapi + "/getallbanks";
+  const url = "$isslapi/getallbanks";
 
   // get all the bank information
   var response = await http.get(Uri.parse(url),
@@ -207,47 +210,46 @@ Future<ResponseM<List<BankInfo>>> getAllBanks() async {
 
 Future<ResponseM<String?>> getOtherBankRecipientAccountName(
     {required String bankCode, required String accountNumber}) async {
-  var url = isslapi +
-      "/accountnamelookup?" +
-      "bankcode=" +
-      bankCode +
-      "&nuban=" +
-      accountNumber;
+  var url = "$isslapi/accountnamelookup?bankcode=$bankCode&nuban=$accountNumber";
 
   // get all the bank information
   var response = await http.get(Uri.parse(url),
       headers: {"Content-Type": "application/json", "X-TENANTID": xtenantid});
 
   // convert json to bankInfo object
-  return ResponseM(
-      status: HttpStatus(response.statusCode),
-      data: (json.decode(response.body)["account_name"] as String?));
+  if (response.statusCode == 200) {
+    return ResponseM(
+        status: HttpStatus(response.statusCode),
+        data: (json.decode(response.body)["account_name"] as String?));
+  } else {
+    return ResponseM(status: HttpStatus(HttpStatus.badRequest), data: null);
+  }
 }
 
-void main() async {
-  // print(DateTime.now().toUtc().toIso8601String().toString());
-  // print();
-  // print(ShortUuid.init().generate().substring(0, 13));
+// void main() async {
+//   // print(DateTime.now().toUtc().toIso8601String().toString());
+//   // print();
+//   // print(ShortUuid.init().generate().substring(0, 13));
 
-  // print(await ownAccountTransfer(
-  //     1.00,
-  //     2067581.toString(),
-  //     "Credit",
-  //     "6767581",
-  //     "Ayodele Olafoluso Bolaji Oliyide",
-  //     "0002",
-  //     ShortUuid.init().generate().substring(0, 15)));
+// //   // print(await ownAccountTransfer(
+// //   //     1.00,
+// //   //     2067581.toString(),
+// //   //     "Credit",
+// //   //     "6767581",
+// //   //     "Ayodele Olafoluso Bolaji Oliyide",
+// //   //     "0002",
+// //   //     ShortUuid.init().generate().substring(0, 15)));
 
-  // print(await recipientInfo("6767581"));
+// //   // print(await recipientInfo("6767581"));
 
-  // print(await interBankTransfer(
-  //     amount: 2000,
-  //     bankCode: "hello",
-  //     customerNo: "6758",
-  //     fromAccountNo: "0100000174",
-  //     fullName: "Anjola Akindipe",
-  //     narrative: "msdf",
-  //     toAccountNo: "0713145366"));
+//   // print(await interBankTransfer(
+//   //     amount: 2000,
+//   //     bankCode: "hello",
+//   //     customerNo: "6758",
+//   //     fromAccountNo: "0100000174",
+//   //     fullName: "Anjola Akindipe",
+//   //     narrative: "msdf",
+//   //     toAccountNo: "0713145366"));
 
-  // print(await getAllBanks());
-}
+//   // print(await getAllBanks());
+// }

@@ -8,7 +8,7 @@ import 'package:islandmfb_flutter_version/pages/success_page.dart';
 import 'package:islandmfb_flutter_version/utilities/colors.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  ResetPasswordPage({Key? key}) : super(key: key);
+  const ResetPasswordPage({Key? key}) : super(key: key);
 
   @override
   State<ResetPasswordPage> createState() => _ResetPasswordPageState();
@@ -72,13 +72,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       ),
       body: SingleChildScrollView(
           child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Form(
           key: resetPasswordPageFormKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Reset Password",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
               ),
