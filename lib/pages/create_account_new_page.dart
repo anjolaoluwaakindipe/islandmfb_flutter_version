@@ -30,6 +30,9 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
       TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   PhoneNumber phoneNumberText = PhoneNumber(isoCode: "NG");
+  var passwordTextEditingController = TextEditingController();
+  var loginIdTextEditingController = TextEditingController();
+  var confirmPasswordTextEditingControlller = TextEditingController();
 
   // form key
   final GlobalKey<FormState> _createAccountFormKey = GlobalKey<FormState>();
@@ -48,7 +51,6 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
   @override
   void initState() {
     super.initState();
-    print("hello");
   }
 
   // Validation to enable/disable the Continue button
@@ -57,6 +59,11 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
         phoneNumberTextEditingController.text.isEmpty ||
         emailTextEditingController.text.isEmpty ||
         bvnTextController.text.length < 11 ||
+        // passwordTextEditingController.text.isEmpty ||
+        // confirmPasswordTextEditingControlller.text.isEmpty ||
+        // loginIdTextEditingController.text.isEmpty ||
+        // passwordTextEditingController.text !=
+        // confirmPasswordTextEditingControlller.text ||
         phoneNumberTextEditingController.text.length < 10 ||
         phoneNumberText.phoneNumber!.length < 11) {
       setState(() {
@@ -78,8 +85,12 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
       }
       sendOtpStream?.cancel();
       sendOtpStream = createAccountFormController
-          .setInitialInfoAndSendOtp(bvnTextController.text,
-              phoneNumberText.phoneNumber!, emailTextEditingController.text)
+          .setInitialInfoAndSendOtp(
+              bvnTextController.text,
+              phoneNumberText.phoneNumber!,
+              emailTextEditingController.text,
+              loginIdTextEditingController.text,
+              passwordTextEditingController.text)
           .asStream()
           .listen((event) {
         if (event.data == null || event.data == false) {
@@ -239,17 +250,16 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
                               phoneNumberText = number;
                             });
                             buttonStateHandler();
-                            print(phoneNumberText.phoneNumber);
                           },
                           validator: (p0) {
                             return;
                           },
-                          initialValue: phoneNumberText,
+                          initialValue: PhoneNumber(isoCode: "NG"),
                           spaceBetweenSelectorAndTextField: 0,
                           selectorConfig: const SelectorConfig(
                             selectorType: PhoneInputSelectorType.DIALOG,
                           ),
-                          ignoreBlank: false,
+                          ignoreBlank: true,
                           autoValidateMode: AutovalidateMode.disabled,
                           selectorTextStyle:
                               const TextStyle(color: Colors.black),
@@ -281,6 +291,47 @@ class _CreateAccountNewPageState extends State<CreateAccountNewPage> {
                   const SizedBox(
                     height: 25,
                   ),
+                  // AppTextField(
+                  //   hint: "Enter Login ID",
+                  //   label: "Login ID",
+                  //   textController: loginIdTextEditingController,
+                  //   onChanged: (text) {
+                  //     buttonStateHandler();
+                  //   },
+                  //   textInputType: TextInputType.text,
+                  //   validator: ValidationBuilder().minLength(5).build(),
+                  // ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  // AppTextField(
+                  //   hint: "***************",
+                  //   label: "Enter Password",
+                  //   textController: passwordTextEditingController,
+                  //   onChanged: (text) {
+                  //     buttonStateHandler();
+                  //   },
+                  //   isPassword: true,
+                  //   validator: ValidationBuilder().minLength(8).build(),
+                  // ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  // AppTextField(
+                  //   hint: "***************",
+                  //   label: "Confirm Password",
+                  //   textController: confirmPasswordTextEditingControlller,
+                  //   onChanged: (text) {
+                  //     buttonStateHandler();
+                  //   },
+                  //   validator: ValidationBuilder().minLength(8).add((value) {
+                  //     if (value != passwordTextEditingController.text) {
+                  //       return "Confirm password must match password";
+                  //     }
+                  //     return null;
+                  //   }).build(),
+                  //   isPassword: true,
+                  // ),
                 ],
               ),
             ),

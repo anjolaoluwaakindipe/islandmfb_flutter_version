@@ -137,7 +137,7 @@ class _VerificationPageState extends State<VerificationPage> {
             if (event.data == null) {
               AppSnackBar.error("Error", event.customErrorMessage!);
             } else {
-              Get.toNamed(AppRoutes.personalInformationPage);
+              Get.offNamed(AppRoutes.personalInformationPage);
             }
             stopLoading();
           });

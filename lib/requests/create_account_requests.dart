@@ -1,7 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:http/http.dart' as http;
+import 'package:islandmfb_flutter_version/models/requests/account_types_response.dart';
+import 'package:islandmfb_flutter_version/models/requests/create_basic_account_response.dart';
 import 'package:islandmfb_flutter_version/models/requests/get_customer_response.dart';
 import 'package:islandmfb_flutter_version/models/requests/getcustomeraccount_response.dart';
 import 'package:islandmfb_flutter_version/models/requests/sent_sms_reponse.dart';
@@ -88,7 +92,7 @@ Future<ResponseM<bool>> sendOtpToEmailAndPhoneNumber(
   Map<String, dynamic> emailBody = {
     "attachments": [{}],
     "body": emailMessage,
-    "from": "mailsend@isslng.com",
+    "from": "devops@issl.ng",
     "subject": emailSubject,
     "to": email,
   };
@@ -150,7 +154,7 @@ Future<ResponseM<bool>> sendOtpToEmailAndPhoneNumber(
           errorMessage += " and ";
         }
 
-        errorMessage += "Not a valid phone number";
+        errorMessage += "could not send sms to phone number.";
       }
     }
   } catch (_) {}
@@ -188,6 +192,80 @@ Future<ResponseM<String>> getOtp(String email) async {
     return ResponseM(
         customErrorMessage: "Something went wrong while verifying pin");
   }
+}
+
+Future<ResponseM<List<AccountTypesResponse>>> getAccountTypesProduct() async {
+  try {
+    var accountTypeResponse = await http.get(
+        Uri.parse("$isslapiDomain/onboarding-api/1.0/getProducts"),
+        headers: {
+          "X-TENANTID": xtenantid
+        }).timeout(const Duration(seconds: 10));
+
+    var errResponse = badStatusCheck<List<AccountTypesResponse>>(
+        accountTypeResponse,
+        notOkErrMsg:
+            "An error occured while getting account products! Please try again later");
+
+    if (errResponse != null) {
+      return errResponse;
+    }
+
+    List<AccountTypesResponse> accountTypeResponseBody =
+        (json.decode(accountTypeResponse.body) as List)
+            .map((e) => AccountTypesResponse.fromMap(e))
+            .toList();
+
+    return ResponseM(data: accountTypeResponseBody);
+  } on SocketException {
+    return ResponseM(customErrorMessage: "Please check your connection.");
+  } on TimeoutException {
+    return ResponseM(customErrorMessage: "Request Timeout.");
+  } catch (err) {
+    return ResponseM(customErrorMessage: "An Unexpected error occured!");
+  }
+}
+
+// create basic user account
+Future<ResponseM<CreateBasicAccountResponse>> createBasicUserAccount(
+    {required String bvn,
+    required String dateOfBirth,
+    required String emailAddress,
+    required String firstName,
+    required String gender,
+    required String lastName,
+    required String phoneNumber,
+    required String middleName}) async {
+  Map<String, String> queryParams = {
+    "BVN": bvn,
+    "DateofBirth": dateOfBirth,
+    "EMailAddress": emailAddress,
+    "FirstName": firstName,
+    "Gender": gender,
+    "LastName": lastName,
+    "MobilePhoneNo": phoneNumber,
+    "OtherNames": middleName
+  };
+
+  var createBasicUserResponse = await http.get(
+      Uri(
+          scheme: "http",
+          host: isslapiHost,
+          path: "/ibank/api/v1/createBasicAccount",
+          queryParameters: queryParams),
+      headers: {"X-TENANTID": xtenantid});
+
+  var errResponse = badStatusCheck<CreateBasicAccountResponse>(
+      createBasicUserResponse,
+      notOkErrMsg:
+          "An error occured while creating your account. Please try again later!");
+
+  if (errResponse != null) return errResponse;
+
+  var createBasicUserResponseBody = ResponseM(
+      data: CreateBasicAccountResponse.fromJson(createBasicUserResponse.body));
+
+  return createBasicUserResponseBody;
 }
 
 ResponseM<T>? badStatusCheck<T>(http.Response response,

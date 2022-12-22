@@ -148,6 +148,7 @@ class _TransferToOtherBanksPageState extends State<TransferToOtherBanksPage> {
             );
           });
     }
+    if (!mounted) return;
     setState(() {
       loadingBanks = false;
     });

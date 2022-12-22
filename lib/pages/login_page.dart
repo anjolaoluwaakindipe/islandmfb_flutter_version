@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_button.dart';
+import 'package:islandmfb_flutter_version/components/shared/app_gesture_detector.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_textfield.dart';
 import 'package:islandmfb_flutter_version/pages/home_page.dart';
 import 'package:islandmfb_flutter_version/pages/lets_get_started_page.dart';
@@ -106,15 +107,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
 
-    return LoaderOverlay(
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus &&
-              currentFocus.focusedChild != null) {
-            currentFocus.focusedChild?.unfocus();
-          }
-        },
+    return AppGestureDetector(
+      child: LoaderOverlay(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: whiteColor,

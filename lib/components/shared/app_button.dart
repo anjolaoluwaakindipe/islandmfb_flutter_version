@@ -12,7 +12,7 @@ class AppButton extends StatefulWidget {
 
   final String text;
   final IconData? iconic;
-  final dynamic onPress;
+  final void Function() onPress;
   final bool isDisabled;
 
   @override

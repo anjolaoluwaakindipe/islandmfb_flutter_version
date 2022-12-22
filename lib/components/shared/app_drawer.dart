@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_alert_dialogue.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
-import 'package:islandmfb_flutter_version/pages/another_transfer_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_type_page.dart';
 
 import 'package:islandmfb_flutter_version/pages/bill_payment_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';

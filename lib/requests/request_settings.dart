@@ -8,3 +8,5 @@ const String customRealm = "anjolatestrealm";
 const String isslapi = "http://api.issl.ng:7777/ibank/api/v1";
 const String refreshTokenGrantType = "refresh_token";
 const String xtenantid = "islandbankpoc";
+const String isslapiDomain = "http://api.issl.ng:7777";
+const String isslapiHost = "api.issl.ng:7777";

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:islandmfb_flutter_version/models/create_account_form.dart';
-import 'package:islandmfb_flutter_version/models/requests/getcustomeraccount_response.dart';
+import 'package:islandmfb_flutter_version/models/requests/account_types_response.dart';
 import 'package:islandmfb_flutter_version/models/response_model.dart';
 import 'package:islandmfb_flutter_version/models/set_profile_form.dart';
 import 'package:islandmfb_flutter_version/requests/auth_request.dart';
@@ -28,14 +28,19 @@ class SetUpProfileFormController extends GetxController {
     _setUpProfileFormState.refresh();
   }
 
+// send otp to user
   Future<ResponseM> sendOtp() async {
+    // check if account no is empty
     if (_setUpProfileFormState.value.accountNo == "") {
       return ResponseM(customErrorMessage: "Please provide an account number");
     }
+
+    // check if password is empty
     if (_setUpProfileFormState.value.password.isEmpty) {
       return ResponseM(customErrorMessage: "Please provide a password");
     }
 
+    // get customer's account details through their account no
     var getCustomerAccountDetailsResponse =
         await getCustomerAccountDetailsThroughAccountNo(
             _setUpProfileFormState.value.accountNo);
@@ -43,12 +48,14 @@ class SetUpProfileFormController extends GetxController {
       return getCustomerAccountDetailsResponse;
     }
 
+    // get customer's detail through the customer no gotten from getCustomerAccountDetailsResponse
     var getCustomerResponse = await getCustomerDetailsThroughtCustomerNo(
         getCustomerAccountDetailsResponse.data?.customerNo ?? "");
     if (getCustomerResponse.data == null) {
       return getCustomerResponse;
     }
 
+    // set customer customer information from getcustomerResponse and getCustomerAccountDetailsResponse to the local _setUpProfileFormState property
     var customerData = getCustomerResponse.data!;
     _setUpProfileFormState.update((val) {
       val?.email = customerData.email ?? "";
@@ -59,27 +66,34 @@ class SetUpProfileFormController extends GetxController {
           getCustomerAccountDetailsResponse.data?.customerNo ?? "";
     });
 
+    // refresh state
     _setUpProfileFormState.refresh();
 
+    // get admin token from keycloak
     var adminTokenResponse = await getAdminToken();
-
     if (adminTokenResponse.data == null) return adminTokenResponse;
 
+    // verify if email doesn't exist before progressing
     var doesEmailExistResponse =
         await doesEmailExists(customerData.email!, adminTokenResponse.data!);
 
+    // if an error occurs
     if (doesEmailExistResponse.data == null) return doesEmailExistResponse;
 
+    // if there is an account similar email
     if (doesEmailExistResponse.data == true) {
       return ResponseM(
           customErrorMessage: "Account already has an online profile");
     }
 
+    // verify if login id doesn't exist before progressing
     var doesLoginIDExistResponse = await doesLoginIDExists(
         _setUpProfileFormState.value.loginId, adminTokenResponse.data!);
 
+    // if an error occurs
     if (doesLoginIDExistResponse.data == null) return doesLoginIDExistResponse;
 
+    // if there is an account with a similar login id
     if (doesLoginIDExistResponse.data == true) {
       return ResponseM(customErrorMessage: "Login ID already in use!");
     }
@@ -119,7 +133,7 @@ class SetUpProfileFormController extends GetxController {
 
     var signUpFormInfo = _setUpProfileFormState.value;
 
-    var createAccountResponse = await registerUser(
+    var createAccountResponse = await registerUserKeycloak(
         signUpFormInfo.firstName,
         signUpFormInfo.lastName,
         signUpFormInfo.email,
@@ -132,21 +146,45 @@ class SetUpProfileFormController extends GetxController {
   }
 }
 
+// for creating a user's account and the online profile
+// can only make it create a user's account
 class CreateAccountFormController extends GetxController {
   final _createAccountForm = CreateAccountForm().obs;
 
-  void _setBvnPhoneNumberAndEmail(
-      String bvn, String phoneNumber, String email) {
+  void _setBvnPhoneNumberAndEmail(String bvn, String phoneNumber, String email,
+      String loginId, String password) {
     _createAccountForm.update((val) {
       val?.bvn = bvn;
       val?.phoneNumber = phoneNumber;
       val?.email = email;
+      val?.loginId = loginId;
+      val?.password = password;
     });
   }
 
-  Future<ResponseM> setInitialInfoAndSendOtp(
-      String bvn, String phoneNumber, String email) async {
-    _setBvnPhoneNumberAndEmail(bvn, phoneNumber, email);
+  String getEmail() {
+    return _createAccountForm.value.email;
+  }
+
+  Future<ResponseM> setInitialInfoAndSendOtp(String bvn, String phoneNumber,
+      String email, String loginId, String password) async {
+    // get admin token from keycloak
+    // var adminTokenResponse = await getAdminToken();
+    // if (adminTokenResponse.data == null) return adminTokenResponse;
+
+    // verify if login id doesn't exist before progressing
+    // var doesLoginIDExistResponse =
+    //     await doesLoginIDExists(loginId, adminTokenResponse.data!);
+
+    // if an error occurs
+    // if (doesLoginIDExistResponse.data == null) return doesLoginIDExistResponse;
+
+    // if there is an account with a similar login id
+    // if (doesLoginIDExistResponse.data == true) {
+    //   return ResponseM(customErrorMessage: "Login ID already in use!");
+    // }
+
+    _setBvnPhoneNumberAndEmail(bvn, phoneNumber, email, loginId, password);
 
     var generateBvnResponse = await generateOtp(_createAccountForm.value.bvn);
     if (generateBvnResponse.data == null) {
@@ -163,8 +201,6 @@ class CreateAccountFormController extends GetxController {
         "Account Creation",
         otpMessage,
         otpMessage);
-
-    print(sendOtpResponse.toString());
 
     return sendOtpResponse;
   }
@@ -183,14 +219,93 @@ class CreateAccountFormController extends GetxController {
     return ResponseM(data: true);
   }
 
-  void setPersonalInfo(
-      String firstName, String lastName, String gender, DateTime dateofBirth) {
+  // sets all the information gotten from the Personal Information Page
+  void setPersonalInfo(String firstName, String lastName, String middleName,
+      String gender, DateTime dateofBirth) {
     _createAccountForm.update((val) {
       val?.firstName = firstName;
       val?.lastName = lastName;
+      val?.middleName = middleName;
       val?.gender = gender;
       val?.dateOfBirth = dateofBirth.toIso8601String();
     });
+  }
+
+  Future<ResponseM<List<AccountTypesResponse>>> getAccounttypesProduct() async {
+    return await getAccountTypesProduct();
+  }
+
+  // set account type from the AccountTypePage
+  setAccountType(AccountTypesResponse selectedAccountType) {
+    _createAccountForm.update((val) {
+      val?.accountType = selectedAccountType;
+    });
+  }
+
+  Future<ResponseM> createBasicAccount() async {
+    var createBasicAccountResponse = await createBasicUserAccount(
+        bvn: _createAccountForm.value.bvn,
+        dateOfBirth: _createAccountForm.value.dateOfBirth,
+        emailAddress: _createAccountForm.value.email,
+        firstName: _createAccountForm.value.firstName,
+        gender: _createAccountForm.value.gender,
+        lastName: _createAccountForm.value.lastName,
+        phoneNumber: _createAccountForm.value.phoneNumber,
+        middleName: _createAccountForm.value.middleName);
+
+    if (createBasicAccountResponse.data == null) {
+      return createBasicAccountResponse;
+    }
+
+    if (createBasicAccountResponse.data!.accountNos.length > 1) {
+      var message =
+          "Thank you for creating an account with Island Microfinance bank. This is your account number: ${createBasicAccountResponse.data!.accountNos[0].number} \n\n You can use this account number to create an Online profile with us on our mobile application.";
+      var sendOtpResponse = await sendOtpToEmailAndPhoneNumber(
+          _createAccountForm.value.email,
+          _createAccountForm.value.phoneNumber,
+          "First Time Account Creation",
+          message,
+          message);
+
+      return ResponseM(
+          data: "Account Creation Successful!",
+          customErrorMessage: sendOtpResponse.customErrorMessage);
+    } else {
+      return ResponseM(data: "Account Created! Please proceed to login");
+    }
+
+    // var adminTokenResponse2 = await getAdminToken();
+    // if (adminTokenResponse2.data == null) return adminTokenResponse2;
+
+    // // verify if email doesn't exist before progressing
+    // var doesEmailExistResponse = await doesEmailExists(
+    //     _createAccountForm.value.email, adminTokenResponse2.data!);
+
+    // // if an error occurs
+    // if (doesEmailExistResponse.data == null) return doesEmailExistResponse;
+
+    // // if there is an account similar email
+    // if (doesEmailExistResponse.data == true) {
+    //   return ResponseM(data: "Account Created!!!");
+    // }
+
+    // // get admin token from keycloak
+    // var adminTokenResponse3 = await getAdminToken();
+    // if (adminTokenResponse3.data == null) return adminTokenResponse3;
+
+    // // create keycloak account if no email exists
+    // var createKeycloakAccount = await registerUserKeycloak(
+    //     _createAccountForm.value.firstName,
+    //     _createAccountForm.value.lastName,
+    //     _createAccountForm.value.email,
+    //     _createAccountForm.value.loginId,
+    //     _createAccountForm.value.password,
+    //     adminTokenResponse2.data!,
+    //     createBasicAccountResponse.data!.customerNo!,
+    //     successMessage:
+    //         "Online Profile and Account created!!! You may please login");
+
+    // return createKeycloakAccount;
   }
 
   void clearCreateAccountFormInfo() {

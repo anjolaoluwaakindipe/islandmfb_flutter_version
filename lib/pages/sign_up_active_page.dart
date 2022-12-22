@@ -47,8 +47,7 @@ class _SignUpActivePageState extends State<SignUpActivePage> {
 
   void buttonValidationCheck() {
     if (accountNumberTextController.text.isEmpty ||
-        passwordTextController.text.isEmpty ||
-        confirmPasswordTextController.text.isEmpty ||
+        
         loginIdTextController.text.isEmpty ||
         passwordTextController.text != confirmPasswordTextController.text ||
         accountNumberTextController.text.length < 7) {

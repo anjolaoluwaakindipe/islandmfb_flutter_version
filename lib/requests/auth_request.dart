@@ -195,15 +195,14 @@ Future<ResponseM<String>> getAdminToken() async {
 }
 
 // registers user to keycloak
-Future<ResponseM<String>> registerUser(
-  String firstName,
-  String lastName,
-  String email,
-  String username,
-  String password,
-  String adminToken,
-  String customerNo
-) async {
+Future<ResponseM<String>> registerUserKeycloak(
+    String firstName,
+    String lastName,
+    String email,
+    String username,
+    String password,
+    String adminToken,
+    String customerNo, {String? successMessage}) async {
   try {
     Map<String, dynamic> body = {
       "firstName": firstName,
@@ -212,9 +211,7 @@ Future<ResponseM<String>> registerUser(
       "username": username,
       "enabled": true,
       "emailVerified": true,
-      "attributes": {
-        "customer_no": customerNo
-      },
+      "attributes": {"customer_no": customerNo},
       "credentials": [
         {"value": password, "type": "password", "temporary": false}
       ]
@@ -233,13 +230,15 @@ Future<ResponseM<String>> registerUser(
       return ResponseM(
           customErrorMessage:
               "Our servers are currently down. Please try again later.");
+    } else if (registerResponse.statusCode == HttpStatus.conflict) {
+      return ResponseM(customErrorMessage: "Sorry user already exists with login id or email");
     } else if (registerResponse.statusCode != HttpStatus.created) {
       return ResponseM(
           customErrorMessage:
               "An error occured while registering your online profile. Please try again later.");
     }
 
-    return ResponseM(data: "Online Profile Created!!!");
+    return ResponseM(data: successMessage ?? "Online Profile Created!!!");
   } on SocketException {
     return ResponseM(
         customErrorMessage:

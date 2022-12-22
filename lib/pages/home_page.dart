@@ -8,7 +8,7 @@ import 'package:islandmfb_flutter_version/components/home_page/home_page_transac
 import 'package:islandmfb_flutter_version/components/shared/app_customer_accounts_button.dart';
 import 'package:islandmfb_flutter_version/components/shared/app_drawer.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
-import 'package:islandmfb_flutter_version/pages/another_transfer_page.dart';
+import 'package:islandmfb_flutter_version/pages/transfer_type_page.dart';
 import 'package:islandmfb_flutter_version/pages/login_page.dart';
 import 'package:islandmfb_flutter_version/pages/transaction_history_page.dart';
 import 'package:islandmfb_flutter_version/requests/auth_request.dart';
@@ -98,11 +98,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Obx(() => Text(
-                            "Hi ${customerDetail["name"]
-                                        ?.split(" ")?[0]!
-                                        .toString()
-                                        .capitalize ??
-                                    " "}",
+                            "Hi ${customerDetail["name"]?.split(" ")?[0]!.toString().capitalize ?? " "}",
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -147,8 +143,8 @@ class _HomePageState extends State<HomePage> {
                                   color: blackColor, fontSize: 10),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: "${(selectedAccount.value.product) ??
-                                          "Savings Account"}  ",
+                                  text:
+                                      "${(selectedAccount.value.product) ?? "Savings Account"}  ",
                                 ),
                                 TextSpan(
                                   text: (selectedAccount.value
@@ -229,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                         HomePageQuicActionButtons(
                           name: "Transfer",
                           onTap: () {
-                            Get.to(const TransferTypePage(),
+                            Get.to(() => const TransferTypePage(),
                                 transition: Transition.downToUp);
                           },
                           svgUrlString:
@@ -241,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                         HomePageQuicActionButtons(
                           name: "Airtime",
                           onTap: () {
-                            Get.to(const AirtimePage());
+                            Get.to(() => const AirtimePage());
                           },
                           svgUrlString: "assets/images/airtimeQuickActions.svg",
                         ),
@@ -386,6 +382,7 @@ class HomePageBottomSheet extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return AppCustomerAccountButtons(
+                            productType: otherAccounts[index].product ?? "",
                             nairaFormat: nairaFormat,
                             accountNo: otherAccounts[index]
                                 .primaryAccountNo?["_number"],

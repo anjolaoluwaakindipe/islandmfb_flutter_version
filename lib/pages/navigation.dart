@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:islandmfb_flutter_version/pages/account_type_page.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_page.dart';
 import 'package:islandmfb_flutter_version/pages/airtime_verification.dart';
 import 'package:islandmfb_flutter_version/pages/create_account_new_page.dart';
@@ -35,6 +36,7 @@ abstract class AppRoutes {
   static const transferPage = "/transfer";
   static const verificationPage = "/verification";
   static const splashScreenPage = "/splash-screen";
+  static const accountTypePage = "/account-type";
 }
 
 class AppPages {
@@ -62,13 +64,14 @@ class AppPages {
         page: () => const LetsGetStartedPage()),
     GetPage(
         name: AppRoutes.signUpActivePage, page: () => const SignUpActivePage()),
-    GetPage(name: AppRoutes.verificationPage, page: () => VerificationPage()),
+    GetPage(name: AppRoutes.verificationPage, page: () => const VerificationPage()),
     GetPage(
         name: AppRoutes.createAccountNewPage,
         page: () => const CreateAccountNewPage()),
     GetPage(
         name: AppRoutes.personalInformationPage,
         page: () => const PersonalInformationPage()),
-    GetPage(name: AppRoutes.loginPage, page: ()=>const LoginPage() )
+    GetPage(name: AppRoutes.loginPage, page: () => const LoginPage()),
+    GetPage(name: AppRoutes.accountTypePage, page: () => AccountTypePage())
   ];
 }

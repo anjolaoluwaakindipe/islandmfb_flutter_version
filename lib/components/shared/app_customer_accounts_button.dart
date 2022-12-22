@@ -8,6 +8,7 @@ class AppCustomerAccountButtons extends StatelessWidget {
       required this.nairaFormat,
       this.accountBalance,
       this.accountNo = "",
+      this.productType = "",
       required this.onClick})
       : super(key: key);
 
@@ -15,6 +16,7 @@ class AppCustomerAccountButtons extends StatelessWidget {
   final String accountNo;
   final double? accountBalance;
   final Function onClick;
+  final String productType;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +39,13 @@ class AppCustomerAccountButtons extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(children: [
-                  const TextSpan(text: "Current Account  "),
+                  TextSpan(text: "$productType:  "),
                   TextSpan(
                     text: accountNo,
                     style: const TextStyle(
                         color: primaryColor, fontWeight: FontWeight.w600),
                   ),
-                ], style: const TextStyle(fontSize: 14)),
+                ], style: const TextStyle(fontSize: 14, color: Colors.black)),
               ),
               const SizedBox(
                 height: 5,
